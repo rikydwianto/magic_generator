@@ -1,0 +1,24 @@
+
+<?php
+date_default_timezone_set('Asia/Jakarta');
+header("X-XSS-Protection: 1; mode=block");
+
+
+
+// Mengakses variabel konfigurasi
+$dbHost = $_ENV['DB_HOST'];
+$dbName = $_ENV['DB_NAME'];
+$dbUser = $_ENV['DB_USER'];
+$dbPass = $_ENV['DB_PASS'];
+$apiKey = $_ENV['API_KEY'];
+
+// Sekarang Anda dapat menggunakan variabel-variabel ini dalam pengaturan Anda
+
+try {
+    $pdo = new PDO("mysql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
+    // Atur mode error untuk menampilkan exception
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // echo "Koneksi berhasil!";
+} catch (PDOException $e) {
+    die("Koneksi gagal: " . $e->getMessage());
+}
