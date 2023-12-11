@@ -12,7 +12,8 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
         <label for="formFile" class="form-label">SILAHKAN PILIH FILE <br></label>
         <input class="form-control" required type="file" name='file' accept=".xls,.xlsx" id="formFile">
         <!-- <input type="date" required name="tgl" class='form-control' id=""> -->
-        <input type="submit" onclick="return confirm('yakin sudah benar?')" value="KONFIRMASI" class='btn btn-danger' name='preview'>
+        <input type="submit" onclick="return confirm('yakin sudah benar?')" value="KONFIRMASI" class='btn btn-danger'
+            name='preview'>
     </div>
 </form>
 <?php
@@ -50,7 +51,7 @@ if (isset($_POST['preview'])) {
     $row_os_total = $last_row - 2;
     $os_total = ganti_karakter($ws->getCell("E" . $row_os_total)->getValue());
     $os_par = ganti_karakter($ws->getCell("E" . $row_os_par)->getValue());
-    $persen_par  = ($os_par / $os_total) ;
+    $persen_par  = ($os_par / $os_total);
 
 
     $spreadsheet = new Spreadsheet();
@@ -234,12 +235,60 @@ if (isset($_POST['preview'])) {
     $barisPertama->setRowHeight(50);
     $mergedCell->getStyle()->getAlignment()->setWrapText(true);
 
-    
+
     foreach (range('A', 'Y') as $col) {
         $sheet4->getColumnDimension($col)->setAutoSize(true);
     }
 
     //AKHIR INFORMASI
+
+    //SHEET 5 ANALISA TPK
+    $sheet5 = $spreadsheet->createSheet();
+    $sheet5->setTitle('ANALISA_TPK');
+    $sheet5->mergeCells('A1:P1');
+    $mergedCell = $sheet5->getCell('A1');
+    $mergedCell->getStyle()->getFont()->setBold(true)->setSize(15);
+    // Set teks di tengah
+    $mergedCell->getStyle()->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+    $mergedCell->getStyle()->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+    $barisPertama = $sheet5->getRowDimension(1);
+    $barisPertama->setRowHeight(40);
+    $mergedCell->getStyle()->getAlignment()->setWrapText(true);
+    $sheet5->getStyle('A2:P2')->getFont()->setBold(true);
+    $judul = "ANALISA TPK UMUM DAN MIKRO BISNIS per TANGGAL $tgl_delin\nCABANG $nama_cabang";
+    $sheet5->setCellValue('A1', $judul);
+    $sheet5->setAutoFilter('A2:P2');
+
+    // NO	LOAN	CENTER	ID AGT	ANGGOTA	RIll	DISBURSE	BALANCE	TOPUP	ANGSURAN	ANGSURAN	ANGSURAN	ANGSURAN	HARI	STAFF
+    // 								BAL + 1%	25 + margin	50 + margin	75 + margin	100 + margin		
+
+    $headerData = [
+        'NO',
+        'LOANNO',
+        'CTR',
+        'ID',
+        'NAMA ANGGOTA',
+        'PRODUK',
+        'RILL',
+        'DISBURSE',
+        'BALANCE',
+        'TOTAL TOPUP',
+        '25 minggu',
+        '50 minggu',
+        '75 minggu',
+        '100 minggu',
+        'HARI',
+        'STAFF',
+    ];
+    $column = 'A';
+    foreach ($headerData as $header) {
+        $sheet5->setCellValue($column . '2', $header);
+        $column++;
+    }
+    //AKHIR ANALISA TPK
+
+
+
     $no = 1;
     $baris_baru = 3;
     $baris_2 = 3;
@@ -249,9 +298,12 @@ if (isset($_POST['preview'])) {
 
     //HITUNG INFORMASI
     $total_os_par = 0;
-    $total_topup=0;
-    $total_bukan_topup=0;
-    $total_tpk=0;
+    $total_topup = 0;
+    $total_bukan_topup = 0;
+    $total_tpk = 0;
+
+    $sql_delete = "DELETE FROM deliquency WHERE tgl_input='$tgl_delin' and cabang='$namaCabang'";
+    $stmt = $pdo->query($sql_delete);
 
     for ($row = 3; $row <= $last_row; $row++) {
         $no_center =  ganti_karakter($ws->getCell("C" . $row)->getValue()) + 0;
@@ -288,24 +340,31 @@ if (isset($_POST['preview'])) {
             $staff =  ganti_karakter1($ws->getCell("AG" . $row)->getValue());
             $jenis_topup =  ganti_karakter($ws->getCell("AH" . $row)->getValue());
 
-            $total_os_par = $balance +$total_os_par;
+            $nama_nasabah = str_replace("'", " ", $nama_nasabah);
+            $sql = "INSERT INTO deliquency (loan, no_center, id_detail_nasabah, nasabah, amount, sisa_saldo, tunggakan, minggu, tgl_input, id_cabang, tgl_disburse, cabang, wajib, sukarela, pensiun, hariraya, lainlain, cicilan, hari, staff, minggu_ke, minggu_rill, priode, kode_pemb, session,jenis_topup) VALUES ('$loan_no', '$no_center', '$client_id', '$nama_nasabah', $disburse, $balance, $arreas, $wpd, '$tgl_delin', '', '$tgl_dis', '$namaCabang', $s_wajib, $s_sukarela, $s_pensiun, $s_hariraya, 0, $angsuran, '$hari', '$staff', $ke, $rill, $jk, '$jenis_produk', '$sesi','$jenis_topup')";
+
+            if ($pdo->query($sql) == TRUE) {
+                //  echo "Data berhasil dimasukkan ke tabel deliquency.";
+            } else {
+                // echo "$nama_nasabah :  Error: ".$pdo->error;
+            }
+            $total_os_par = $balance + $total_os_par;
             if ($jenis_topup == "") {
                 $jenis_topup = "TIDAKTOPUP";
                 $total_bukan_topup++;
-            }
-            else{
+            } else {
                 $jenis_topup = $jenis_topup;
-                if($jenis_topup=='KHUSUS'){
+                if ($jenis_topup == 'KHUSUS') {
                     $total_tpk++;
-                }
-                else{
+                } else {
                     $total_topup++;
                 }
             }
-            if($jk==$ke){
-                $ket_sh1="Pinj. Sudah jatuh tempo";
+            if ($jk == $ke) {
+                $ket_sh1 = "Pinj. Sudah jatuh tempo";
+            } else {
+                $ket_sh1 = "";
             }
-            else{$ket_sh1="";}
 
             $total_simpanan = $s_wajib  + $s_sukarela + $s_pensiun + $s_hariraya;
             $sheet1->setCellValue('A' . $baris_baru, $no);
@@ -425,6 +484,8 @@ if (isset($_POST['preview'])) {
             $baris[] = $row;
         }
     }
+
+
     $akhir = count($baris) + 2;
     $sheet1->getStyle('A2:X' . $akhir)->applyFromArray($styleArray);
     $kolomJhinggaT = range('J', 'X');
@@ -471,8 +532,8 @@ if (isset($_POST['preview'])) {
     $sheet2->getStyle('A2:S' . $akhir)->applyFromArray($styleArray);
     $sheet2->getStyle("A2:S" . $akhir)->getFont()->setSize(8);
 
-    $sheet3->getStyle('A2:T' . $akhir)->applyFromArray($styleArray);
-    $sheet3->getStyle("A2:T" . $akhir)->getFont()->setSize(8);
+    $sheet3->getStyle('A2:T' . $baris_3)->applyFromArray($styleArray);
+    $sheet3->getStyle("A2:T" . $baris_3)->getFont()->setSize(8);
 
 
 
@@ -494,21 +555,21 @@ if (isset($_POST['preview'])) {
     $sheet4->setCellValue('D4', $persen_par);
     $sheet4->setCellValue('E4', $os_par);
 
-    
+
     $sheet4->setCellValue('A5', 'BUKAN TOPUP');
     $sheet4->setCellValue('B5', ':');
     $sheet4->setCellValue('C5', $total_bukan_topup);
-    $sheet4->setCellValue('D5', $total_bukan_topup/$total_rek);
+    $sheet4->setCellValue('D5', $total_bukan_topup / $total_rek);
 
     $sheet4->setCellValue('A6', 'TOPUP REGULER');
     $sheet4->setCellValue('B6', ':');
     $sheet4->setCellValue('C6', $total_topup);
-    $sheet4->setCellValue('D6', $total_topup/$total_rek);
+    $sheet4->setCellValue('D6', $total_topup / $total_rek);
 
     $sheet4->setCellValue('A7', 'TOPUP KHUSUS');
     $sheet4->setCellValue('B7', ':');
     $sheet4->setCellValue('C7', $total_tpk);
-    $sheet4->setCellValue('D7', $total_tpk/$total_rek);
+    $sheet4->setCellValue('D7', $total_tpk / $total_rek);
 
     $sheet4->setCellValue('A8', 'TOTAL REKENING PAR');
     $sheet4->setCellValue('B8', ':');
@@ -521,6 +582,67 @@ if (isset($_POST['preview'])) {
 
     $sheet4->getStyle('A2:E10')->applyFromArray($styleArray);
 
+
+
+    // PROSES SHEET 5
+
+    $sql_delin = "SELECT * FROM deliquency WHERE kode_pemb in('PINJAMAN UMUM','PINJAMAN MIKROBISNIS') and tgl_input = '$tgl_delin' AND cabang = '$namaCabang' order by staff,sisa_saldo asc";
+    // echo $sql_delin;
+    $stmt = $pdo->query($sql_delin);
+    $no = 1;
+    $baris_5 = 3;
+    foreach ($stmt->fetchAll() as $row) {
+
+        $sisa_saldo = $row['sisa_saldo'];
+        $satu_persen = $sisa_saldo * 0.01;
+        $tpk = round(($sisa_saldo + $satu_persen) / 10000, PHP_ROUND_HALF_UP);
+        $tpk = $tpk * 10000;
+        $dualima = ($tpk + ($tpk * 0.12)) / 25;
+        $limapuluh = ($tpk + ($tpk * 0.24)) / 50;
+        $tujuhlima = ($tpk + ($tpk * 0.36)) / 75;
+        $seratus = ($tpk + ($tpk * 0.48)) / 100;
+
+        $bodyData = [
+            $no,
+            "$row[loan]",
+            "$row[no_center]",
+            "$row[id_detail_nasabah]",
+            "$row[nasabah]",
+            "$row[kode_pemb]",
+            "$row[minggu_rill]",
+            "$row[amount]",
+            "$sisa_saldo",
+            "$tpk",
+            "$dualima",
+            "$limapuluh",
+            "$tujuhlima",
+            "$seratus",
+            "$row[hari]",
+            "$row[staff]",
+        ];
+        $column = 'A';
+        foreach ($bodyData as $header) {
+            $sheet5->setCellValue($column . $baris_5, $header);
+            $column++;
+        }
+
+        $no++;
+        $baris_5++;
+    }
+
+    //STYLE SHEET 5
+    foreach (range('A', 'P') as $col) {
+        $sheet5->getColumnDimension($col)->setAutoSize(true);
+    }
+
+    $batas_sh5 = $baris_5;
+    $sheet5->getStyle('G3:N' . $batas_sh5)->getNumberFormat()->setFormatCode('#,##0');
+    $sheet5->getStyle("A2:Z" . $batas_sh5)->getFont()->setSize(8);
+    $sheet5->getStyle('A2:P' . $batas_sh5)->applyFromArray($styleArray); //INI UNTUK BORDER
+
+
+    $sql_delete = "DELETE FROM deliquency WHERE tgl_input='$tgl_delin' and cabang='$namaCabang'";
+    $stmt = $pdo->query($sql_delete);
 
     // Simpan sebagai file Excel
     $writer = new Xlsx($spreadsheet);
