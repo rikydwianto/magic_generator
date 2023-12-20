@@ -6,7 +6,7 @@ include_once "./config/koneksi.php";
 require("vendor/PHPExcel/Classes/PHPExcel.php");
 
 
-
+@$sesi = $_SESSION['sesi'];
 ?>
 <!doctype html>
 <html lang="en">
@@ -17,15 +17,46 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.0/css/buttons.dataTables.min.css">
+    <!-- //cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css -->
+    <style>
+    body {
+        background-color: #f8f9fa;
+    }
 
+    #sidebar {
+        background-color: #343a40;
+        color: #ced4da;
+    }
+
+    #sidebar .nav-link {
+        color: #adb5bd;
+    }
+
+    #sidebar .nav-link.active {
+        color: #fff;
+    }
+
+    #content {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    </style>
     <title>TOOL GENERATOR</title>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-center m-3">
         <a class="navbar-brand" href="#"> &nbsp; Tool Generator</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
@@ -36,12 +67,23 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
                 <li class="nav-item">
                     <a class="nav-link" href="<?= $url ?>index.php?menu=cek_par">CEK PAR</a>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= $url ?>index.php?menu=anal">ANALISA PAR</a>
+                    <a class="nav-link" href="<?= $url ?>index.php?menu=quiz">ANALISA PAR</a>
+                </li>
+                <?php
+                if ($sesi != '' || $sesi != null) {
+                ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= $url ?>index.php?menu=quiz">PANEL QUIZ</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<?= $url ?>index.php?menu=logout">LOGOUT</a>
                 </li>
+                <?php
+                }
+                ?>
+
                 <!-- Tambahkan menu lain sesuai kebutuhan -->
             </ul>
         </div>
@@ -51,7 +93,7 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
         <div class="container">
 
             <?php
-            @$sesi = $_SESSION['sesi'];
+
 
             // session_destroy();
             if ($sesi == '' || $sesi == null) {
@@ -69,20 +111,39 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
                     include("./proses/proses_delin.php");
                 } else if ($menu == 'logout') {
                     include("./proses/logout.php");
+                } else if ($menu == 'quiz') {
+                    include("./proses/quiz/index.php");
                 } else {
             ?>
-                    <h1>Halaman Awal</h1>
+            <h1>Halaman Awal</h1>
             <?php
                 }
             }
             ?>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap4.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('#example').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
+            ]
+        });
+    });
+    </script>
 
 
 
