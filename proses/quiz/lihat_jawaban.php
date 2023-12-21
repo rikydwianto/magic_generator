@@ -13,18 +13,18 @@ $kuis = $stmt->fetch()
             <th>Cabang</th>
             <th>NIK</th>
             <th>Nama</th>
-
             <th>Pengerjaan</th>
             <th>Keterangan</th>
             <th>Benar</th>
             <th>Salah</th>
             <th>Total Score</th>
+            <th>Jawaban</th>
         </tr>
     </thead>
     <tbody>
         <?php
         $no = 1;
-        $query = "select * from kuis_jawab where id_kuis='$id_kuis' order by total_score desc, pengerjaan asc";
+        $query = "select * from kuis_jawab where id_kuis='$id_kuis' and keterangan='selesai' order by total_score desc, pengerjaan asc";
         $stmt = $pdo->query($query);
         foreach ($stmt->fetchAll() as $row) {
         ?>
@@ -38,6 +38,10 @@ $kuis = $stmt->fetch()
                 <td><?= $row['benar'] ?></td>
                 <td><?= $row['salah'] ?></td>
                 <td><?= $row['total_score'] ?></td>
+                <td>
+                    <button onclick="openNewTab('<?= $row['id_jawab'] ?>','<?= $row['id_kuis'] ?>')" class='btn'>Lihat
+                        Jawaban</button>
+                </td>
             </tr>
         <?php
             $no++;
@@ -47,3 +51,11 @@ $kuis = $stmt->fetch()
         <!-- Tambahkan baris lain sesuai dengan data yang ada di tabel kuis -->
     </tbody>
 </table>
+<script>
+    let popupIsOpen = false;
+
+    function openNewTab(id, id_kuis) {
+        // Membuka tab baru
+        window.open('popup_jawaban.php?id=' + id + '&id_kuis=' + id_kuis, '_blank', 'width=800,height=600');
+    }
+</script>

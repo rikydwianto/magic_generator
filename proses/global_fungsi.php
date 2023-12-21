@@ -40,22 +40,30 @@ function rupiah($angka)
 function alert($isi)
 {
 ?>
-    <script>
-        alert('<?php echo $isi ?>')
-    </script>
+<script>
+alert('<?php echo $isi ?>')
+</script>
 
 <?php
 }
 function pindah($url)
 {
 ?>
-    <script>
-        window.location.href = "<?php echo $url ?>";
-    </script>
+<script>
+window.location.href = "<?php echo $url ?>";
+</script>
 <?php
 
 }
+function tutupWindow()
+{
+?>
+<script>
+window.close()
+</script>
+<?php
 
+}
 function jumlah_staff($pdo,$ket,$tgl,$staff,$namacabang){
     $sql  ="SELECT SUM(sisa_saldo) AS balance,sum(perubahan) as turunos FROM deliquency WHERE keterangan='$ket' AND cabang='$namacabang' and staff='$staff' and tgl_input='$tgl' GROUP BY staff";
     $stmt = $pdo->query($sql);

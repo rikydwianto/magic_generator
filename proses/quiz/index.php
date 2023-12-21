@@ -43,6 +43,8 @@
                         include("./proses/cek_par.php");
                     } else if ($menu == "lihat_jawaban") {
                         include("./proses/quiz/lihat_jawaban.php");
+                    } else if ($menu == "detail_jawaban") {
+                        include("./proses/quiz/detail_jawaban.php");
                     } else {
                         include("./proses/quiz/lihat.php");
                     }

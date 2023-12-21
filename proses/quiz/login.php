@@ -4,7 +4,7 @@
 
         <label for="jawaban">kode akses</label>
         <input type="text" class='form-control' id="jawaban" name="nik" placeholder="NIK" required>
-        <input type="text" class='form-control' id="jawaban" name="jawaban" required>
+        <input type="password" class='form-control' id="jawaban" name="jawaban" required>
         <button type="submit" class='btn btn-danger'>Login</button>
     </div>
 </form>
