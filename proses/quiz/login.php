@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // $session = base64_encode($session);
 
         $_SESSION['idLogin'] = $id;
-        header("location:$url" . "index.php?menu=quiz");
+        pindah($url . "index.php?menu=quiz");
     } else {
         echo "<h2>Maaf, jawaban Anda salah. Silakan coba lagi.</h2>";
     }
