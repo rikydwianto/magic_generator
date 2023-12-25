@@ -2,9 +2,9 @@
 
 <form action="" method="POST" id="myForm">
     <label for="soal">Soal:</label>
-    <div class="form-group" id="editor" style="height:200px;">
-    </div>
-    <textarea class="form-control" id="soal" name="soal" rows="3" style="display: none;"></textarea>
+    <!-- <div class="form-group" id="editor" style="height:200px;">
+    </div> -->
+    <textarea class="form-control" id="soal" name="soal" rows="3"></textarea>
 
     <div class="form-group">
         <label for="pilihan">Pilihan:</label>
@@ -55,6 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $soal = $soal;
     }
+    $soal = $soal;
 
     $pilihan = $_POST['pilihan'];
     $jawaban = strtoupper($_POST['jawaban']);

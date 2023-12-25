@@ -61,6 +61,8 @@
                         include("./proses/quiz/kosongkan_responden.php");
                     } else if ($menu == "lihat_prepost") {
                         include("./proses/quiz/lihat_prepost.php");
+                    } else if ($menu == "edit_aktif") {
+                        include("./proses/quiz/edit_aktif_kuis.php");
                     } else {
                         include("./proses/quiz/lihat.php");
                     }

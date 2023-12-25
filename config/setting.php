@@ -8,5 +8,5 @@ $dotenv = Dotenv::createImmutable(__DIR__ . "'/../");
 $dotenv->load();
 $url = $_ENV['URL'];
 // $url = "https://localhost/comdev/";
-$url_quiz = "https://comdev.my.id/";
+$url_quiz = $_ENV['URL_KUIS'];
 // $url_quiz = "http://localhost:3000/";

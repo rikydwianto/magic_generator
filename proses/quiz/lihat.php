@@ -80,9 +80,17 @@
                     ?>
                 <a href="<?= $url . "index.php?menu=quiz&act=kelola_soal&id_kuis=" . $row['id_kuis'] ?>"
                     class="btn btn-primary btn-sm mt-2">Kelola soal</a>
+                <br>
+                <a href="<?= $url . "index.php?menu=quiz&act=edit_aktif&ket=aktif&id_kuis=" . $row['id_kuis'] ?>"
+                    class="btn btn-success btn-sm mt-2">Aktifkan Kuis</a>
+
                 <?php
                     } else {
-                        echo "<small class='text'>ketika aktif tidak <br/>dapat olah soal</small>";
+                        echo "<small class='text'>ketika aktif tidak <br/>dapat olah soal</small><br>";
+                    ?>
+                <a href="<?= $url . "index.php?menu=quiz&act=edit_aktif&ket=tidakaktif&id_kuis=" . $row['id_kuis'] ?>"
+                    class="btn btn-danger btn-sm mt-2">Non-Aktif Kuis</a>
+                <?php
                     }
                     ?>
 
