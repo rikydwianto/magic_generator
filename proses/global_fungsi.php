@@ -40,46 +40,69 @@ function rupiah($angka)
 function alert($isi)
 {
 ?>
-<script>
-alert('<?php echo $isi ?>')
-</script>
+    <script>
+        alert('<?php echo $isi ?>')
+    </script>
 
 <?php
 }
 function pindah($url)
 {
 ?>
-<script>
-window.location.href = "<?php echo $url ?>";
-</script>
+    <script>
+        window.location.href = "<?php echo $url ?>";
+    </script>
 <?php
 
 }
 function tutupWindow()
 {
 ?>
-<script>
-window.close()
-</script>
+    <script>
+        window.close()
+    </script>
 <?php
 
 }
-function jumlah_staff($pdo,$ket,$tgl,$staff,$namacabang){
-    $sql  ="SELECT SUM(sisa_saldo) AS balance,sum(perubahan) as turunos FROM deliquency WHERE keterangan='$ket' AND cabang='$namacabang' and staff='$staff' and tgl_input='$tgl' GROUP BY staff";
+function jumlah_staff($pdo, $ket, $tgl, $staff, $namacabang)
+{
+    $sql  = "SELECT SUM(sisa_saldo) AS balance,sum(perubahan) as turunos FROM deliquency WHERE keterangan='$ket' AND cabang='$namacabang' and staff='$staff' and tgl_input='$tgl' GROUP BY staff";
     $stmt = $pdo->query($sql);
-    if($stmt->rowCount()>0){
+    if ($stmt->rowCount() > 0) {
         $total = $stmt->fetch();
-        if($ket=='turunos'){
+        if ($ket == 'turunos') {
             return $total['turunos'];
-
-        }
-        else{
+        } else {
             return $total['balance'];
-
         }
-    }
-    else{
+    } else {
         return 0;
     }
     // return $sql;
+}
+
+function encodeId($sessionId)
+{
+    // Gunakan algoritma hash yang kuat, contoh: SHA-256
+    $hashedSessionId = hash('sha256', $sessionId);
+    return base64_encode($sessionId);
+}
+
+function decodeId($encodedSessionId)
+{
+    $hashedSessionId = base64_decode($encodedSessionId);
+
+    // Pastikan bahwa hasil decode adalah string
+    if (!is_string($hashedSessionId)) {
+        return false;
+    }
+
+    // Verifikasi panjang hash sesuai dengan algoritma yang digunakan
+    if (strlen($hashedSessionId) !== 64) {
+        return false;
+    }
+
+    // Tambahan verifikasi keamanan sesuai kebutuhan
+
+    return base64_decode($encodedSessionId);
 }

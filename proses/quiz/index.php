@@ -32,7 +32,6 @@
 
                 <?php
                 @$sesi = $_SESSION['idLogin'];
-
                 if ($sesi == '' || $sesi == null) {
 
                     include("./proses/quiz/login.php");
