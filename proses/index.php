@@ -3,6 +3,7 @@
 
         <!-- Sidebar -->
         <?php
+        @$sesi = $_SESSION['idLogin'];
         if (!$sesi == '' || !$sesi == null) {
 
             include_once("./proses/layout/navbar.php");
@@ -15,7 +16,7 @@
 
                 <?php
 
-                @$sesi = $_SESSION['idLogin'];
+
                 if ($sesi == '' || $sesi == null) {
 
                     include("./proses/view/login.php");
