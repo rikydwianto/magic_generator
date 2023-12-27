@@ -46,4 +46,4 @@ function deleteKuisDanJawaban($idKuis, $pdo)
 // Gunakan fungsi untuk menghapus data berdasarkan id_kuis tertentu
 $idKuisToDelete = $_GET['id_kuis']; // Ganti dengan id_kuis yang sesuai
 deleteKuisDanJawaban($idKuisToDelete, $pdo);
-pindah($url . "index.php?menu=quiz");
+pindah($url . "index.php?menu=index&act=quiz");

@@ -41,8 +41,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $id_kuis_baru = $pdo->lastInsertId(); // Dapatkan ID kuis baru
 
         // Salin data soal
-        $query_copy_soal = "INSERT INTO soal (id_kuis, soal, pilihan, jawaban)
-                            SELECT :id_kuis_baru, soal, pilihan, jawaban
+        $query_copy_soal = "INSERT INTO soal (id_kuis, soal, pilihan, jawaban,id_bank_soal)
+                            SELECT :id_kuis_baru, soal, pilihan, jawaban,id_soal
                             FROM soal WHERE id_kuis = :id_kuis_asal";
 
         $stmt_copy_soal = $pdo->prepare($query_copy_soal);
@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt_copy_soal->execute();
 
         echo "Kuis dan soal-soalnya berhasil disalin.";
-        pindah($url . "index.php?menu=quiz");
+        pindah($url . "index.php?menu=index&act=quiz");
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }

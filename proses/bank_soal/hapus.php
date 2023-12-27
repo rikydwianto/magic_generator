@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id_soal'])) {
         $stmt->execute();
 
         alert("berhasil dihapus");
-        pindah($url . "index.php?menu=quiz&act=soal_bank");
+        pindah($url . "index.php?menu=index&act=bank_soal");
     } catch (PDOException $e) {
         die("Error: " . $e->getMessage());
     }

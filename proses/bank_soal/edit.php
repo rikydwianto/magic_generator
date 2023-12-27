@@ -34,7 +34,7 @@
             $stmt->execute();
 
             alert("berhasil disimpan");
-            pindah($url . "index.php?menu=quiz&act=soal_bank");
+            pindah($url . "index.php?menu=index&act=bank_soal");
         } catch (PDOException $e) {
             // Display detailed error information
             echo "Error: " . $e->getMessage();

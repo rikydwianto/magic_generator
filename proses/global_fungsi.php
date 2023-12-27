@@ -40,27 +40,27 @@ function rupiah($angka)
 function alert($isi)
 {
 ?>
-    <script>
-        alert('<?php echo $isi ?>')
-    </script>
+<script>
+alert('<?php echo $isi ?>')
+</script>
 
 <?php
 }
 function pindah($url)
 {
 ?>
-    <script>
-        window.location.href = "<?php echo $url ?>";
-    </script>
+<script>
+window.location.href = "<?php echo $url ?>";
+</script>
 <?php
 
 }
 function tutupWindow()
 {
 ?>
-    <script>
-        window.close()
-    </script>
+<script>
+window.close()
+</script>
 <?php
 
 }
@@ -105,4 +105,23 @@ function decodeId($encodedSessionId)
     // Tambahan verifikasi keamanan sesuai kebutuhan
 
     return base64_decode($encodedSessionId);
+}
+
+function getTeksById($jsonArray, $targetId)
+{
+    foreach ($jsonArray as $item) {
+        if ($item['id'] === $targetId) {
+            return $item['teks'];
+        }
+    }
+    return null; // Return null if id is not found
+}
+
+function hitung($pdo, $id_kuis, $id_soal, $ket)
+{
+    $q = "SELECT COUNT(keterangan) as total,keterangan FROM soal_jawab WHERE id_kuis=$id_kuis AND id_soal=$id_soal and keterangan='$ket' GROUP BY keterangan";
+    $stm = $pdo->query($q);
+    $stm = $stm->fetch();
+    return ($stm['total']?$stm['total'] : 0);
+    // return $q;
 }

@@ -13,7 +13,7 @@ if (isset($_GET['del'])) {
     $st = $pdo->query($qdel);
     if ($st) {
         alert("berhasil dihapus");
-        pindah($url . "index.php?menu=quiz&act=lihat_jawaban&id_kuis=$id_kuis");
+        pindah($url . "index.php?menu=index&act=quiz&sub=lihat_jawaban&id_kuis=$id_kuis");
     }
 }
 ?>
@@ -22,7 +22,7 @@ if (isset($_GET['del'])) {
         <tr>
             <th>NO</th>
             <th>Cabang</th>
-            <th>NIK</th>
+            <th><?= ($kuis['anggota'] == 'ya' ? "CENTER" : "NIK") ?></th>
             <th>Nama</th>
             <th>Pengerjaan</th>
             <th>Keterangan</th>
@@ -57,7 +57,7 @@ if (isset($_GET['del'])) {
                 <td>
                     <?php if ($row['keterangan'] == 'selesai' || true) {
                     ?>
-                        <a href="<?= $url . "index.php?menu=quiz&act=lihat_jawaban&id_kuis=$row[id_kuis]&del&id_jawab=" . $row['id_jawab'] ?>" class="btn btn-danger">x</a>
+                        <a href="<?= $url . "index.php?menu=index&act=quiz&sub=lihat_jawaban&id_kuis=$row[id_kuis]&del&id_jawab=" . $row['id_jawab'] ?>" class="btn btn-danger">x</a>
                     <?php
                     } ?>
 
@@ -71,6 +71,9 @@ if (isset($_GET['del'])) {
         <!-- Tambahkan baris lain sesuai dengan data yang ada di tabel kuis -->
     </tbody>
 </table>
+<?php
+include "./proses/quiz/analisa_quiz.php";
+?>
 <script>
     let popupIsOpen = false;
 

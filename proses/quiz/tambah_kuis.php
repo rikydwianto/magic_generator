@@ -1,3 +1,9 @@
+<?php
+$sql = "SELECT * FROM users where id='$sesi' ";
+$result = $pdo->query($sql);
+$data = $result->fetch();
+?>
+
 <div class="container mt-4">
     <h2>Tambah Data Kuis</h2>
 
@@ -6,15 +12,13 @@
         <!-- Nama Kuis -->
         <div class="mb-3">
             <label for="nama_kuis" class="form-label">Nama Kuis</label>
-            <input type="text" class="form-control" id="nama_kuis" name="nama_kuis" placeholder="Masukkan Nama Kuis"
-                required>
+            <input type="text" class="form-control" id="nama_kuis" name="nama_kuis" placeholder="Masukkan Nama Kuis" required>
         </div>
 
         <!-- Nama Karyawan -->
         <div class="mb-3">
             <label for="nama_karyawan" class="form-label">Nama Karyawan</label>
-            <input type="text" required class="form-control" id="nama_karyawan" name="nama_karyawan"
-                placeholder="Masukkan Nama Karyawan">
+            <input type="text" disabled required class="form-control" value="<?= $data['nama']; ?>" id="nama_karyawan" name="nama_karyawan" placeholder="Masukkan Nama Karyawan">
         </div>
 
         <!-- Tanggal Kuis -->
@@ -100,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         $stmt->execute();
         alert("berhasil dibuat anda akan diarahkan ke halaman tambah soal");
-        pindah($url . "index.php?menu=quiz");
+        pindah($url . "index.php?menu=index&act=quiz");
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }

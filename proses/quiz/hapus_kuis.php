@@ -38,7 +38,7 @@ if (isset($_GET['id_kuis'])) {
         $pdo->commit();
 
         echo "Kuis beserta soal-soal dan jawabannya berhasil dihapus.";
-        pindah($url . "index.php?menu=quiz");
+        pindah($url . "index.php?menu=index&act=quiz");
     } catch (PDOException $e) {
         // Rollback transaksi jika terjadi kesalahan
         $pdo->rollBack();

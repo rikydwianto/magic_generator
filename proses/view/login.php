@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($password == $result["password"]) {
                 // Password benar, set session dan arahkan ke halaman selamat datang
                 $_SESSION["idLogin"] = ($result["id"]);
-                pindah($url . "index.php?menu=quiz");
+                pindah($url . "index.php?menu=index");
             } else {
                 // Password salah, arahkan kembali ke halaman login
                 echo "Password SALAH!";

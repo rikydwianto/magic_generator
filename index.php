@@ -79,12 +79,13 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
                 <li class="nav-item">
                     <a class="nav-link" href="<?= $url ?>index.php?menu=anal">ANALISA PAR</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= $url ?>index.php?menu=index">CONTROL ROOM</a>
+                </li>
                 <?php
                 if ($sesi != '' || $sesi != null) {
                 ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= $url ?>index.php?menu=quiz">PANEL QUIZ</a>
-                </li>
+
                 <li class="nav-item">
                     <a class="nav-link" href="<?= $url ?>index.php?menu=logout">LOGOUT</a>
                 </li>
@@ -119,8 +120,8 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
                     include("./proses/proses_delin.php");
                 } else if ($menu == 'logout') {
                     include("./proses/logout.php");
-                } else if ($menu == 'quiz') {
-                    include("./proses/quiz/index.php");
+                }else if ($menu == 'index') {
+                    include("./proses/index.php");
                 } else {
             ?>
             <h1>Halaman Awal</h1>

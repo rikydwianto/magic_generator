@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         $stmt->execute();
-        pindah($url . "index.php?menu=quiz");
+        pindah($url . "index.php?menu=index&act=quiz");
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }

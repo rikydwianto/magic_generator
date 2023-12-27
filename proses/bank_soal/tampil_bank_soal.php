@@ -62,11 +62,11 @@ try {
             <?php
             $no = 1;
             foreach ($result as $row) : ?>
-                <tr>
-                    <td><?php echo $no ?></td>
-                    <td><?php echo $row['soal']; ?></td>
-                    <td>
-                        <?php
+            <tr>
+                <td><?php echo $no ?></td>
+                <td><?php echo $row['soal']; ?></td>
+                <td>
+                    <?php
 
                         $choices = json_decode($row['pilihan'], true);
 
@@ -74,28 +74,32 @@ try {
                         foreach ($choices as $choice) {
                             if ($choice['id'] === $row['jawaban']) {
                         ?>
-                                <b><?= strtoupper($choice['id']) ?>. <?= $choice['teks'] ?><br /></b>
-                            <?php
+                    <b><?= strtoupper($choice['id']) ?>. <?= $choice['teks'] ?><br /></b>
+                    <?php
                             } else {
                             ?>
-                                <?= strtoupper($choice['id']) ?>. <?= $choice['teks'] ?><br />
-                            <?php
+                    <?= strtoupper($choice['id']) ?>. <?= $choice['teks'] ?><br />
+                    <?php
                             }
                             ?>
 
-                        <?php }
+                    <?php }
 
                         ?>
-                    </td>
-                    <td><?php echo strtoupper($row['jawaban']); ?></td>
-                    <td><?php echo $row['kategori']; ?></td>
-                    <td><?php echo $row['sub_kategori']; ?></td>
-                    <td>
-                        <a href="<?= $url . "index.php?menu=quiz&act=soal_bank&submenu=del&id_soal=" . $row['id_soal'] ?>" class="btn btn-danger btn-sm" onclick="return window.confirm('Apakah yakin akan menghapus soal ini?')"><i class="fa fa-times"></i></a>
+                </td>
+                <td><?php echo strtoupper($row['jawaban']); ?></td>
+                <td><?php echo $row['kategori']; ?></td>
+                <td><?php echo $row['sub_kategori']; ?></td>
+                <td>
+                    <a href="<?= $url . "index.php?menu=index&act=bank_soal&submenu=del&id_soal=" . $row['id_soal'] ?>"
+                        class="btn btn-danger btn-sm"
+                        onclick="return window.confirm('Apakah yakin akan menghapus soal ini?')"><i
+                            class="fa fa-times"></i></a>
 
-                        <a href="<?= $url . "index.php?menu=quiz&act=soal_bank&submenu=edit&id_soal=" . $row['id_soal'] ?>" class="btn text-white btn-warning btn-sm"><i class="fa fa-pencil"></i></a>
-                    </td>
-                </tr>
+                    <a href="<?= $url . "index.php?menu=index&act=bank_soal&submenu=edit&id_soal=" . $row['id_soal'] ?>"
+                        class="btn text-white btn-warning btn-sm"><i class="fa fa-pencil"></i></a>
+                </td>
+            </tr>
             <?php
                 $no++;
             endforeach; ?>

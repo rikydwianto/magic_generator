@@ -7,7 +7,7 @@ $status_baru = $_GET['ket'];
 $query = "UPDATE kuis SET status = '$status_baru' WHERE id_kuis = $id_kuis";
 
 if ($pdo->query($query)) {
-    pindah($url . "index.php?menu=quiz");
+    pindah($url . "index.php?menu=index&act=quiz");
 } else {
     echo "Error: ";
 }
