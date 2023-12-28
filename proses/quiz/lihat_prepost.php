@@ -31,7 +31,7 @@ $query = "
         FROM kuis_jawab
     ) AS numbered_data
     where id_kuis='$id_kuis'
-    GROUP BY unique_id_2;
+    GROUP BY unique_id_2 order by nik;
 ";
 
 $stmt = $pdo->query($query);
@@ -52,15 +52,15 @@ $hasilQuery = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <tbody>
 
         <?php foreach ($hasilQuery as $hasil) : ?>
-        <tr>
-            <td><?php echo $hasil['cabang']; ?></td>
-            <td><?php echo $hasil['nik']; ?></td>
-            <td><?php echo $hasil['nama']; ?></td>
-            <td><?php echo $hasil['pre_test_score']; ?></td>
-            <td><?php echo $hasil['post_test_1_score']; ?></td>
-            <td><?php echo $hasil['post_test_2_score']; ?></td>
-            <td><?php echo $hasil['post_test_3_score']; ?></td>
-        </tr>
+            <tr>
+                <td><?php echo $hasil['cabang']; ?></td>
+                <td><?php echo $hasil['nik']; ?></td>
+                <td><?php echo $hasil['nama']; ?></td>
+                <td><?php echo $hasil['pre_test_score']; ?></td>
+                <td><?php echo $hasil['post_test_1_score']; ?></td>
+                <td><?php echo $hasil['post_test_2_score']; ?></td>
+                <td><?php echo $hasil['post_test_3_score']; ?></td>
+            </tr>
         <?php endforeach; ?>
 
     </tbody>
