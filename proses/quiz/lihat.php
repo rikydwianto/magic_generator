@@ -1,8 +1,10 @@
 <h2>TAMPIL KUIS</h2>
-<a class="btn btn-danger btn-lg mb-4" style="float: right;"
-    href="<?= $url . "index.php?menu=index&act=quiz&sub=tambah_kuis" ?>">
+<a class="btn btn-danger btn-lg mb-2" style="float: right;" href="<?= $url . "index.php?menu=index&act=quiz&sub=tambah_kuis" ?>">
     <i class="fas fa-plus"></i> Buat Kuis
 </a>
+<?php
+$q_tambah = ($_SESSION['jenisAkun'] === 'superuser' ? "" : "where kuis.id_user='$sesi'");
+?>
 <table id="example" class="table table-striped table-bordered" style="width:100%">
     <thead>
         <tr>
@@ -30,6 +32,7 @@
         COUNT(soal.id_soal) AS jumlah_soal
     FROM kuis
     LEFT JOIN soal ON kuis.id_kuis = soal.id_kuis
+    $q_tambah
     GROUP BY kuis.id_kuis
     ORDER BY kuis.id_kuis desc";
         $stmt = $pdo->query($query);
@@ -40,66 +43,55 @@
             ";
             $hitung = $pdo->query($qtot)->fetch()['responden'];
         ?>
-        <tr>
-            <td><?= $no ?></td>
-            <td><?= $row['nama_kuis'] ?></td>
-            <td><?= $row['nama_karyawan'] ?></td>
-            <td><?= $row['tgl_kuis'] ?></td>
+            <tr>
+                <td><?= $no ?></td>
+                <td><?= $row['nama_kuis'] ?></td>
+                <td><?= $row['nama_karyawan'] ?></td>
+                <td><?= $row['tgl_kuis'] ?></td>
 
-            <td>
-                Link : <a href="<?= $url_quiz . "quiz/" . $row['id_kuis'] ?>" target="_blank">Lihat</a> <br />
-                Jawaban : <?= $row['tampil_jawaban'] ?><br />
-                Aktif : <?= $row['status'] ?><br>
-                Soal : <?= $row['jumlah_soal'] ?><br>
-                Acak : <?= $row['acak'] ?><br>
-                <!-- <br /> -->
+                <td>
+                    Link : <a href="<?= $url_quiz . "quiz/" . $row['id_kuis'] ?>" target="_blank">Lihat</a> <br />
+                    Jawaban : <?= $row['tampil_jawaban'] ?><br />
+                    Aktif : <?= $row['status'] ?><br>
+                    Soal : <?= $row['jumlah_soal'] ?><br>
+                    Acak : <?= $row['acak'] ?><br>
+                    <!-- <br /> -->
 
-            </td>
-            <td>
-                <a href="<?= $url . "index.php?menu=index&act=quiz&sub=lihat_jawaban&id_kuis=" . $row['id_kuis'] ?>"
-                    class="btn btn-success btn-sm">Lihat Hasil(<?= $hitung ?>)</a>
-                <br>
-                <a href="<?= $url . "index.php?menu=index&act=quiz&sub=lihat_prepost&id_kuis=" . $row['id_kuis'] ?>"
-                    class="btn btn-sm btn-warning">Lihat Prepost</a>
-                <br>
-                <a href="<?= $url . "index.php?menu=index&act=quiz&sub=kosongkan&id_kuis=" . $row['id_kuis'] ?>"
-                    onclick="return window.confirm('Apakah yakin akan menghapus semua responden?')"
-                    class="btn btn-danger btn-sm mt-1">Kosongkan</a>
+                </td>
+                <td>
+                    <a href="<?= $url . "index.php?menu=index&act=quiz&sub=lihat_jawaban&id_kuis=" . $row['id_kuis'] ?>" class="btn btn-success btn-sm">Lihat Hasil(<?= $hitung ?>)</a>
+                    <br>
+                    <a href="<?= $url . "index.php?menu=index&act=quiz&sub=lihat_prepost&id_kuis=" . $row['id_kuis'] ?>" class="btn btn-sm btn-warning">Lihat Prepost</a>
+                    <br>
+                    <a href="<?= $url . "index.php?menu=index&act=quiz&sub=kosongkan&id_kuis=" . $row['id_kuis'] ?>" onclick="return window.confirm('Apakah yakin akan menghapus semua responden?')" class="btn btn-danger btn-sm mt-1">Kosongkan</a>
 
-            </td>
-            <td>
+                </td>
+                <td>
 
-                <a href="<?= $url . "index.php?menu=index&act=quiz&sub=edit_kuis&id_kuis=" . $row['id_kuis'] ?>"
-                    class="btn btn-sm btn-warning"><i class="fa fa-gears"></i></a>
-                <a href="<?= $url . "index.php?menu=index&act=quiz&sub=copy_quis&id_kuis=" . $row['id_kuis'] ?>"
-                    class="btn btn-sm btn-primary"><i class="fa fa-copy"></i></a>
-                <a href="<?= $url . "index.php?menu=index&act=quiz&sub=hapus_kuis&id_kuis=" . $row['id_kuis'] ?>"
-                    class="btn btn-danger btn-sm"
-                    onclick="return window.confirm('Apakah yakin untuk menghapus ini?\nsemua yang berhubung dengan kuis ini akan terhapus \nNilai dan Responden akan terhapus ')">
-                    <i class="fa fa-times"></i>
-                </a>
-                <br />
-                <?php
+                    <a href="<?= $url . "index.php?menu=index&act=quiz&sub=edit_kuis&id_kuis=" . $row['id_kuis'] ?>" class="btn btn-sm btn-warning"><i class="fa fa-gears"></i></a>
+                    <a href="<?= $url . "index.php?menu=index&act=quiz&sub=copy_quis&id_kuis=" . $row['id_kuis'] ?>" class="btn btn-sm btn-primary"><i class="fa fa-copy"></i></a>
+                    <a href="<?= $url . "index.php?menu=index&act=quiz&sub=hapus_kuis&id_kuis=" . $row['id_kuis'] ?>" class="btn btn-danger btn-sm" onclick="return window.confirm('Apakah yakin untuk menghapus ini?\nsemua yang berhubung dengan kuis ini akan terhapus \nNilai dan Responden akan terhapus ')">
+                        <i class="fa fa-times"></i>
+                    </a>
+                    <br />
+                    <?php
                     if ($row['status'] != 'aktif') {
                     ?>
-                <a href="<?= $url . "index.php?menu=index&act=quiz&sub=kelola_soal&id_kuis=" . $row['id_kuis'] ?>"
-                    class="btn btn-primary btn-sm mt-2">Kelola soal</a>
-                <br>
-                <a href="<?= $url . "index.php?menu=index&act=quiz&sub=edit_aktif&ket=aktif&id_kuis=" . $row['id_kuis'] ?>"
-                    class="btn btn-success btn-sm mt-2">Aktifkan Kuis</a>
+                        <a href="<?= $url . "index.php?menu=index&act=quiz&sub=kelola_soal&id_kuis=" . $row['id_kuis'] ?>" class="btn btn-primary btn-sm mt-2">Kelola soal</a>
+                        <br>
+                        <a href="<?= $url . "index.php?menu=index&act=quiz&sub=edit_aktif&ket=aktif&id_kuis=" . $row['id_kuis'] ?>" class="btn btn-success btn-sm mt-2">Aktifkan Kuis</a>
 
-                <?php
+                    <?php
                     } else {
                         echo "<small class='text'>ketika aktif tidak <br/>dapat olah soal</small><br>";
                     ?>
-                <a href="<?= $url . "index.php?menu=index&act=quiz&sub=edit_aktif&ket=tidakaktif&id_kuis=" . $row['id_kuis'] ?>"
-                    class="btn btn-danger btn-sm mt-2">Non-Aktif Kuis</a>
-                <?php
+                        <a href="<?= $url . "index.php?menu=index&act=quiz&sub=edit_aktif&ket=tidakaktif&id_kuis=" . $row['id_kuis'] ?>" class="btn btn-danger btn-sm mt-2">Non-Aktif Kuis</a>
+                    <?php
                     }
                     ?>
 
-            </td>
-        </tr>
+                </td>
+            </tr>
         <?php
             $no++;
         }

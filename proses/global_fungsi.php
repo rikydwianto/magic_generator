@@ -40,27 +40,27 @@ function rupiah($angka)
 function alert($isi)
 {
 ?>
-<script>
-alert('<?php echo $isi ?>')
-</script>
+    <script>
+        alert('<?php echo $isi ?>')
+    </script>
 
 <?php
 }
 function pindah($url)
 {
 ?>
-<script>
-window.location.href = "<?php echo $url ?>";
-</script>
+    <script>
+        window.location.href = "<?php echo $url ?>";
+    </script>
 <?php
 
 }
 function tutupWindow()
 {
 ?>
-<script>
-window.close()
-</script>
+    <script>
+        window.close()
+    </script>
 <?php
 
 }
@@ -122,6 +122,16 @@ function hitung($pdo, $id_kuis, $id_soal, $ket)
     $q = "SELECT COUNT(keterangan) as total,keterangan FROM soal_jawab WHERE id_kuis=$id_kuis AND id_soal=$id_soal and keterangan='$ket' GROUP BY keterangan";
     $stm = $pdo->query($q);
     $stm = $stm->fetch();
-    return ($stm['total']?$stm['total'] : 0);
+    return ($stm['total'] ? $stm['total'] : 0);
     // return $q;
+}
+function validateInput($input)
+{
+    // Gunakan mysqli_real_escape_string untuk sanitasi
+    // $sanitizedInput = mysqli_real_escape_string($pdo, $input);
+
+    // Misalnya, Anda juga dapat menambahkan validasi lain sesuai kebutuhan
+    // seperti memeriksa pola atau memastikan input hanya terdiri dari karakter tertentu.
+
+    return $input;
 }

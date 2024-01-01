@@ -57,12 +57,12 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
     </style>
-    <title>TOOL GENERATOR</title>
+    <title>COMDEV TOOL</title>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-center m-3">
-        <a class="navbar-brand" href="#"> &nbsp; Tool Generator</a>
+        <a class="navbar-brand" href="#"> &nbsp; Comdev Tool</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -99,7 +99,7 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
     </nav>
 
     <div class="row">
-        <div class="container ">
+        <div class="container container-fluid">
 
             <?php
 
@@ -120,7 +120,7 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
                     include("./proses/proses_delin.php");
                 } else if ($menu == 'logout') {
                     include("./proses/logout.php");
-                }else if ($menu == 'index') {
+                } else if ($menu == 'index') {
                     include("./proses/index.php");
                 } else {
             ?>
@@ -145,6 +145,15 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
     <script>
     $(document).ready(function() {
         $('#example').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
+            ]
+        });
+        $('#example2').DataTable({
             dom: 'Bfrtip',
             buttons: [
                 'copyHtml5',
@@ -228,3 +237,4 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
 </body>
 
 </html>
+<?php $pdo = null ?>

@@ -1,9 +1,10 @@
-<div class="container-fluid">
+<div class="container-fluid table-responsive ">
     <div class="row">
 
         <!-- Sidebar -->
         <?php
         @$sesi = $_SESSION['idLogin'];
+        @$superuser = $_SESSION['jenisAkun'];
         if (!$sesi == '' || !$sesi == null) {
 
             include_once("./proses/layout/navbar.php");
@@ -24,6 +25,13 @@
 
                     @$menu = $_GET['act'];
 
+                    $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+                    $stmt->execute([$sesi]);
+                    $detailAkun = $stmt->fetch(PDO::FETCH_ASSOC);
+                    if ($detailAkun) {
+                    } else {
+                        pindah($url);
+                    }
                     if ($menu == "") {
                         include "./proses/view/awal.php";
                     } else {

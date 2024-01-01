@@ -18,7 +18,7 @@ $data = $result->fetch();
         <!-- Nama Karyawan -->
         <div class="mb-3">
             <label for="nama_karyawan" class="form-label">Nama Karyawan</label>
-            <input type="text" disabled required class="form-control" value="<?= $data['nama']; ?>" id="nama_karyawan" name="nama_karyawan" placeholder="Masukkan Nama Karyawan">
+            <input type="text" readonly required class="form-control" value="<?= $data['nama']; ?>" id="nama_karyawan" name="nama_karyawan" placeholder="Masukkan Nama Karyawan">
         </div>
 
         <!-- Tanggal Kuis -->
@@ -87,8 +87,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $responden = $_POST['responden'];
 
     // Insert data ke dalam database
-    $query = "INSERT INTO kuis (nama_kuis, nama_karyawan, tgl_kuis, waktu, status, acak, tampil_jawaban,anggota)
-              VALUES (:nama_kuis, :nama_karyawan, :tgl_kuis, :waktu, :status, :acak, :tampil_jawaban,:responden)";
+    $query = "INSERT INTO kuis (nama_kuis, nama_karyawan, tgl_kuis, waktu, status, acak, tampil_jawaban,anggota,id_user)
+              VALUES (:nama_kuis, :nama_karyawan, :tgl_kuis, :waktu, :status, :acak, :tampil_jawaban,:responden,:id_user)";
 
     $stmt = $pdo->prepare($query);
 
@@ -100,6 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':acak', $acak);
     $stmt->bindParam(':tampil_jawaban', $tampil_jawaban);
     $stmt->bindParam(':responden', $responden);
+    $stmt->bindParam(':id_user', $sesi);
 
     try {
         $stmt->execute();

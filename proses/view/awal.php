@@ -1,3 +1,5 @@
 <div class="container mt-2">
-    <h2 class="mb-4">Halaman Awal - Control Room</h2>
+    <h2 class="mb-3">Halaman Awal - <?= $detailAkun['nama'] ?></h2>
+    <hr>
+
 </div>

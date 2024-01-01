@@ -25,10 +25,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
 
         // Ambil data dari formulir login
-        $username = filter_var($_POST["username"], FILTER_SANITIZE_STRING);
-        $password = filter_var($_POST["password"], FILTER_SANITIZE_STRING);
+        $username = $_POST["username"];
+        $password = $_POST["password"];
         // Query untuk mencari pengguna berdasarkan username
-        $query = $pdo->prepare("SELECT * FROM users WHERE username = :username");
+        $query = $pdo->prepare("SELECT * FROM users WHERE username = :username or nik = :username");
         $query->bindParam(':username', $username);
         $query->execute();
 
@@ -39,6 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($password == $result["password"]) {
                 // Password benar, set session dan arahkan ke halaman selamat datang
                 $_SESSION["idLogin"] = ($result["id"]);
+                $_SESSION["jenisAkun"] = ($result["jenis_akun"]);
                 pindah($url . "index.php?menu=index");
             } else {
                 // Password salah, arahkan kembali ke halaman login
