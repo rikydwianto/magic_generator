@@ -85,15 +85,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Tampilkan konfirmasi menggunakan JavaScript
 ?>
-        <script>
-            var tambahSoal = confirm("Ingin menambah soal lagi?");
-            if (tambahSoal) {
-                window.location.href =
-                    "<?= $url ?>index.php?menu=quiz&act=soal_bank&submenu=tambah_soal"; // Ganti dengan halaman tambah soal
-            } else {
-                window.location.href = '<?= $url ?>index.php?menu=quiz&act=soal_bank'; // Ganti dengan halaman soal
-            }
-        </script>
+<script>
+var tambahSoal = confirm("Ingin menambah soal lagi?");
+if (tambahSoal) {
+    window.location.href =
+        "<?= $url . 'index.php?menu=index&act=bank_soal&submenu=tambah_soal' ?>"; // Ganti dengan halaman tambah soal
+} else {
+    window.location.href =
+    "<?= $url . 'index.php?menu=index&act=bank_soal&submenu=tambah_soal' ?>"; // Ganti dengan halaman soal
+}
+</script>
 <?php
         // pindah($url . "index.php?menu=quiz&act=soal_bank");
     } catch (PDOException $e) {
