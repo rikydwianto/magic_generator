@@ -6,11 +6,11 @@ function haritanggal($tanggal)
         'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
     ];
 
-    // Ubah format tanggal ke dalam format 'Hari, DD Nama_Bulan TTTT'
+
     $tanggalArray = explode('-', $tanggal);
     $hariIndex = date('w', strtotime($tanggal));
     $hariIndonesia = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'][$hariIndex];
-    $bulanIndonesia = $bulan[(int)$tanggalArray[1]]; // -1 karena indeks bulan dimulai dari 0
+    $bulanIndonesia = $bulan[(int)$tanggalArray[1]];
     $tanggalIndonesia = date('d', strtotime($tanggal));
     $tahunIndonesia = date('Y', strtotime($tanggal));
 
@@ -78,12 +78,11 @@ function jumlah_staff($pdo, $ket, $tgl, $staff, $namacabang)
     } else {
         return 0;
     }
-    // return $sql;
 }
 
 function encodeId($sessionId)
 {
-    // Gunakan algoritma hash yang kuat, contoh: SHA-256
+
     $hashedSessionId = hash('sha256', $sessionId);
     return base64_encode($sessionId);
 }
@@ -92,17 +91,17 @@ function decodeId($encodedSessionId)
 {
     $hashedSessionId = base64_decode($encodedSessionId);
 
-    // Pastikan bahwa hasil decode adalah string
+
     if (!is_string($hashedSessionId)) {
         return false;
     }
 
-    // Verifikasi panjang hash sesuai dengan algoritma yang digunakan
+
     if (strlen($hashedSessionId) !== 64) {
         return false;
     }
 
-    // Tambahan verifikasi keamanan sesuai kebutuhan
+
 
     return base64_decode($encodedSessionId);
 }
@@ -114,7 +113,7 @@ function getTeksById($jsonArray, $targetId)
             return $item['teks'];
         }
     }
-    return null; // Return null if id is not found
+    return null;
 }
 
 function hitung($pdo, $id_kuis, $id_soal, $ket)
@@ -123,15 +122,28 @@ function hitung($pdo, $id_kuis, $id_soal, $ket)
     $stm = $pdo->query($q);
     $stm = $stm->fetch();
     return ($stm['total'] ? $stm['total'] : 0);
-    // return $q;
 }
 function validateInput($input)
 {
-    // Gunakan mysqli_real_escape_string untuk sanitasi
-    // $sanitizedInput = mysqli_real_escape_string($pdo, $input);
 
-    // Misalnya, Anda juga dapat menambahkan validasi lain sesuai kebutuhan
-    // seperti memeriksa pola atau memastikan input hanya terdiri dari karakter tertentu.
+
+
+
+
 
     return $input;
 }
+$bulanArray = [
+    1 => 'Januari',
+    2 => 'Februari',
+    3 => 'Maret',
+    4 => 'April',
+    5 => 'Mei',
+    6 => 'Juni',
+    7 => 'Juli',
+    8 => 'Agustus',
+    9 => 'September',
+    10 => 'Oktober',
+    11 => 'November',
+    12 => 'Desember',
+];

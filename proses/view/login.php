@@ -19,15 +19,15 @@
 </form>
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Ambil nilai jawaban dari formulir
-    // Validasi CSRF token
-    // Ambil data dari formulir login
+
+
+
     try {
 
-        // Ambil data dari formulir login
+
         $username = $_POST["username"];
         $password = $_POST["password"];
-        // Query untuk mencari pengguna berdasarkan username
+
         $query = $pdo->prepare("SELECT * FROM users WHERE username = :username or nik = :username");
         $query->bindParam(':username', $username);
         $query->execute();
@@ -35,18 +35,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $result = $query->fetch(PDO::FETCH_ASSOC);
 
         if ($result) {
-            // Verifikasi password
+
             if ($password == $result["password"]) {
-                // Password benar, set session dan arahkan ke halaman selamat datang
+
                 $_SESSION["idLogin"] = ($result["id"]);
                 $_SESSION["jenisAkun"] = ($result["jenis_akun"]);
                 pindah($url . "index.php?menu=index");
             } else {
-                // Password salah, arahkan kembali ke halaman login
+
                 echo "Password SALAH!";
             }
         } else {
-            // Pengguna tidak ditemukan, arahkan kembali ke halaman login
+
             echo "AKUN TIDAK DITEMUKAN!!";
         }
     } catch (PDOException $e) {

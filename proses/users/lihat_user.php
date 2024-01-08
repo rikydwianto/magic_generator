@@ -1,8 +1,8 @@
 <?php
 try {
-    // Create a PDO pdoection
 
-    // Select all users from the database
+
+
     $stmt = $pdo->query("SELECT * FROM users");
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -38,7 +38,11 @@ try {
                         </td>
                         <td>
                             <a href="<?= $url . "index.php?menu=index&act=users&submenu=edituser&id=$user[id]" ?>" class="btn btn-warning btn-sm text-white"><i class="fa fa-pencil"></i></a>
-                            <a href="<?= $url . "index.php?menu=index&act=users&submenu=hapususer&id=$user[id]" ?>" class="btn btn-danger btn-sm text-white" onclick="return window.confirm('Apakah yakin untuk menghapus?')"><i class="fa fa-times"></i></a>
+                            <?php if ($user['jenis_akun'] != 'superuser') {
+                            ?>
+                                <a href="<?= $url . "index.php?menu=index&act=users&submenu=hapususer&id=$user[id]" ?>" class="btn btn-danger btn-sm text-white" onclick="return window.confirm('Apakah yakin untuk menghapus?')"><i class="fa fa-times"></i></a>
+                            <?php
+                            } ?>
                         </td>
                     </tr>
                 <?php

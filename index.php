@@ -103,15 +103,15 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
 
             <?php
 
-
+            @$menu = $_GET['menu'];
             // session_destroy();
             if ($sesi == '' || $sesi == null) {
-
-                include("./proses/tanya.php");
+                if ($menu == 'index') {
+                    include("./proses/index.php");
+                } else {
+                    include("./proses/tanya.php");
+                }
             } else {
-
-                @$menu = $_GET['menu'];
-
                 if ($menu == "cek_par") {
                     include("./proses/cek_par.php");
                 } else if ($menu == 'anal') {

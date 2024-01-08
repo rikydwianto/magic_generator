@@ -4,22 +4,36 @@
 ?>
 <nav id="sidebar" class="col-md-2 col-lg-2 d-md-block sidebar">
     <div class="sidebar-sticky">
-        <ul class="nav flex-column">
+        <ul class="nav flex-column ">
             <li class="nav-item">
                 <a class="nav-link <?= ($menu == '') ? 'active' : '' ?>" href="<?= $url . 'index.php?menu=index' ?>">
-                    <i class="fas fa-home"></i> Dashboard
+                    <i class="fas fa-2x fa-home"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?= ($menu === 'target') ? 'active' : '' ?>"
+                    href="<?= $url . 'index.php?menu=index&act=target' ?>">
+                    <i class="fas fa-2x fa-file-excel"></i> Target
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?= ($menu === 'capaian') ? 'active' : '' ?>"
+                    href="<?= $url . 'index.php?menu=index&act=capaian' ?>">
+                    <i class="fas fa-2x fa-hourglass-start"></i> Capaian
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <?= ($menu === 'quiz') ? 'active' : '' ?>"
                     href="<?= $url . 'index.php?menu=index&act=quiz' ?>">
-                    <i class="fas fa-question"></i> KUIS
+                    <i class="fas fa-2x fa-question"></i> KUIS
                 </a>
             </li>
+
+
             <li class="nav-item">
                 <a class="nav-link <?= ($menu === 'bank_soal') ? 'active' : '' ?>"
                     href="<?= $url . 'index.php?menu=index&act=bank_soal' ?>">
-                    <i class="fas fa-book"></i> Bank Soal
+                    <i class="fas fa-2x fa-book"></i> Bank Soal
                 </a>
             </li>
             <?php
@@ -28,19 +42,23 @@
             <li class="nav-item">
                 <a class="nav-link <?= ($menu === 'users') ? 'active' : '' ?>"
                     href="<?= $url . 'index.php?menu=index&act=users' ?>">
-                    <i class="fas fa-users"></i> Users
+                    <i class="fas fa-2x fa-users"></i> Users
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <?= ($menu === 'generator') ? 'active' : '' ?>"
                     href="<?= $url . 'index.php?menu=index&act=generator' ?>">
-                    <i class="fas fa-database"></i> Database
+                    <i class="fas fa-2x fa-database"></i> Database
                 </a>
             </li>
             <?php
             }
             ?>
-
+            <li class="nav-item mb-4">
+                <a class="nav-link " href="<?= $url . 'index.php?menu=logout' ?>">
+                    <i class="fas fa-2x fa-arrow-left"></i> Logout
+                </a>
+            </li>
             <!-- Add more sidebar items as needed -->
         </ul>
     </div>
