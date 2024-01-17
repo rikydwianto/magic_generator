@@ -74,7 +74,7 @@ $url = $url . 'sl/';
                         $_SESSION['nik_staff'] = $row['nik_staff'];
 
                         // Redirect ke halaman dashboard
-                        pindah("$url");
+                        pindah("$url_sl");
                     } else {
                         // Jika data staff tidak ditemukan, kembali ke halaman login
             ?>
