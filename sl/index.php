@@ -4,7 +4,7 @@ require './../proses/global_fungsi.php';
 include_once "./../config/setting.php";
 include_once "./../config/koneksi.php";
 $url_asli = $url;
-$url = $url . 'sl/';
+$url = $url_sl; // . 'sl/';
 ?>
 <!DOCTYPE html>
 <html lang="en">

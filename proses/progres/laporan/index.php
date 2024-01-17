@@ -1,4 +1,51 @@
 <h2>Data Capaian Cabang</h2>
+
+<div class="container overflow-hidden text-center">
+    <div class="row gx-3">
+        <div class="col">
+            <label for="filterMinggu">Filter Minggu:</label>
+            <select class='form-control' name="" id="filterMinggu">
+                <option value="">Minggu</option>
+                <?php
+                for ($i = 1; $i <= 5; $i++) {
+                    echo "<option value='{$i}'>{$i}</option>";
+                }
+                ?>
+            </select>
+
+        </div>
+        <div class="col">
+            <label for="filterBulan">Filter Bulan:</label>
+            <select class='form-control' id="filterBulan">
+                <option value="">Semua Bulan</option>
+                <?php
+
+                foreach ($bulanArray as $kodeBulan => $namaBulan) {
+                    $selbulan = $kodeBulan == date("m") ? "selected" : "";
+                    echo "<option $selbulan value='{$namaBulan}'>{$namaBulan}</option>";
+                }
+                ?>
+            </select>
+        </div>
+        <div class="col">
+            <label for="filterTahun">Filter Tahun:</label>
+            <!-- <input type="text" id="filterTahun"> -->
+            <select class='form-control' name="" id="filterTahun">
+                <option value="">Pilih tahun</option>
+                <?php
+                for ($i = 2023; $i <= 2026; $i++) {
+                    $seltahun = $i == date("Y") ? "selected" : "";
+                    echo "<option $seltahun value='{$i}'>{$i}</option>";
+                }
+                ?>
+            </select>
+        </div>
+    </div>
+</div>
+
+
+
+
 <table class="table table-bordered" id='table_capaian'>
     <thead>
         <tr>
@@ -7,7 +54,8 @@
             <th>Nama Cabang</th>
             <th>Regional</th>
             <th>Minggu</th>
-            <th>Priode</th>
+            <th>Bulan</th>
+            <th>Tahun</th>
             <th>Staff</th>
             <th>AM</th>
             <th>AK</th>
@@ -29,23 +77,24 @@
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         ?>
 
-                <tr>
-                    <td><?= $no ?></td>
-                    <td><?= $row['manager_cabang'] ?></td>
-                    <td><?= $row['nama_cabang'] ?></td>
-                    <td><?= $row['regional'] ?>/<?= $row['wilayah'] ?></td>
-                    <td><?= $row['minggu'] ?></td>
-                    <td><?= $bulanArray[$row['bulan']] ?>-<?= $row['tahun'] ?></td>
-                    <td><?= $row['total_staff_laporan'] ?></td>
-                    <td><?= $row['total_am'] ?></td>
-                    <td><?= $row['total_ak'] ?></td>
-                    <td><?= $row['total_nett_agt'] ?></td>
-                    <td><?= rupiah($row['total_naik_par']) ?></td>
-                    <td><?= rupiah($row['total_turun_par']) ?></td>
-                    <td><?= rupiah($row['total_nett_par']) ?></td>
-                    <td><?= $row['total_pembiayaan_lain'] ?></td>
-                    <td><?= ($row['status']) ?></td>
-                </tr>
+        <tr>
+            <td><?= $no ?></td>
+            <td><?= $row['manager_cabang'] ?></td>
+            <td><?= $row['nama_cabang'] ?></td>
+            <td><?= $row['regional'] ?>/<?= $row['wilayah'] ?></td>
+            <td><?= $row['minggu'] ?></td>
+            <td><?= $bulanArray[$row['bulan']] ?></td>
+            <td><?= $row['tahun'] ?></td>
+            <td><?= $row['total_staff_laporan'] ?></td>
+            <td><?= $row['total_am'] ?></td>
+            <td><?= $row['total_ak'] ?></td>
+            <td><?= $row['total_nett_agt'] ?></td>
+            <td><?= rupiah($row['total_naik_par']) ?></td>
+            <td><?= rupiah($row['total_turun_par']) ?></td>
+            <td><?= rupiah($row['total_nett_par']) ?></td>
+            <td><?= $row['total_pembiayaan_lain'] ?></td>
+            <td><?= ($row['status']) ?></td>
+        </tr>
         <?php
                 $no++;
             }

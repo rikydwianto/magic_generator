@@ -41,7 +41,7 @@ $url = $url . 'sl/';
         <form method="post">
             <div class="mb-3">
                 <label for="username" class="form-label">NIK</label>
-                <input type="text" name='username' class="form-control" id="username" placeholder="Enter your username">
+                <input type="text" name='username' value="<?= @$_POST['username'] ?>" class="form-control" id="username" placeholder="Enter your username">
             </div>
 
             <div class="mb-3">

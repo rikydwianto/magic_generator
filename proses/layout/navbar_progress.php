@@ -7,6 +7,8 @@ $jabatanMenu = array(
     ),
     'MIS' => array(
         'Dashboard' => array('link' => 'index', 'icon' => 'fa-home'),
+        'Submit Laporan' => array('link' => 'laporan/submit', 'icon' => 'fa-paper-plane'),
+        'Laporan' => array('link' => 'laporan/index', 'icon' => 'fa-chart-bar'),
         'Staff' => array('link' => 'staff/index', 'icon' => 'fa-users'),
     ),
     'Manager' => array(

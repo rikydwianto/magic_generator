@@ -29,13 +29,15 @@ error_reporting(0);
             <div class="col">
                 <div class="form-group">
                     <label for="anggota_masuk">Anggota Masuk:</label>
-                    <input type="text" <?= $disabled ?> oninput="formatAngka(this)" value="<?= $hasil['anggota_masuk'] ?>" class="form-control" name="anggota_masuk">
+                    <input type="text" <?= $disabled ?> oninput="formatAngka(this)"
+                        value="<?= $hasil['anggota_masuk'] ?>" class="form-control" name="anggota_masuk">
                 </div>
             </div>
             <div class="col">
                 <div class="form-group">
                     <label for="anggota_keluar">Anggota Keluar:</label>
-                    <input type="text" <?= $disabled ?> oninput="formatAngka(this)" value="<?= $hasil['anggota_keluar'] ?>" class="form-control" name="anggota_keluar">
+                    <input type="text" <?= $disabled ?> oninput="formatAngka(this)"
+                        value="<?= $hasil['anggota_keluar'] ?>" class="form-control" name="anggota_keluar">
                 </div>
             </div>
             <div class="col">
@@ -43,7 +45,8 @@ error_reporting(0);
                     <label for="nett_anggota">Nett Anggota:</label>
                     <div id="hasil_agt" class="mt-1 <?= $hasil['nett_anggota'] < 0 ? "text-danger" : "text-success" ?>">
                         <?= formatNumber($hasil['nett_anggota']) ?></div>
-                    <input type="hidden" <?= $disabled ?> oninput="formatAngka(this)" readonly value="<?= $hasil['nett_anggota'] ?>" class="form-control" name="nett_anggota">
+                    <input type="hidden" <?= $disabled ?> oninput="formatAngka(this)" readonly
+                        value="<?= $hasil['nett_anggota'] ?>" class="form-control" name="nett_anggota">
                 </div>
             </div>
         </div>
@@ -54,13 +57,16 @@ error_reporting(0);
             <div class="col">
                 <div class="form-group">
                     <label for="naik_par">Outstanding Par Naik:</label>
-                    <input type="text" <?= $disabled ?> oninput="formatAngka(this)" value="<?= formatNumber($hasil['naik_par']) ?>" class="form-control" name="naik_par">
+                    <input type="text" <?= $disabled ?> oninput="formatAngka(this)"
+                        value="<?= formatNumber($hasil['naik_par']) ?>" class="form-control" name="naik_par">
                 </div>
             </div>
             <div class="col">
                 <div class="form-group">
                     <label for="turun_par">Outstanding Par Turun:</label>
-                    <input type="text" <?= $disabled ?> placeholder="3000000" value="<?= formatNumber($hasil['turun_par']) ?>" oninput="formatAngka(this)" class="form-control" name="turun_par">
+                    <input type="text" <?= $disabled ?> placeholder="3000000"
+                        value="<?= formatNumber($hasil['turun_par']) ?>" oninput="formatAngka(this)"
+                        class="form-control" name="turun_par">
                 </div>
             </div>
             <div class="col">
@@ -68,26 +74,30 @@ error_reporting(0);
                     <label for="nett_par">Nett Outstanding Par</label>
                     <div id="hasil" class="mt-1 <?= $hasil['nett_pat'] > 0 ? "text-danger" : "text-success" ?>">
                         <?= formatNumber($hasil['nett_par']) ?></div>
-                    <input type="hidden" <?= $disabled ?> onload="formatAngka(this)" readonly value="<?= formatNumber($hasil['nett_par']) ?>" class="form-control" name="nett_par">
+                    <input type="hidden" <?= $disabled ?> onload="formatAngka(this)" readonly
+                        value="<?= formatNumber($hasil['nett_par']) ?>" class="form-control" name="nett_par">
                 </div>
             </div>
         </div>
 
-        Pencairan
+        Total Pencairan Pembiayaan Lain
         <div class="row g-3  mb-3">
             <?php
             foreach ($pinjamanArray as $kode => $kategori) {
             ?>
-                <div class="col">
-                    <label for="pinjaman<?= $kode ?>"> <?= $kode ?></label>
-                    <input type="number" <?= $disabled ?> value="<?= $json[$kode] ? $json[$kode] : 0 ?>" oninput="hitungTotalPinjaman()" class="form-control" id="pinjaman<?= $kode ?>" name="pinjaman[<?= $kode ?>]" min="0">
-                </div>
+            <div class="col">
+                <label for="pinjaman<?= $kode ?>"> <?= $kode ?></label>
+                <input type="text" <?= $disabled ?> value="<?= $json[$kode] ? $json[$kode] : 0 ?>"
+                    oninput="hitungTotalPinjaman()" class="form-control" id="pinjaman<?= $kode ?>"
+                    name="pinjaman[<?= $kode ?>]" pattern="^(100|[0-9][0-9]?)$" min="0">
+            </div>
             <?php
 
             }
 
             ?>
-            <input type="hidden" readonly id='totalPinjaman' value="<?= $total_pinj ?>" class="form-control" name="pemb_lain">
+            <input type="hidden" readonly id='totalPinjaman' value="<?= $total_pinj ?>" class="form-control"
+                name="pemb_lain">
             <div class="col text-center">
                 <label for="total_pemb"> Total Pemb:</label>
                 <div id="total_pemb"><?= $total_pinj ?></div>
@@ -101,7 +111,8 @@ error_reporting(0);
                 <div class="form-group">
                     <label for="agt_tpk">Anggota Cuti <br> <small>Total Anggota cuti yang
                             dimiliki</small></label>
-                    <input type="number" <?= $disabled ?> value="<?= $hasil['agt_tpk'] ?>" class="form-control" id="agt_tpk" name="agt_tpk">
+                    <input type="number" <?= $disabled ?> value="<?= $hasil['agt_tpk'] ?>" class="form-control"
+                        id="agt_tpk" name="agt_tpk">
 
                 </div>
             </div>
@@ -110,7 +121,8 @@ error_reporting(0);
                 <div class="form-group">
                     <label for="agt_cuti">Pengajuan Anggota TPK <br> <small>Total Anggota yang diajukan TPK minggu
                             ini</small></label>
-                    <input type="number" <?= $disabled ?> value="<?= $hasil['agt_cuti'] ?>" class="form-control" id="agt_cuti" name="agt_cuti">
+                    <input type="number" <?= $disabled ?> value="<?= $hasil['agt_cuti'] ?>" class="form-control"
+                        id="agt_cuti" name="agt_cuti">
 
                 </div>
             </div>
@@ -126,10 +138,10 @@ error_reporting(0);
         <?php
         if ($disabled != "") {
         ?>
-            <div class="form-group mb-3 ">
-                TTD
-                <img alt="" src="data:<?= $result['ttd'] ?>" />
-            </div>
+        <div class="form-group mb-3 ">
+            TTD
+            <img alt="" src="data:<?= $result['ttd'] ?>" />
+        </div>
         <?php
         }
         ?>
@@ -138,13 +150,13 @@ error_reporting(0);
         <?php
         if ($hasil && $status == 'pending') {
         ?>
-            <!-- <button type="submit" value='simpan' name='konfirmasi'
+        <!-- <button type="submit" value='simpan' name='konfirmasi'
             onclick="return window.confirm('Apakah yakin akan menyetujui laporan ini?')"
             class="btn btn-success">KONFIRMASI</button> -->
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                KONFIRMASI
-            </button>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            KONFIRMASI
+        </button>
         <?php
         }
         ?>
@@ -164,11 +176,14 @@ error_reporting(0);
                     <div id="signature"></div>
 
 
+                    <div>Dengan penuh tanggung jawab, saya menandatangani ini sebagai tanda bahwa saya telah mengisi
+                        data dengan teliti dan benar.</div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button onclick="resetSignature()" class='btn btn-danger'>Reset TTD</button>
-                    <button type="submit" value='simpan' id='submitBtn' name='konfirmasi' class="btn btn-success">KONFIRMASI</button>
+                    <button type="submit" value='simpan' id='submitBtn' name='konfirmasi'
+                        class="btn btn-success">KONFIRMASI</button>
                 </div>
             </div>
         </div>
@@ -259,75 +274,73 @@ if (isset($_POST['konfirmasi'])) {
 
 
 <style>
-    /* CSS untuk input */
-    input {
-        font-weight: bold;
-        vertical-align: auto;
-        /* Membuat huruf tebal */
-        font-size: 18px;
-        /* Menentukan ukuran huruf */
-        text-align: center;
-        /* Menengahkan teks */
-    }
+/* CSS untuk input */
+input {
+    font-weight: bold;
+    vertical-align: auto;
+    /* Membuat huruf tebal */
+    font-size: 18px;
+    /* Menentukan ukuran huruf */
+    text-align: center;
+    /* Menengahkan teks */
+}
 
-    #hasil,
-    #hasil_agt,
-    #total_pemb {
-        text-align: center;
-        font-weight: bold;
-        font-size: larger;
-    }
+#hasil,
+#hasil_agt,
+#total_pemb {
+    text-align: center;
+    font-weight: bold;
+    font-size: larger;
+}
 
-    #signature {
-        height: 200px;
-        /* Sesuaikan dengan lebar yang diinginkan */
-        /* Sesuaikan dengan tinggi yang diinginkan */
-        border: 1px solid #ccc;
-        /* Tambahkan border */
-    }
+#signature {
+    /* height: 400px; */
+    border: 1px solid #ccc;
+    background-color: #fafafa;
+}
 </style>
 
 <script>
-    function hitungTotalPinjaman() {
-        // Ambil nilai input untuk masing-masing pinjaman
-        var totalPinjaman = 0;
+function hitungTotalPinjaman() {
+    // Ambil nilai input untuk masing-masing pinjaman
+    var totalPinjaman = 0;
 
-        <?php
+    <?php
         foreach ($pinjamanArray as $kode => $kategori) {
             echo 'var pinjaman' . $kode . ' = parseFloat(document.getElementById("pinjaman' . $kode . '").value) || 0;';
             echo 'totalPinjaman += pinjaman' . $kode . ';';
         }
         ?>
 
-        // Set nilai totalPinjaman pada input readonly
-        document.getElementById("totalPinjaman").value = totalPinjaman;
-        document.getElementById("total_pemb").textContent = totalPinjaman;
-    }
-    document.getElementById('submitBtn').addEventListener('click', function() {
-        // Aksi submit form
-        var $signaturePad = $("#signature");
-        var imageData = $signaturePad.jSignature("getData", "image");
-        var konfirmasiInput = document.createElement("input");
-        konfirmasiInput.type = "hidden";
-        konfirmasiInput.name = "konfirmasi";
-        konfirmasiInput.value = "ya";
+    // Set nilai totalPinjaman pada input readonly
+    document.getElementById("totalPinjaman").value = totalPinjaman;
+    document.getElementById("total_pemb").textContent = totalPinjaman;
+}
+document.getElementById('submitBtn').addEventListener('click', function() {
+    // Aksi submit form
+    var $signaturePad = $("#signature");
+    var imageData = $signaturePad.jSignature("getData", "image");
+    var konfirmasiInput = document.createElement("input");
+    konfirmasiInput.type = "hidden";
+    konfirmasiInput.name = "konfirmasi";
+    konfirmasiInput.value = "ya";
 
-        var imageDataTextarea = document.createElement("textarea");
-        imageDataTextarea.name = "imageData"; // Sesuaikan dengan nama yang sesuai
-        imageDataTextarea.style.display = "none"; // Sembunyikan textarea
+    var imageDataTextarea = document.createElement("textarea");
+    imageDataTextarea.name = "imageData"; // Sesuaikan dengan nama yang sesuai
+    imageDataTextarea.style.display = "none"; // Sembunyikan textarea
 
-        // Set nilai textarea dengan data gambar base64
-        imageDataTextarea.value = imageData; // Anda perlu memiliki imageData yang telah didefinisikan sebelumnya
-        document.getElementById("form_capaian").appendChild(imageDataTextarea);
-
-
-        // Tambahkan elemen input hidden ke dalam form
-        document.getElementById('form_capaian').appendChild(konfirmasiInput);
+    // Set nilai textarea dengan data gambar base64
+    imageDataTextarea.value = imageData; // Anda perlu memiliki imageData yang telah didefinisikan sebelumnya
+    document.getElementById("form_capaian").appendChild(imageDataTextarea);
 
 
+    // Tambahkan elemen input hidden ke dalam form
+    document.getElementById('form_capaian').appendChild(konfirmasiInput);
 
 
 
-        document.getElementById('form_capaian').submit();
-    });
+
+
+    document.getElementById('form_capaian').submit();
+});
 </script>
