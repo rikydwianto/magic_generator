@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -12,15 +13,13 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
         <label for="formFile" class="form-label">SILAHKAN PILIH FILE <br></label>
         <input class="form-control" required type="file" name='file' accept=".xls,.xlsx" id="formFile">
         <!-- <input type="date" required name="tgl" class='form-control' id=""> -->
-        <input type="submit" onclick="return confirm('yakin sudah benar?')" value="KONFIRMASI" class='btn btn-danger'
-            name='preview'>
+        <input type="submit" onclick="return confirm('yakin sudah benar?')" value="KONFIRMASI" class='btn btn-danger' name='preview'>
     </div>
 </form>
 <?php
 
 if (isset($_POST['preview'])) {
 
-    error_reporting(0);
     $file = $_FILES['file']['tmp_name'];
     $path = $file;
     $tgl = $_POST['tgl'];
@@ -650,7 +649,7 @@ if (isset($_POST['preview'])) {
     $filename = "ANALISA PAR $namaCabang $tgl_delin.xlsx";
     $writer->save($folder . $filename);
 
-    header("location:download.php?filename=" . $filename);
+    pindah($url . "download.php?filename=" . $filename);
 }
 
 

@@ -147,8 +147,8 @@ $judul = "ANALISA ANGGOTA TIDAK BAYAR $tgl_delin_awal s/d $tgl_delin_akhir \nCAB
 $sheet5->setCellValue('A1', $judul);
 $sheet5->setAutoFilter('A2:S2');
 $headerData = array(
-    'NO', 'LOAN', 'CTR', 'CLIENT ID', 'NASABAH','PRODUK', 
-    'JENIS TOPUP','DISBURSE', 'BALANCE BEFORE', 'BALANCE AFTER', 'WAJIB BEFORE',
+    'NO', 'LOAN', 'CTR', 'CLIENT ID', 'NASABAH', 'PRODUK',
+    'JENIS TOPUP', 'DISBURSE', 'BALANCE BEFORE', 'BALANCE AFTER', 'WAJIB BEFORE',
     'WAJIB AFTER', 'KET WAJIB', 'SUKARELA BEFORE', 'SUKARELA AFTER',
     'SELISIH SUKARELA', 'KET SUKARELA', 'HARI', 'STAFF'
 );
@@ -291,7 +291,7 @@ foreach ($stmt->fetchAll() as $row) {
     if ($saldo_berkurang > 0) {
         $isidata = [
             $no, $row['loan'], $row['no_center'], $row['id_detail_nasabah'], $row['nasabah'], $row['tgl_disburse'], $row['amount'],
-            $saldo_sebelum, $saldo_banding, $saldo_berkurang, $row['minggu'], $row['jenis_topup'], $row['hari'], $row['staff']
+            $saldo_banding, $saldo_sebelum,  $saldo_berkurang, $row['minggu'], $row['jenis_topup'], $row['hari'], $row['staff']
         ];
         $by_staff['turunos'][$row['staff']][] = $saldo_berkurang;
 
@@ -410,7 +410,7 @@ foreach ($stmt->fetchAll() as $row) {
         else $ket_wajib = "berubah";
 
         $headerData = array(
-            $no,  $row['loan'],  $row['no_center'],  $row['id_detail_nasabah'], $row['nasabah'], $row['kode_pemb'],  
+            $no,  $row['loan'],  $row['no_center'],  $row['id_detail_nasabah'], $row['nasabah'], $row['kode_pemb'],
             $row['jenis_topup'], $row['amount'], $saldo_before, $saldo_after, $wajib_before,
             $wajib_after, $ket_wajib, $sukarela_before, $sukarela_after,
             $banding_sukarela, $ket_sukarela, $row['hari'],  $row['staff']

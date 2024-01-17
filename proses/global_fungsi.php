@@ -40,27 +40,27 @@ function rupiah($angka)
 function alert($isi)
 {
 ?>
-    <script>
-        alert('<?php echo $isi ?>')
-    </script>
+<script>
+alert('<?php echo $isi ?>')
+</script>
 
 <?php
 }
 function pindah($url)
 {
 ?>
-    <script>
-        window.location.href = "<?php echo $url ?>";
-    </script>
+<script>
+window.location.href = "<?php echo $url ?>";
+</script>
 <?php
 
 }
 function tutupWindow()
 {
 ?>
-    <script>
-        window.close()
-    </script>
+<script>
+window.close()
+</script>
 <?php
 
 }
@@ -146,4 +146,64 @@ $bulanArray = [
     10 => 'Oktober',
     11 => 'November',
     12 => 'Desember',
+];
+$jabatanOptions = array('Staff Lapang', 'MIS', 'Manager', 'Regional');
+$jabatanOptions_cabang = array('MIS', 'Manager');
+
+function menu_progress($menu)
+{
+    $url = $GLOBALS['url'];
+    return $url . "progress.php?menu=$menu";
+}
+
+function menu_sl($menu)
+{
+    $url = $GLOBALS['url'];
+
+    return $url . "index.php?menu=$menu";
+}
+function pesan($teks, $warna = 'success')
+{
+?>
+<div class="alert alert-<?= $warna ?>" role="alert">
+    <?= $teks ?>
+</div>
+<?php
+}
+function badge($teks, $warna = 'success')
+{
+?>
+<span class="badge text-bg-<?= $warna ?>"><?= $teks ?></span>
+
+<?php
+}
+function removeNonNumeric($input)
+{
+    // Hapus karakter selain angka
+    $numericOnly = preg_replace("/[^0-9]/", "", $input);
+
+    return $numericOnly;
+}
+function formatNumber($number)
+{
+    return number_format($number, 0, ',', '.');
+}
+function hitungTotalPinjaman($dataJSON)
+{
+    // Mengonversi string JSON menjadi array PHP
+    $pinjamanArray = json_decode($dataJSON, true);
+
+    // Menghitung total
+    $totalPinjaman = array_sum($pinjamanArray);
+
+    return $totalPinjaman;
+}
+
+
+$pinjamanArray = [
+    "PMB" => "Mikro Bisnis",
+    "PSA" => "Sanitasi",
+    "PPD" => "Pendidikan",
+    "PRR" => "Renovasi Rumah",
+    "ARTA" => "Alat Rumah Tangga"
 ];

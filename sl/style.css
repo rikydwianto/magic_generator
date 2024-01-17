@@ -1,0 +1,86 @@
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  margin-bottom: 60px;
+}
+
+main {
+  flex: 1;
+}
+
+.sidebar {
+  position: fixed;
+  top: 56px;
+  bottom: 0;
+  left: 0;
+  width: 250px;
+  /* background-color: #f8f9fa; */
+  padding-top: 1rem;
+}
+
+.sidebar-heading {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #495057;
+  padding-bottom: 10px;
+}
+#samping a {
+  display: block;
+  padding: 10px;
+  /* color: #ffffff; */
+  text-decoration: none;
+  transition: background-color 0.3s;
+  width: 100%;
+}
+.wrapper {
+  display: flex;
+}
+
+#samping a:hover {
+  background-color: #007bff;
+  /* color: #ffffff; */
+}
+.nav-item {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.nav-link {
+  color: #495057;
+}
+
+.nav-link:hover {
+  color: #fff;
+  width: 100%;
+}
+
+.active {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.main-content {
+  margin-top: 100px;
+  /* margin-left: 250px; Sesuaikan margin sesuai lebar sidebar */
+  padding: 20px;
+  /* border-left: 1px solid #dee2e6; Menambahkan border pada sisi kiri */
+}
+
+.main-content h1 {
+  border-bottom: 2px solid #dee2e6;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+.footer {
+  margin-top: 100px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #343a40;
+  color: #ffffff;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}

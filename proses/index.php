@@ -18,7 +18,7 @@
                 <?php
 
 
-                if ($sesi == '' || $sesi == null) {
+                if ($sesi == '' || $sesi == null || $_SESSION['jabatan'] != "Regional") {
 
                     include("./proses/view/login.php");
                 } else {

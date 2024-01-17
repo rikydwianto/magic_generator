@@ -39,7 +39,7 @@
                 $stmtInsert->execute();
 
                 echo "User added successfully.";
-                pindah($url . "index.php?menu=index&act=users&submenu=lihat_user");
+                pindah(menu_progress("users/index"));
             }
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
@@ -69,8 +69,9 @@
                 <?php
                 $sel_reg = "";
                 for ($letter = 'A'; $letter < 'Z'; $letter++) {
+                    $sel = $regional == $letter ? "selected" : "";
 
-                    echo '<option ' . $sel_reg . ' value="' . $letter . '">Regional ' . $letter . '</option>';
+                    echo '<option ' . $sel . ' value="' . $letter . '">Regional ' . $letter . '</option>';
                 }
                 ?>
             </select>
@@ -84,7 +85,7 @@
                 <option value="">Pilih Jabatan</option>
                 <?php
                 // Loop untuk menampilkan setiap elemen dalam array sebagai opsi
-                foreach ($jabatanOptions as $jabatan) {
+                foreach ($jabatanOptions_cabang as $jabatan) {
                     echo '<option value="' . $jabatan . '">' . $jabatan . '</option>';
                 }
                 ?>
@@ -98,7 +99,7 @@
 
                 <option value="">Pilih Cabang</option>
                 <?php
-                $query = "SELECT id_cabang, nama_cabang FROM cabang";
+                $query = "SELECT id_cabang, nama_cabang FROM cabang where regional='$regional'";
                 $result = $pdo->query($query);
 
                 // Loop untuk menampilkan setiap elemen dalam array sebagai opsi
@@ -129,10 +130,7 @@
                 <input type="radio" class="form-check-input" checked id="biasa" name="jenis_akun" value="biasa" required>
                 <label class="form-check-label" for="biasa">Biasa</label>
             </div>
-            <div class="form-check">
-                <input type="radio" class="form-check-input" id="superuser" name="jenis_akun" value="superuser" required>
-                <label class="form-check-label" for="superuser">Superuser</label>
-            </div>
+
         </div>
 
 

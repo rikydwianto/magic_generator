@@ -18,7 +18,7 @@
             $stmt = $pdo->prepare("UPDATE users SET username=?, nik=?, nama=?, email=?, jenis_akun=?,regional=?,jabatan=?,id_cabang=? WHERE id=?");
             $stmt->execute([$username, $nik, $nama, $email, $jenis_akun, $regional, $jabatan, $cabang, $id]);
 
-            pindah($url . "index.php?menu=index&act=users&submenu=lihat_user");
+            pindah(menu_progress("users/index"));
         } else {
         }
     } catch (PDOException $e) {
@@ -77,7 +77,7 @@
 
                             <?php
                             // Loop untuk menampilkan setiap elemen dalam array sebagai opsi
-                            foreach ($jabatanOptions as $jabatan) {
+                            foreach ($jabatanOptions_cabang as $jabatan) {
                                 if ($jabatan == $user['jabatan']) $sel_jab = "selected";
                                 else $sel_jab = "";
                                 echo '<option ' . $sel_jab . ' value="' . $jabatan . '">' . $jabatan . '</option>';
@@ -93,7 +93,7 @@
 
                             <option value="">Pilih Cabang</option>
                             <?php
-                            $query = "SELECT id_cabang, nama_cabang FROM cabang";
+                            $query = "SELECT id_cabang, nama_cabang FROM cabang where regional='$regional'";
                             $result = $pdo->query($query);
 
                             // Loop untuk menampilkan setiap elemen dalam array sebagai opsi
@@ -114,7 +114,6 @@
                     <div class="form-group">
                         <label for="jenis_akun">Jenis Akun:</label>
                         <select class="form-control" id="jenis_akun" name="jenis_akun">
-                            <option value="superuser" <?= ($user['jenis_akun'] === 'superuser') ? 'selected' : '' ?>>Admin</option>
                             <option value="biasa" <?= ($user['jenis_akun'] === 'biasa') ? 'selected' : '' ?>>User</option>
                         </select>
                     </div>

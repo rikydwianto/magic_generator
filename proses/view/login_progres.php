@@ -1,4 +1,4 @@
-<h2>Silakan Masukan kode akses</h2>
+<h2>Silakan Login Terlebih dahulu</h2>
 <form method="post">
     <div class="col-md-3">
         <div class="form-group">
@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION["id_cabang"] = ($result["id_cabang"]);
                 $_SESSION["jabatan"] = ($result["jabatan"]);
                 $_SESSION["regional"] = ($result["regional"]);
-                pindah($url . "index.php?menu=index");
+                pindah($url . "progress.php?menu=index");
             } else {
 
                 echo "Password SALAH!";
