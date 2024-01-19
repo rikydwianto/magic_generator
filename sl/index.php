@@ -55,14 +55,15 @@ $url = $url_sl; // . 'sl/';
         <div class="offcanvas-body">
             <ul class="nav flex-column">
                 <?php foreach ($menuItems as $menuItem) : ?>
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo $menuItem['url'] === menu_sl(@$_GET['menu']) ? 'active' : ''; ?>" href="<?php echo $menuItem['url']; ?>">
-                            <?php if (!empty($menuItem['icon'])) : ?>
-                                <i class="<?php echo $menuItem['icon']; ?>"></i>
-                            <?php endif; ?>
-                            <?php echo $menuItem['text']; ?>
-                        </a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link <?php echo $menuItem['url'] === menu_sl(@$_GET['menu']) ? 'active' : ''; ?>"
+                        href="<?php echo $menuItem['url']; ?>">
+                        <?php if (!empty($menuItem['icon'])) : ?>
+                        <i class="<?php echo $menuItem['icon']; ?>"></i>
+                        <?php endif; ?>
+                        <?php echo $menuItem['text']; ?>
+                    </a>
+                </li>
                 <?php endforeach; ?>
             </ul>
         </div>
@@ -79,14 +80,15 @@ $url = $url_sl; // . 'sl/';
                     <nav id="sidebar">
                         <ul class="nav flex-column">
                             <?php foreach ($menuItems as $menuItem) : ?>
-                                <li class="nav-item">
-                                    <a class="nav-link <?php echo $menuItem['url'] === menu_sl(@$_GET['menu']) ? 'active' : ''; ?>" href="<?php echo $menuItem['url']; ?>">
-                                        <?php if (!empty($menuItem['icon'])) : ?>
-                                            <i class="<?php echo $menuItem['icon']; ?>"></i>
-                                        <?php endif; ?>
-                                        <?php echo $menuItem['text']; ?>
-                                    </a>
-                                </li>
+                            <li class="nav-item">
+                                <a class="nav-link <?php echo $menuItem['url'] === menu_sl(@$_GET['menu']) ? 'active' : ''; ?>"
+                                    href="<?php echo $menuItem['url']; ?>">
+                                    <?php if (!empty($menuItem['icon'])) : ?>
+                                    <i class="<?php echo $menuItem['icon']; ?>"></i>
+                                    <?php endif; ?>
+                                    <?php echo $menuItem['text']; ?>
+                                </a>
+                            </li>
                             <?php endforeach; ?>
                         </ul>
                     </nav>
@@ -108,7 +110,7 @@ $url = $url_sl; // . 'sl/';
                 $detailAkun = $stmt->fetch(PDO::FETCH_ASSOC);
                 if ($detailAkun) {
                 } else {
-                    pindah($url);
+                    pindah($url . "login_staff.php");
                 }
                 $menuPath = "./proses/";
                 @$menu = $_GET['menu'];
@@ -150,33 +152,33 @@ $url = $url_sl; // . 'sl/';
 
     <script src="<?= $url . "script.js" ?>"></script>
     <script>
-        var url = "<?= $url ?>";
-        // Tambahkan script berikut untuk menangani toggle sidebar pada mode mobile
-        $(document).ready(function() {
-            $('[data-bs-toggle="collapse"]').on('click', function() {
-                $('#sidebar').toggle();
-            });
+    var url = "<?= $url ?>";
+    // Tambahkan script berikut untuk menangani toggle sidebar pada mode mobile
+    $(document).ready(function() {
+        $('[data-bs-toggle="collapse"]').on('click', function() {
+            $('#sidebar').toggle();
         });
+    });
 
 
-        $(function() {
-            $("#start_date, #end_date").datepicker({
-                dateFormat: "yy-mm-dd",
-                showButtonPanel: true,
-                changeMonth: true,
-                changeYear: true,
-                onClose: function(selectedDate) {
-                    var option = this.id == "start_date" ? "minDate" : "maxDate",
-                        instance = $(this).data("datepicker"),
-                        date = $.datepicker.parseDate(
-                            instance.settings.dateFormat ||
-                            $.datepicker._defaults.dateFormat,
-                            selectedDate, instance.settings);
+    $(function() {
+        $("#start_date, #end_date").datepicker({
+            dateFormat: "yy-mm-dd",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true,
+            onClose: function(selectedDate) {
+                var option = this.id == "start_date" ? "minDate" : "maxDate",
+                    instance = $(this).data("datepicker"),
+                    date = $.datepicker.parseDate(
+                        instance.settings.dateFormat ||
+                        $.datepicker._defaults.dateFormat,
+                        selectedDate, instance.settings);
 
-                    $("#start_date, #end_date").not(this).datepicker("option", option, date);
-                }
-            });
+                $("#start_date, #end_date").not(this).datepicker("option", option, date);
+            }
         });
+    });
     </script>
 
 </body>

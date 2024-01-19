@@ -81,4 +81,10 @@ include "./proses/quiz/analisa_quiz.php";
         // Membuka tab baru
         window.open('popup_jawaban.php?id=' + id + '&id_kuis=' + id_kuis, '_blank', 'width=800,height=600');
     }
+
+    function jawabAnalisa(id_kuis, ket, id_soal) {
+        // Membuka tab baru
+        window.open('popup_jawaban_user.php?ket=' + ket + '&id_kuis=' + id_kuis + '&id_soal=' + id_soal, '_blank',
+            'width=800,height=600');
+    }
 </script>

@@ -39,8 +39,17 @@
             <td><?= $no++ ?></td>
             <td><?= $row['soal'] ?></td>
             <td><?= getTeksById($jsonArray, $row['jawaban']); ?></td>
-            <td><?= @hitung($pdo, $id_kuis, $row['id_soal'], "BENAR") ?></td>
-            <td><?= @hitung($pdo, $id_kuis, $row['id_soal'], "SALAH") ?></td>
+            <td>
+                <a href="javascript:void()"
+                    onclick="jawabAnalisa('<?= $row['id_kuis'] ?>','BENAR','<?= $row['id_soal'] ?>')"
+                    class="btn btn-success"><?= @hitung($pdo, $id_kuis, $row['id_soal'], "BENAR") ?></a>
+
+            </td>
+            <td>
+                <a href="javascript:void()"
+                    onclick="jawabAnalisa('<?= $row['id_kuis'] ?>','SALAH','<?= $row['id_soal'] ?>')"
+                    class="btn btn-danger"><?= @hitung($pdo, $id_kuis, $row['id_soal'], "SALAH") ?></a>
+            </td>
         </tr>
         <?php
         }
