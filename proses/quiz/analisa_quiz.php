@@ -57,3 +57,10 @@
     </tbody>
 
 </table>
+<script>
+function jawabAnalisa(id_kuis, ket, id_soal) {
+    // Membuka tab baru
+    window.open('popup_jawaban_user.php?ket=' + ket + '&id_kuis=' + id_kuis + '&id_soal=' + id_soal, '_blank',
+        'width=800,height=600');
+}
+</script>

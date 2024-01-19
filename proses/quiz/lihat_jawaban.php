@@ -9,9 +9,20 @@ $kuis = $stmt->fetch()
 <?php
 if (isset($_GET['del'])) {
     $id_jawab = $_GET['id_jawab'];
-    $qdel = "delete from kuis_jawab where id_jawab ='$id_jawab' and id_kuis='$id_kuis'";
-    $st = $pdo->query($qdel);
-    if ($st) {
+    $qdel_kuis_jawab = "DELETE FROM kuis_jawab WHERE id_jawab = :id_jawab AND id_kuis = :id_kuis";
+    $stmt_kuis_jawab = $pdo->prepare($qdel_kuis_jawab);
+    $stmt_kuis_jawab->bindParam(':id_jawab', $id_jawab, PDO::PARAM_INT);
+    $stmt_kuis_jawab->bindParam(':id_kuis', $id_kuis, PDO::PARAM_INT);
+    $stmt_kuis_jawab->execute();
+
+    // Hapus dari tabel soal_jawab
+    $qdel_soal_jawab = "DELETE FROM soal_jawab WHERE id_jawab = :id_jawab AND id_kuis = :id_kuis";
+    $stmt_soal_jawab = $pdo->prepare($qdel_soal_jawab);
+    $stmt_soal_jawab->bindParam(':id_jawab', $id_jawab, PDO::PARAM_INT);
+    $stmt_soal_jawab->bindParam(':id_kuis', $id_kuis, PDO::PARAM_INT);
+    $stmt_soal_jawab->execute();
+
+    if ($stmt_kuis_jawab && $stmt_soal_jawab) {
         alert("berhasil dihapus");
         pindah($url . "index.php?menu=index&act=quiz&sub=lihat_jawaban&id_kuis=$id_kuis");
     }
@@ -44,7 +55,7 @@ if (isset($_GET['del'])) {
                 <td><?= $no ?></td>
                 <td><?= $row['cabang'] ?></td>
                 <td><?= $row['nik'] ?></td>
-                <td><?= $row['nama'] ?></td>
+                <td><?= proper($row['nama']) ?></td>
                 <td><?= $row['pengerjaan'] ?></td>
                 <td><?= $row['jenis_kuis'] ?></td>
                 <td><?= $row['benar'] ?></td>
@@ -80,11 +91,5 @@ include "./proses/quiz/analisa_quiz.php";
     function openNewTab(id, id_kuis) {
         // Membuka tab baru
         window.open('popup_jawaban.php?id=' + id + '&id_kuis=' + id_kuis, '_blank', 'width=800,height=600');
-    }
-
-    function jawabAnalisa(id_kuis, ket, id_soal) {
-        // Membuka tab baru
-        window.open('popup_jawaban_user.php?ket=' + ket + '&id_kuis=' + id_kuis + '&id_soal=' + id_soal, '_blank',
-            'width=800,height=600');
     }
 </script>

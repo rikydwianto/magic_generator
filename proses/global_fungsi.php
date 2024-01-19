@@ -118,18 +118,13 @@ function getTeksById($jsonArray, $targetId)
 
 function hitung($pdo, $id_kuis, $id_soal, $ket)
 {
-    $q = "SELECT COUNT(keterangan) as total,keterangan FROM soal_jawab WHERE id_kuis=$id_kuis AND id_soal=$id_soal and keterangan='$ket' GROUP BY keterangan";
+    $q = "SELECT COUNT(sj.keterangan) as total,sj.keterangan FROM soal_jawab sj join kuis_jawab kj on kj.id_jawab=sj.id_jawab WHERE sj.id_kuis=$id_kuis AND sj.id_soal=$id_soal and sj.keterangan='$ket' GROUP BY sj.keterangan";
     $stm = $pdo->query($q);
     $stm = $stm->fetch();
     return ($stm['total'] ? $stm['total'] : 0);
 }
 function validateInput($input)
 {
-
-
-
-
-
 
     return $input;
 }
@@ -198,6 +193,11 @@ function hitungTotalPinjaman($dataJSON)
 
     return $totalPinjaman;
 }
+function proper($string)
+{
+    return ucwords(strtolower($string));
+}
+
 
 
 $pinjamanArray = [

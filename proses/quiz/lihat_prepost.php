@@ -11,21 +11,32 @@ if (isset($_GET['id_unik'])) {
         // Assuming $unique_id_2 is the value to be deleted
 
         // Using prepared statement to avoid SQL injection
-        $sql = "DELETE FROM kuis_jawab WHERE unique_id_2 = :unique_id_2";
-        $stmt = $pdo->prepare($sql);
+        $selectQuery = "SELECT id_jawab, id_kuis FROM kuis_jawab WHERE unique_id_2 = :unique_id_2";
+        $selectStmt = $pdo->prepare($selectQuery);
+        $selectStmt->bindParam(':unique_id_2', $unique_id_2, PDO::PARAM_STR);
+        $selectStmt->execute();
 
-        // Bind the parameter
-        $stmt->bindParam(':unique_id_2', $unique_id_2, PDO::PARAM_STR);
+        // Fetch hasil query
+        $result = $selectStmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($result as $row) {
+            $id_jawab = $row['id_jawab'];
+            $id_kuis = $row['id_kuis'];
 
-        // Execute the statement
-        $stmt->execute();
+            $qdel_kuis_jawab = "DELETE FROM kuis_jawab WHERE id_jawab = :id_jawab AND id_kuis = :id_kuis";
+            $stmt_kuis_jawab = $pdo->prepare($qdel_kuis_jawab);
+            $stmt_kuis_jawab->bindParam(':id_jawab', $id_jawab, PDO::PARAM_INT);
+            $stmt_kuis_jawab->bindParam(':id_kuis', $id_kuis, PDO::PARAM_INT);
+            $stmt_kuis_jawab->execute();
 
-        // Check if the deletion was successful
-        if ($stmt->rowCount() > 0) {
-            echo "Record(s) deleted successfully.";
-        } else {
-            echo "No records deleted.";
+            // Hapus dari tabel soal_jawab
+            $qdel_soal_jawab = "DELETE FROM soal_jawab WHERE id_jawab = :id_jawab AND id_kuis = :id_kuis";
+            $stmt_soal_jawab = $pdo->prepare($qdel_soal_jawab);
+            $stmt_soal_jawab->bindParam(':id_jawab', $id_jawab, PDO::PARAM_INT);
+            $stmt_soal_jawab->bindParam(':id_kuis', $id_kuis, PDO::PARAM_INT);
+            $stmt_soal_jawab->execute();
         }
+
+
         pindah($url . "index.php?menu=index&act=quiz&sub=lihat_prepost&id_kuis=$id_kuis");
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
@@ -82,27 +93,25 @@ $hasilQuery = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <tbody>
 
         <?php foreach ($hasilQuery as $hasil) : ?>
-        <tr>
-            <td><?php echo $hasil['cabang']; ?></td>
-            <td><?php echo $hasil['nik']; ?></td>
-            <td><?php echo $hasil['nama']; ?></td>
-            <td><?php echo $hasil['pre_test_score']; ?></td>
-            <td><?php echo $hasil['post_test_1_score']; ?></td>
-            <td><?php echo $hasil['post_test_2_score']; ?></td>
-            <td><?php echo $hasil['post_test_3_score']; ?></td>
-            <td>
-                <?php 
-                    if($superuser==='superuser'){
-                        ?>
-                <a onclick="return window.confirm('Apakah yakin untuk menghapus?')"
-                    href="<?= $url . "index.php?menu=index&act=quiz&sub=lihat_prepost&id_kuis=$id_kuis&id_unik=$hasil[unique_id_2]" ?>"
-                    class="btn btn-danger"><i class="fa fa-times"></i></a>
-                <?php
+            <tr>
+                <td><?php echo $hasil['cabang']; ?></td>
+                <td><?php echo $hasil['nik']; ?></td>
+                <td><?php echo proper($hasil['nama'])  ?></td>
+                <td><?php echo $hasil['pre_test_score']; ?></td>
+                <td><?php echo $hasil['post_test_1_score']; ?></td>
+                <td><?php echo $hasil['post_test_2_score']; ?></td>
+                <td><?php echo $hasil['post_test_3_score']; ?></td>
+                <td>
+                    <?php
+                    if ($superuser === 'superuser') {
+                    ?>
+                        <a onclick="return window.confirm('Apakah yakin untuk menghapus?')" href="<?= $url . "index.php?menu=index&act=quiz&sub=lihat_prepost&id_kuis=$id_kuis&id_unik=$hasil[unique_id_2]" ?>" class="btn btn-danger"><i class="fa fa-times"></i></a>
+                    <?php
                     }
                     ?>
 
-            </td>
-        </tr>
+                </td>
+            </tr>
         <?php endforeach; ?>
 
     </tbody>
