@@ -88,58 +88,90 @@ if (isset($_GET['minggu']) && isset($_GET['bulan'])) {
         if ($result) {
 ?>
 <table border="1" class="table mt-2">
-    <tr>
-        <th colspan="14" class='text-center'>
-            REGIONAL <?= $regional ?> <br>
-            REKAP LAPORAN PER CABANG <br>
-            <?php
-                        if ($minggu == 'semua') {
-                            echo "BULAN " . strtoupper($bulanArray[$bulan]);
-                        } else {
+    <thead>
+        <tr>
+            <th colspan="14" class='text-center'>
+                REGIONAL <?= $regional ?> <br>
+                REKAP LAPORAN PER CABANG <br>
+                <?php
+                            if ($minggu == 'semua') {
+                                echo "BULAN " . strtoupper($bulanArray[$bulan]);
+                            } else {
 
-                            echo "MINGGU KE-$minggu" . " BULAN " . strtoupper($bulanArray[$bulan]);
-                        }
-                        ?>
-            TAHUN <?= $tahun ?>
-        </th>
-    </tr>
-    <tr>
-        <th>NO</th>
-        <th>Manager Cabang</th>
-        <th>Nama Cabang</th>
-        <th>AM</th>
-        <th>AK</th>
-        <th>NETT</th>
-        <th>AGT CUTI</th>
-        <th>PENGAJUAN TPK</th>
-        <th>PEMB LAIN</th>
-        <th>PAR NAIK</th>
-        <th>PAR TURUN</th>
-        <th>NETT PAR</th>
-        <th>Status</th>
-    </tr>
-    <?php
-                $no = 1;
-                foreach ($result as $row) {
-                ?>
-    <tr>
-        <td><?= $no++ ?></td>
-        <td><?= $row['manager_cabang'] ?></td>
-        <td><?= $row['nama_cabang'] ?></td>
-        <td class='text-center'><?= $row['total_am'] ?></td>
-        <td class='text-center'><?= $row['total_ak'] ?></td>
-        <td class='text-center'><?= $row['total_nett_agt'] ?></td>
-        <td class='text-center'><?= $row['total_anggota_cuti'] ?></td>
-        <td class='text-center'><?= $row['total_anggota_cuti'] ?></td>
-        <td class='text-center'><?= $row['total_pembiayaan_lain'] ?></td>
-        <td class='text-center'><?= rupiah($row['total_naik_par']) ?></td>
-        <td class='text-center'><?= rupiah($row['total_turun_par']) ?></td>
-        <td class='text-center'><?= rupiah($row['total_nett_par']) ?></td>
-        <td><?= $row['status'] ?></td>
-    </tr>
-    <?php
-                }
-                ?>
+                                echo "MINGGU KE-$minggu" . " BULAN " . strtoupper($bulanArray[$bulan]);
+                            }
+                            ?>
+                TAHUN <?= $tahun ?>
+            </th>
+        </tr>
+        <tr>
+            <th>NO</th>
+            <th>Manager Cabang</th>
+            <th>Nama Cabang</th>
+            <th>AM</th>
+            <th>AK</th>
+            <th>NETT</th>
+            <th>AGT CUTI</th>
+            <th>PENGAJUAN TPK</th>
+            <th>PEMB LAIN</th>
+            <th>PAR NAIK</th>
+            <th>PAR TURUN</th>
+            <th>NETT PAR</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+                    $no = 1;
+                    $total_pengajuan_tpk = $total_am = $total_ak = $total_nett_agt = $total_anggota_cuti = $total_pembiayaan_lain = $total_naik_par = $total_turun_par = $total_nett_par = 0;
+
+                    foreach ($result as $row) {
+                        $total_am += $row['total_am'];
+                        $total_ak += $row['total_ak'];
+                        $total_nett_agt += $row['total_nett_agt'];
+                        $total_anggota_cuti += $row['total_anggota_cuti'];
+                        $total_pembiayaan_lain += $row['total_pembiayaan_lain'];
+                        $total_pengajuan_tpk += $row['total_pengajuan_tpk'];
+                        $total_naik_par += $row['total_naik_par'];
+                        $total_turun_par += $row['total_turun_par'];
+                        $total_nett_par += $row['total_nett_par'];
+
+                    ?>
+        <tr>
+            <td><?= $no++ ?></td>
+            <td><?= $row['manager_cabang'] ?></td>
+            <td><?= $row['nama_cabang'] ?></td>
+            <td class='text-center'><?= $row['total_am'] ?></td>
+            <td class='text-center'><?= $row['total_ak'] ?></td>
+            <td class='text-center'><?= $row['total_nett_agt'] ?></td>
+            <td class='text-center'><?= $row['total_anggota_cuti'] ?></td>
+            <td class='text-center'><?= $row['total_pengajuan_tpk'] ?></td>
+            <td class='text-center'><?= $row['total_pembiayaan_lain'] ?></td>
+            <td class='text-center'><?= rupiah($row['total_naik_par']) ?></td>
+            <td class='text-center'><?= rupiah($row['total_turun_par']) ?></td>
+            <td class='text-center'><?= rupiah($row['total_nett_par']) ?></td>
+            <td><?= $row['status'] ?></td>
+        </tr>
+        <?php
+                    }
+                    ?>
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="3">Total</th>
+            <td class='text-center'><?= $total_am ?></td>
+            <td class='text-center'><?= $total_ak ?></td>
+            <td class='text-center'><?= $total_nett_agt ?></td>
+            <td class='text-center'><?= $total_anggota_cuti ?></td>
+            <td class='text-center'><?= $total_pengajuan_tpk ?></td>
+            <td class='text-center'><?= $total_pembiayaan_lain ?></td>
+            <td class='text-center'><?= rupiah($total_naik_par) ?></td>
+            <td class='text-center'><?= rupiah($total_turun_par) ?></td>
+            <td class='text-center'><?= rupiah($total_nett_par) ?></td>
+            <td></td>
+        </tr>
+    </tfoot>
+
 </table>
 <?php
         } else {

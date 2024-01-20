@@ -214,6 +214,10 @@ try {
                     ?>
             <a href="<?= menu_sl("laporan/edit&id=$row[id_capaian_staff]") ?>" class="btn btn-warning text-white">Lanjut
                 <i class="fa fa-arrow-right"></i></a>
+            <a href="<?= menu_sl("laporan/hapus&id=$row[id_capaian_staff]") ?>"
+                onclick="return window.confirm('yakin akan menghapus laporan ini?')"
+                class="btn btn-danger btn-sm text-white"><i class="fa fa-times"></i></a>
+
             <?php
                     }
                     ?>

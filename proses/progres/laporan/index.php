@@ -73,28 +73,37 @@
             $no = 1;
             // Ambil data dari tabel capaian_cabang
             $stmt = $pdo->query("SELECT * FROM capaian_cabang  where nama_cabang='$detailAkun[nama_cabang]' order by minggu,bulan desc");
+            $total_staff = $total_am = $total_ak = $total_nett_agt = $total_naik_par = $total_turun_par = $total_nett_par = $total_pembiayaan_lain = 0;
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $total_staff += $row['total_staff_laporan'];
+                $total_am += $row['total_am'];
+                $total_ak += $row['total_ak'];
+                $total_nett_agt += $row['total_nett_agt'];
+                $total_naik_par += $row['total_naik_par'];
+                $total_turun_par += $row['total_turun_par'];
+                $total_nett_par += $row['total_nett_par'];
+                $total_pembiayaan_lain += $row['total_pembiayaan_lain'];
         ?>
 
-        <tr>
-            <td><?= $no ?></td>
-            <td><?= $row['manager_cabang'] ?></td>
-            <td><?= $row['nama_cabang'] ?></td>
-            <td><?= $row['regional'] ?>/<?= $row['wilayah'] ?></td>
-            <td><?= $row['minggu'] ?></td>
-            <td><?= $bulanArray[$row['bulan']] ?></td>
-            <td><?= $row['tahun'] ?></td>
-            <td><?= $row['total_staff_laporan'] ?></td>
-            <td><?= $row['total_am'] ?></td>
-            <td><?= $row['total_ak'] ?></td>
-            <td><?= $row['total_nett_agt'] ?></td>
-            <td><?= rupiah($row['total_naik_par']) ?></td>
-            <td><?= rupiah($row['total_turun_par']) ?></td>
-            <td><?= rupiah($row['total_nett_par']) ?></td>
-            <td><?= $row['total_pembiayaan_lain'] ?></td>
-            <td><?= ($row['status']) ?></td>
-        </tr>
+                <tr>
+                    <td><?= $no ?></td>
+                    <td><?= $row['manager_cabang'] ?></td>
+                    <td><?= $row['nama_cabang'] ?></td>
+                    <td><?= $row['regional'] ?>/<?= $row['wilayah'] ?></td>
+                    <td><?= $row['minggu'] ?></td>
+                    <td><?= $bulanArray[$row['bulan']] ?></td>
+                    <td><?= $row['tahun'] ?></td>
+                    <td><?= $row['total_staff_laporan'] ?></td>
+                    <td><?= $row['total_am'] ?></td>
+                    <td><?= $row['total_ak'] ?></td>
+                    <td><?= $row['total_nett_agt'] ?></td>
+                    <td><?= rupiah($row['total_naik_par']) ?></td>
+                    <td><?= rupiah($row['total_turun_par']) ?></td>
+                    <td><?= rupiah($row['total_nett_par']) ?></td>
+                    <td><?= $row['total_pembiayaan_lain'] ?></td>
+                    <td><?= ($row['status']) ?></td>
+                </tr>
         <?php
                 $no++;
             }
@@ -103,4 +112,19 @@
         }
         ?>
     </tbody>
+    <!-- <tfoot>
+        <tr>
+            <td colspan="7">Total</td>
+            <td><?= $total_staff ?></td>
+            <td><?= $total_am ?></td>
+            <td><?= $total_ak ?></td>
+            <td><?= $total_nett_agt ?></td>
+            <td><?= rupiah($total_naik_par) ?></td>
+            <td><?= rupiah($total_turun_par) ?></td>
+            <td><?= rupiah($total_nett_par) ?></td>
+            <td><?= $total_pembiayaan_lain ?></td>
+            <td></td> 
+    </tr>
+    </tfoot> -->
+
 </table>

@@ -22,7 +22,7 @@ $jabatanMenu = array(
     'Regional' => array(
         'Dashboard' => array('link' => 'index', 'icon' => 'fa-home'),
         'Cabang' => array('link' => 'cabang/index', 'icon' => 'fa-store'),
-        'Laporan Per Regional' => array('link' => 'laporan_regional/regional', 'icon' => 'fa-file-excel'),
+        'Rekap Per Regional' => array('link' => 'laporan_regional/regional', 'icon' => 'fa-file-excel'),
         'Laporan Per Cabang ' => array('link' => 'laporan_regional/cabang', 'icon' => 'fa-file-excel'),
         'Laporan Per Staff ' => array('link' => 'laporan_regional/staff', 'icon' => 'fa-file-excel'),
         'User Login' => array('link' => 'users/index', 'icon' => 'fa-users'),
