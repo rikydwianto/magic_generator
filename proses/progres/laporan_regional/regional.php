@@ -108,6 +108,7 @@ if (isset($_GET['minggu']) && isset($_GET['bulan'])) {
             <th>NO</th>
             <th>Manager Cabang</th>
             <th>Nama Cabang</th>
+            <th>Staff</th>
             <th>AM</th>
             <th>AK</th>
             <th>NETT</th>
@@ -123,11 +124,12 @@ if (isset($_GET['minggu']) && isset($_GET['bulan'])) {
     <tbody>
         <?php
                     $no = 1;
-                    $total_pengajuan_tpk = $total_am = $total_ak = $total_nett_agt = $total_anggota_cuti = $total_pembiayaan_lain = $total_naik_par = $total_turun_par = $total_nett_par = 0;
+                    $total_staff = $total_pengajuan_tpk = $total_am = $total_ak = $total_nett_agt = $total_anggota_cuti = $total_pembiayaan_lain = $total_naik_par = $total_turun_par = $total_nett_par = 0;
 
                     foreach ($result as $row) {
                         $total_am += $row['total_am'];
                         $total_ak += $row['total_ak'];
+                        $total_staff += $row['total_staff_laporan'];
                         $total_nett_agt += $row['total_nett_agt'];
                         $total_anggota_cuti += $row['total_anggota_cuti'];
                         $total_pembiayaan_lain += $row['total_pembiayaan_lain'];
@@ -141,6 +143,7 @@ if (isset($_GET['minggu']) && isset($_GET['bulan'])) {
             <td><?= $no++ ?></td>
             <td><?= $row['manager_cabang'] ?></td>
             <td><?= $row['nama_cabang'] ?></td>
+            <td class='text-center'><?= $row['total_staff_laporan'] ?></td>
             <td class='text-center'><?= $row['total_am'] ?></td>
             <td class='text-center'><?= $row['total_ak'] ?></td>
             <td class='text-center'><?= $row['total_nett_agt'] ?></td>
@@ -159,6 +162,7 @@ if (isset($_GET['minggu']) && isset($_GET['bulan'])) {
     <tfoot>
         <tr>
             <th colspan="3">Total</th>
+            <td class='text-center'><?= $total_staff ?></td>
             <td class='text-center'><?= $total_am ?></td>
             <td class='text-center'><?= $total_ak ?></td>
             <td class='text-center'><?= $total_nett_agt ?></td>

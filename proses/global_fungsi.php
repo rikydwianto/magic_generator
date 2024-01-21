@@ -36,6 +36,11 @@ function rupiah($angka)
     $hasil = "Rp. " . number_format($angka, 0, ',', '.');
     return $hasil;
 }
+function angka($angka)
+{
+    $hasil = number_format($angka, 0, ',', '.');
+    return $hasil;
+}
 
 function alert($isi)
 {
@@ -207,3 +212,67 @@ $pinjamanArray = [
     "PRR" => "Renovasi Rumah",
     "ARTA" => "Alat Rumah Tangga"
 ];
+
+
+
+function warnaPlusMinus($nilai)
+{
+    if ($nilai < 0) {
+        $warna = "text-danger"; // Merah untuk nilai negatif
+    } elseif ($nilai > 0) {
+        $warna = "text-success"; // Hijau untuk nilai positif
+    } else {
+        $warna = "text-black"; // Hitam untuk nilai nol
+    }
+
+    return $warna;
+}
+
+function warnaPlusMinusPar($nilai)
+{
+    if ($nilai < 0) {
+        $warna = "text-success"; // Merah untuk nilai negatif
+    } elseif ($nilai > 0) {
+        $warna = "text-danger"; // Hijau untuk nilai positif
+    } else {
+        $warna = "text-black"; // Hitam untuk nilai nol
+    }
+
+    return $warna;
+}
+
+function getTotalMinggu($field, $cabang, $minggu, $bulan, $tahun)
+{
+    $pdo = $GLOBALS['pdo'];
+    try {
+        // Query untuk mendapatkan total nett anggota
+        $query = "SELECT SUM($field) AS hasil
+                  FROM capaian_staff cs
+                  INNER JOIN detail_capaian_staff dcs
+                  ON dcs.id_capaian_staff = cs.id_capaian_staff
+                  WHERE cs.cabang_staff = :cabang
+                  AND cs.minggu = :minggu
+                  AND cs.bulan = :bulan
+                  AND cs.tahun = :tahun
+                  AND cs.status = 'approve'";
+
+        $stmt = $pdo->prepare($query);
+        // $stmt->bindParam(':field', $field);
+        $stmt->bindParam(':cabang', $cabang);
+        $stmt->bindParam(':minggu', $minggu);
+        $stmt->bindParam(':bulan', $bulan);
+        $stmt->bindParam(':tahun', $tahun);
+        $stmt->execute();
+
+        // Mengambil hasil query
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Menutup koneksi database
+        $pdo = null;
+
+        return $result['hasil'] ? $result['hasil'] : 0;
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+        return false;
+    }
+}

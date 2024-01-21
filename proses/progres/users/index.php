@@ -11,7 +11,7 @@
 
         if (count($users) > 0) {
     ?>
-        <table id='example' class="table table-bordered">
+        <table id='table' class="table table-bordered">
             <thead>
                 <tr>
                     <th>NO</th>

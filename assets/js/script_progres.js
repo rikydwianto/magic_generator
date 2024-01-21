@@ -1,6 +1,7 @@
 $(document).ready(function () {
   // Inisialisasi DataTables
   var table = $("#table_capaian").DataTable();
+  var table_biasa = $("#table").DataTable();
 
   // Filter berdasarkan bulan
   $("#filterBulan").on("change", function () {
