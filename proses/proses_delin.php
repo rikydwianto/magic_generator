@@ -162,7 +162,7 @@ foreach ($headerData as $header) {
 
 $no = 1;
 $baris_1 = 3;
-$sql_naik = "SELECT * FROM deliquency WHERE `loan` NOT IN (SELECT loan FROM deliquency WHERE tgl_input='$tgl_delin_awal') AND tgl_input='$tgl_delin_akhir' AND cabang='$nama_cabang'";
+$sql_naik = "SELECT * FROM deliquency WHERE `loan` NOT IN (SELECT loan FROM deliquency WHERE tgl_input='$tgl_delin_awal') AND tgl_input='$tgl_delin_akhir' AND cabang='$nama_cabang' order by staff";
 $stmt = $pdo->query($sql_naik);
 $hitung_naik = $stmt->rowCount();
 if ($hitung_naik > 0) {
@@ -234,7 +234,7 @@ $sheet1->getStyle('A' . $header_baru . ':O' . $header_baru)->getFont()->setBold(
 
 
 $baris_turun = $header_baru + 1;
-$sql_turun = "SELECT * FROM deliquency WHERE `loan` NOT IN (SELECT loan FROM deliquency WHERE tgl_input = '$tgl_delin_akhir') AND tgl_input = '$tgl_delin_awal'AND cabang = '$nama_cabang'";
+$sql_turun = "SELECT * FROM deliquency WHERE `loan` NOT IN (SELECT loan FROM deliquency WHERE tgl_input = '$tgl_delin_akhir') AND tgl_input = '$tgl_delin_awal'AND cabang = '$nama_cabang' order by staff";
 $stmt = $pdo->query($sql_turun);
 $hitung_turun = $stmt->rowCount();
 if ($hitung_turun > 0) {
