@@ -413,7 +413,7 @@ foreach ($stmt->fetchAll() as $row) {
             $no,  $row['loan'],  $row['no_center'],  $row['id_detail_nasabah'], $row['nasabah'], $row['kode_pemb'],
             $row['jenis_topup'], $row['amount'], $saldo_before, $saldo_after, $wajib_before,
             $wajib_after, $ket_wajib, $sukarela_before, $sukarela_after,
-            $banding_sukarela, $ket_sukarela, $row['hari'],  $row['staff']
+            $banding_sukarela, $ket_sukarela, $row['hari'],  $banding['staff']
         );
         $column = 'A';
         foreach ($headerData as $header) {
