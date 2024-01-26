@@ -64,24 +64,32 @@ if (isset($_GET['post-test']) && isset($_SESSION['unique_id'])) {
                         <form id="karyawanForm" method="post">
                             <div class="form-group">
                                 <label for="cabang">Cabang:</label>
-                                <input type="text" class="form-control" value='<?= $hasil['cabang'] ? $hasil['cabang'] : "" ?>' <?= $readonly ?> id="cabang" name="cabang" placeholder="Masukkan Nama Cabang" required>
+                                <input type="text" class="form-control"
+                                    value='<?= $hasil['cabang'] ? $hasil['cabang'] : "" ?>' <?= $readonly ?> id="cabang"
+                                    name="cabang" placeholder="Masukkan Nama Cabang" required>
                             </div>
                             <div class="form-group">
                                 <label for="nama">Nama:</label>
-                                <input type="text" class="form-control" value='<?= $hasil['nama'] ? $hasil['nama'] : "" ?>' <?= $readonly ?> id="nama" name="nama" placeholder="Masukkan Nama Anda" required>
+                                <input type="text" class="form-control"
+                                    value='<?= $hasil['nama'] ? $hasil['nama'] : "" ?>' <?= $readonly ?> id="nama"
+                                    name="nama" placeholder="Masukkan Nama Anda" required>
                             </div>
                             <div class="form-group">
 
                                 <?php
                                 if ($row['anggota'] == 'ya') {
                                 ?>
-                                    <label for="nik">CENTER:</label>
-                                    <input type="text" class="form-control" value='<?= $hasil['nik'] ? $hasil['nik'] : "" ?>' <?= $readonly ?> id="nik" name="nik" placeholder="Masukkan CENTER" required>
+                                <label for="nik">CENTER:</label>
+                                <input type="text" class="form-control"
+                                    value='<?= $hasil['nik'] ? $hasil['nik'] : "" ?>' <?= $readonly ?> id="nik"
+                                    name="nik" placeholder="Masukkan CENTER" required>
                                 <?php
                                 } else {
                                 ?>
-                                    <label for="nik">NIK:</label>
-                                    <input type="text" class="form-control" value='<?= $hasil['nik'] ? $hasil['nik'] : "" ?>' <?= $readonly ?> id="nik" name="nik" placeholder="Masukkan NIK Anda" required>
+                                <label for="nik">NIK:</label>
+                                <input type="text" class="form-control"
+                                    value='<?= $hasil['nik'] ? $hasil['nik'] : "" ?>' <?= $readonly ?> id="nik"
+                                    name="nik" placeholder="Masukkan NIK Anda" required>
                                 <?php
                                 }
                                 ?>
@@ -95,7 +103,7 @@ if (isset($_GET['post-test']) && isset($_SESSION['unique_id'])) {
     </div>
     <?php
     if (isset($_POST['nik']) && isset($_POST['nama'])) {
-        $unique_id = uniqid(); // Membuat Unique ID secara acak
+        $unique_id = uniqid().uniqid(); // Membuat Unique ID secara acak
         $nik = $_POST['nik'];
         $nama = $_POST['nama'];
         $cabang = $_POST['cabang'];
