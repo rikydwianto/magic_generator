@@ -45,27 +45,27 @@ function angka($angka)
 function alert($isi)
 {
 ?>
-<script>
-alert('<?php echo $isi ?>')
-</script>
+    <script>
+        alert('<?php echo $isi ?>')
+    </script>
 
 <?php
 }
 function pindah($url)
 {
 ?>
-<script>
-window.location.href = "<?php echo $url ?>";
-</script>
+    <script>
+        window.location.href = "<?php echo $url ?>";
+    </script>
 <?php
 
 }
 function tutupWindow()
 {
 ?>
-<script>
-window.close()
-</script>
+    <script>
+        window.close()
+    </script>
 <?php
 
 }
@@ -165,15 +165,15 @@ function menu_sl($menu)
 function pesan($teks, $warna = 'success')
 {
 ?>
-<div class="alert alert-<?= $warna ?>" role="alert">
-    <?= $teks ?>
-</div>
+    <div class="alert alert-<?= $warna ?>" role="alert">
+        <?= $teks ?>
+    </div>
 <?php
 }
 function badge($teks, $warna = 'success')
 {
 ?>
-<span class="badge text-bg-<?= $warna ?>"><?= $teks ?></span>
+    <span class="badge text-bg-<?= $warna ?>"><?= $teks ?></span>
 
 <?php
 }
@@ -275,4 +275,22 @@ function getTotalMinggu($field, $cabang, $minggu, $bulan, $tahun)
         echo "Error: " . $e->getMessage();
         return false;
     }
+}
+
+function hitungSelisihWaktu($tanggalAwal, $tanggalAkhir)
+{
+    $dateTimeAwal = new DateTime($tanggalAwal);
+    $dateTimeAkhir = new DateTime($tanggalAkhir);
+
+    $selisih = $dateTimeAwal->diff($dateTimeAkhir);
+
+    // Menghitung total detik dari selisih waktu
+    $totalDetik = $selisih->s + ($selisih->i * 60) + ($selisih->h * 3600) + ($selisih->d * 86400);
+
+    // Mengonversi total detik ke format jam:menit:detik
+    $jam = floor($totalDetik / 3600);
+    $menit = floor(($totalDetik % 3600) / 60);
+    $detik = $totalDetik % 60;
+
+    return sprintf('%02d:%02d:%02d', $jam, $menit, $detik);
 }

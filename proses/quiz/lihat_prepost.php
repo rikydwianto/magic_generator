@@ -48,30 +48,37 @@ if (isset($_GET['id_unik'])) {
 <?php
 
 $query = "
-    SELECT 
-        unique_id_2,
+SELECT
+    id_kuis,
+    unique_id_2,
+    nama,
+    cabang,
+    nik,
+    MAX(CASE WHEN jenis_kuis = 'pre' THEN total_score END) AS pre_test_score,
+    MAX(CASE WHEN jenis_kuis = 'pre' THEN id_jawab END) AS id_jawab_pre_test,
+    MAX(CASE WHEN jenis_kuis = 'post' AND post_number = 1 THEN total_score END) AS post_test_1_score,
+    MAX(CASE WHEN jenis_kuis = 'post' AND post_number = 1 THEN id_jawab END) AS id_jawab_post_test_1,
+    MAX(CASE WHEN jenis_kuis = 'post' AND post_number = 2 THEN total_score END) AS post_test_2_score,
+    MAX(CASE WHEN jenis_kuis = 'post' AND post_number = 2 THEN id_jawab END) AS id_jawab_post_test_2,
+    MAX(CASE WHEN jenis_kuis = 'post' AND post_number = 3 THEN total_score END) AS post_test_3_score,
+    MAX(CASE WHEN jenis_kuis = 'post' AND post_number = 3 THEN id_jawab END) AS id_jawab_post_test_3
+FROM (
+    SELECT
         id_kuis,
+        unique_id_2,
         nama,
-        cabang,nik,
-        MAX(CASE WHEN jenis_kuis = 'pre' THEN total_score END) AS pre_test_score,
-        MAX(CASE WHEN jenis_kuis = 'post' AND post_number = 1 THEN total_score END) AS post_test_1_score,
-        MAX(CASE WHEN jenis_kuis = 'post' AND post_number = 2 THEN total_score END) AS post_test_2_score,
-        MAX(CASE WHEN jenis_kuis = 'post' AND post_number = 3 THEN total_score END) AS post_test_3_score
-    FROM (
-        SELECT 
-            unique_id_2,
-            id_kuis,
-            nama,
-            cabang,
-            nik,
-            jenis_kuis,
-            total_score,
-            ROW_NUMBER() OVER (PARTITION BY unique_id_2, jenis_kuis ORDER BY created) AS post_number
-        FROM kuis_jawab
-    ) AS numbered_data
-    where id_kuis='$id_kuis'
-    GROUP BY unique_id_2 
-    order by nik, pre_test_score DESC, post_test_1_score DESC, post_test_2_score DESC, post_test_3_score DESC;;
+        cabang,
+        nik,
+        jenis_kuis,
+        total_score,
+        id_jawab,
+        ROW_NUMBER() OVER (PARTITION BY unique_id_2, jenis_kuis ORDER BY created) AS post_number
+    FROM kuis_jawab
+) AS numbered_data
+WHERE id_kuis = '$id_kuis'
+GROUP BY id_kuis, unique_id_2, nik
+HAVING pre_test_score IS NOT NULL
+ORDER BY pre_test_score DESC, post_test_1_score DESC, post_test_2_score DESC, post_test_3_score DESC;
 ";
 
 $stmt = $pdo->query($query);
@@ -97,10 +104,14 @@ $hasilQuery = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td><?php echo $hasil['cabang']; ?></td>
                 <td><?php echo $hasil['nik']; ?></td>
                 <td><?php echo proper($hasil['nama'])  ?></td>
-                <td><?php echo $hasil['pre_test_score']; ?></td>
-                <td><?php echo $hasil['post_test_1_score']; ?></td>
-                <td><?php echo $hasil['post_test_2_score']; ?></td>
-                <td><?php echo $hasil['post_test_3_score']; ?></td>
+                <td><a href="javascript:void(0)" onclick="openNewTab('<?= $hasil['id_jawab_pre_test'] ?>','<?= $id_kuis ?>')"><?php echo $hasil['pre_test_score']; ?></a>
+                </td>
+                <td><a href="javascript:void(0)" onclick="openNewTab('<?= $hasil['id_jawab_post_test_1'] ?>','<?= $id_kuis ?>')"><?php echo $hasil['post_test_1_score']; ?></a>
+                </td>
+                <td><a href="javascript:void(0)" onclick="openNewTab('<?= $hasil['id_jawab_post_test_2'] ?>','<?= $id_kuis ?>')"><?php echo $hasil['post_test_2_score']; ?></a>
+                </td>
+                <td><a href="javascript:void(0)" onclick="openNewTab('<?= $hasil['id_jawab_post_test_3'] ?>','<?= $id_kuis ?>')"><?php echo $hasil['post_test_3_score']; ?></a>
+                </td>
                 <td>
                     <?php
                     if ($superuser === 'superuser') {

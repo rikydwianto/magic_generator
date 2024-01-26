@@ -15,7 +15,7 @@ try {
     $id = $stmt->fetch();
     if (!empty($id)) {
 
-        $isi = $url_quiz . 'quiz/' . $id['id_kuis'];
+        $isi = $url_quiz . 'index.php?id=' . $id['id_kuis'];
         // $isi = 'https://www.malasngoding.com';
 
         // nama folder tempat penyimpanan file qrcode

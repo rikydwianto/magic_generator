@@ -40,14 +40,12 @@
             <td><?= $row['soal'] ?></td>
             <td><?= getTeksById($jsonArray, $row['jawaban']); ?></td>
             <td>
-                <a href="javascript:void()"
-                    onclick="jawabAnalisa('<?= $row['id_kuis'] ?>','BENAR','<?= $row['id_soal'] ?>')"
+                <a href="javascript:void()" onclick="jawabAnalisa('<?= $id_kuis ?>','BENAR','<?= $row['id_soal'] ?>')"
                     class="btn btn-success"><?= @hitung($pdo, $id_kuis, $row['id_soal'], "BENAR") ?></a>
 
             </td>
             <td>
-                <a href="javascript:void()"
-                    onclick="jawabAnalisa('<?= $row['id_kuis'] ?>','SALAH','<?= $row['id_soal'] ?>')"
+                <a href="javascript:void()" onclick="jawabAnalisa('<?= $id_kuis ?>','SALAH','<?= $row['id_soal'] ?>')"
                     class="btn btn-danger"><?= @hitung($pdo, $id_kuis, $row['id_soal'], "SALAH") ?></a>
             </td>
         </tr>

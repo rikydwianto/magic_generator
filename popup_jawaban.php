@@ -23,7 +23,8 @@ $kuis = $stmt->fetch(); ?>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css">
@@ -49,6 +50,14 @@ $kuis = $stmt->fetch(); ?>
                 <tr>
                     <th>Nama</th>
                     <td><?= $kuis['nama'] ?></td>
+                </tr>
+                <tr>
+                    <th>waktu</th>
+                    <td><?= $kuis['mulai'] ?> s/d <?= $kuis['selesai'] ?></td>
+                </tr>
+                <tr>
+                    <th>Pengerjaan</th>
+                    <td><?= $kuis['pengerjaan'] ?></td>
                 </tr>
                 <tr>
                     <th>Benar</th>
@@ -89,11 +98,11 @@ $kuis = $stmt->fetch(); ?>
                     else $bg = "bg-danger text-white";
                 ?>
 
-                    <li class="list-group-item kuis-item <?= $bg ?> ">
-                        <h5><?= $no ?> <?= $row['soal'] ?>
-                        </h5>
+                <li class="list-group-item kuis-item <?= $bg ?> ">
+                    <h5><?= $no ?> <?= $row['soal'] ?>
+                    </h5>
 
-                        <?php
+                    <?php
                         $pilihan = json_decode($row['pilihan'], true);
                         foreach ($pilihan as $pil) {
                             if ($pil['id'] == $row['pilihan_benar']) {
@@ -103,11 +112,11 @@ $kuis = $stmt->fetch(); ?>
                             }
                         }
                         ?>
-                        <p>
-                            Jawab: <?= strtoupper($row['pilihuser']) ?> | <?= $row['keterangan'] ?>
+                    <p>
+                        Jawab: <?= strtoupper($row['pilihuser']) ?> | <?= $row['keterangan'] ?>
 
-                        </p>
-                    </li>
+                    </p>
+                </li>
 
 
                 <?php
@@ -119,7 +128,8 @@ $kuis = $stmt->fetch(); ?>
     </div>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -128,17 +138,17 @@ $kuis = $stmt->fetch(); ?>
     <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap4.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#example').DataTable({
-                dom: 'Bfrtip',
-                buttons: [
-                    'copyHtml5',
-                    'excelHtml5',
-                    'csvHtml5',
-                    'pdfHtml5'
-                ]
-            });
+    $(document).ready(function() {
+        $('#example').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
+            ]
         });
+    });
     </script>
 
 

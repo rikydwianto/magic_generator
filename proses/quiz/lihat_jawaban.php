@@ -51,29 +51,30 @@ if (isset($_GET['del'])) {
         $stmt = $pdo->query($query);
         foreach ($stmt->fetchAll() as $row) {
         ?>
-            <tr>
-                <td><?= $no ?></td>
-                <td><?= $row['cabang'] ?></td>
-                <td><?= $row['nik'] ?></td>
-                <td><?= proper($row['nama']) ?></td>
-                <td><?= $row['pengerjaan'] ?></td>
-                <td><?= $row['jenis_kuis'] ?></td>
-                <td><?= $row['benar'] ?></td>
-                <td><?= $row['salah'] ?></td>
-                <td><?= $row['total_score'] ?></td>
-                <td>
-                    <button onclick="openNewTab('<?= $row['id_jawab'] ?>','<?= $row['id_kuis'] ?>')" class='btn'>Lihat
-                        Jawaban</button>
-                </td>
-                <td>
-                    <?php if ($row['keterangan'] == 'selesai' || true) {
+        <tr>
+            <td><?= $no ?></td>
+            <td><?= $row['cabang'] ?></td>
+            <td><?= $row['nik'] ?></td>
+            <td><?= proper($row['nama']) ?></td>
+            <td><?= $row['pengerjaan'] ?></td>
+            <td><?= $row['jenis_kuis'] ?></td>
+            <td><?= $row['benar'] ?></td>
+            <td><?= $row['salah'] ?></td>
+            <td><?= $row['total_score'] ?></td>
+            <td>
+                <button onclick="openNewTab('<?= $row['id_jawab'] ?>','<?= $row['id_kuis'] ?>')" class='btn'>Lihat
+                    Jawaban</button>
+            </td>
+            <td>
+                <?php if ($row['keterangan'] == 'selesai' || true) {
                     ?>
-                        <a href="<?= $url . "index.php?menu=index&act=quiz&sub=lihat_jawaban&id_kuis=$row[id_kuis]&del&id_jawab=" . $row['id_jawab'] ?>" class="btn btn-danger">x</a>
-                    <?php
+                <a href="<?= $url . "index.php?menu=index&act=quiz&sub=lihat_jawaban&id_kuis=$row[id_kuis]&del&id_jawab=" . $row['id_jawab'] ?>"
+                    class="btn btn-danger">x</a>
+                <?php
                     } ?>
 
-                </td>
-            </tr>
+            </td>
+        </tr>
         <?php
             $no++;
         }
@@ -85,11 +86,6 @@ if (isset($_GET['del'])) {
 <?php
 include "./proses/quiz/analisa_quiz.php";
 ?>
-<script>
-    let popupIsOpen = false;
-
-    function openNewTab(id, id_kuis) {
-        // Membuka tab baru
-        window.open('popup_jawaban.php?id=' + id + '&id_kuis=' + id_kuis, '_blank', 'width=800,height=600');
-    }
-</script>
+<!-- <script>
+    
+</script> -->
