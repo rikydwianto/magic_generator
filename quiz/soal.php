@@ -100,63 +100,6 @@ if ($hitung_jawab_soal > ($hitung_soal - 1)) {
 
 <body>
 
-    <div class="container-fluid mt-5">
-        <form action="" method="post" id="quizForm">
-            <div class="row justify-content-center">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header bg-primary text-white">
-                            <h4 class="mb-0">Soal ke <?= $hitung_jawab_soal + 1 ?> dari <?= $hitung_soal ?>
-                            </h4>
-
-                        </div>
-                        <div class="card-body">
-                            <div id="questionContainer" class="question-container">
-                                <input type="hidden" name="id_soal" id="" value="<?= $result['id_soal'] ?>">
-                                <input type="hidden" name="id_kuis" id="" value="<?= $result['id_kuis'] ?>">
-                                <div id="questionTitle" class="question-title">
-                                    <h4><?= $result['soal'] ?></h4>
-                                </div>
-                                <div id="optionsContainer" class="options-container">
-                                    <h6>Pilihan</h6>
-                                    <ul class="list-group">
-                                        <?php
-                                        foreach ($pilihan as $pilihan) {
-                                        ?>
-                                        <li class="list-group-item" for="pilihan<?= $pilihan['id'] ?>">
-                                            <input class="form-check-input me-1" type="radio" name="pilihan"
-                                                value="<?= $pilihan['id'] ?>" id="pilihan<?= $pilihan['id'] ?>">
-                                            <label class="form-check-label" for="pilihan<?= $pilihan['id'] ?>"
-                                                name='pilihan'>
-                                                <?= $row['acak'] == 'ya' ? "" : $pilihan['id'] . '. ' ?><?= $pilihan['teks'] ?></label>
-                                        </li>
-                                        <?php
-                                        }
-                                        ?>
-
-                                    </ul>
-                                </div>
-                            </div>
-                            <?php
-                            if ($hitung_jawab_soal >= ($hitung_soal - 1)) {
-                            ?>
-                            <input type="hidden" name="kirim_jawaban" value='ya' id="">
-                            <button id="nextBtn" type="button" onclick="validateForm()"
-                                class="btn btn-primary mt-3">KIRIM DAN LIHAT HASIL</button>
-                            <?php
-                            } else {
-                            ?>
-                            <button id="nextBtn" type="button" onclick="validateForm()"
-                                class="btn btn-primary mt-3">Jawab</button>
-                            <?php
-                            }
-                            ?>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
     <?php
     if (isset($_POST['id_soal']) && isset($_POST['pilihan'])) {
         try {
@@ -259,6 +202,65 @@ if ($hitung_jawab_soal > ($hitung_soal - 1)) {
     }
 
     ?>
+
+    <div class="container-fluid mt-5">
+        <form action="" method="post" id="quizForm">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="mb-0">Soal ke <?= $hitung_jawab_soal + 1 ?> dari <?= $hitung_soal ?>
+                            </h4>
+
+                        </div>
+                        <div class="card-body">
+                            <div id="questionContainer" class="question-container">
+                                <input type="hidden" name="id_soal" id="" value="<?= $result['id_soal'] ?>">
+                                <input type="hidden" name="id_kuis" id="" value="<?= $result['id_kuis'] ?>">
+                                <div id="questionTitle" class="question-title">
+                                    <h4><?= $result['soal'] ?></h4>
+                                </div>
+                                <div id="optionsContainer" class="options-container">
+                                    <h6>Pilihan</h6>
+                                    <ul class="list-group">
+                                        <?php
+                                        foreach ($pilihan as $pilihan) {
+                                        ?>
+                                        <li class="list-group-item" for="pilihan<?= $pilihan['id'] ?>">
+                                            <input class="form-check-input me-1" type="radio" name="pilihan"
+                                                value="<?= $pilihan['id'] ?>" id="pilihan<?= $pilihan['id'] ?>">
+                                            <label class="form-check-label" for="pilihan<?= $pilihan['id'] ?>"
+                                                name='pilihan'>
+                                                <?= $row['acak'] == 'ya' ? "" : $pilihan['id'] . '. ' ?><?= $pilihan['teks'] ?></label>
+                                        </li>
+                                        <?php
+                                        }
+                                        ?>
+
+                                    </ul>
+                                </div>
+                            </div>
+                            <?php
+                            if ($hitung_jawab_soal >= ($hitung_soal - 1)) {
+                            ?>
+                            <input type="hidden" name="kirim_jawaban" value='ya' id="">
+                            <button id="nextBtn" type="button" onclick="validateForm()"
+                                class="btn btn-primary mt-3">KIRIM DAN LIHAT HASIL</button>
+                            <?php
+                            } else {
+                            ?>
+                            <button id="nextBtn" type="button" onclick="validateForm()"
+                                class="btn btn-primary mt-3">Jawab</button>
+                            <?php
+                            }
+                            ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
 
     <!-- Bootstrap JS and Popper.js -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
