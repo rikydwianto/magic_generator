@@ -4,6 +4,10 @@ require './../proses/global_fungsi.php';
 include_once "./../config/setting.php";
 include_once "./../config/koneksi.php";
 include "./../vendor/phpqrcode/qrlib.php";
+header("Access-Control-Allow-Origin: https://quiz.comdev.my.id");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
 header('Content-Type: application/json');
 
 // Mendapatkan data dari sesi
