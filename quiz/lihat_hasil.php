@@ -6,9 +6,14 @@ include_once "./../config/koneksi.php";
 $id_kuis = isset($_SESSION['id_kuis']) ? intval($_SESSION['id_kuis']) : 0;
 $id_jawab = $_SESSION['id_kuis_jawab'];
 
+$url_api = $url . "api/";
 
 
-
+$hitung_soal = $pdo->prepare("SELECT COUNT(*) AS total_soal FROM soal WHERE id_kuis=:id_kuis");
+$hitung_soal->bindParam(":id_kuis", $id_kuis);
+$hitung_soal->execute();
+$hitung_soal = $hitung_soal->fetch()['total_soal'];
+$total_soal =  $hitung_soal;
 
 // Query untuk mengecek apakah kuis dengan ID tertentu ada atau tidak
 $sql = "SELECT * FROM kuis WHERE id_kuis = :id_kuis";
@@ -33,6 +38,29 @@ $tampil_jawaban = $row['tampil_jawaban'];
 if ($hitungTest >= 1) {
     $tampil_jawaban = 'ya';
 }
+if ($kuis['benar'] + $kuis['salah'] == $total_soal) {
+    // echo "sama";
+} else {
+    // echo "update";
+    // Data yang akan dikirim ke server
+    $data = array(
+        'id_kuis' => $id_kuis,
+        'id_jawab' => $id_jawab,
+    );
+
+    $options = array(
+        'http' => array(
+            'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method' => 'POST',
+            'content' => http_build_query($data),
+        ),
+    );
+
+    $context = stream_context_create($options);
+
+    $result = file_get_contents($url_api . "soal.php?update-kuis", false, $context);
+    pindah($url_quiz . "lihat_hasil.php");
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,7 +72,9 @@ if ($hitungTest >= 1) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@9">
-
+    <script>
+    localStorage.clear()
+    </script>
     <style>
     body {
         user-select: none;
@@ -93,7 +123,7 @@ if ($hitungTest >= 1) {
                                             <div class="card-body">
                                                 <h5 class="card-title">Total Soal</h5>
                                                 <h2 class="card-text text-center">
-                                                    <?= $kuis['benar']  + $kuis['salah'] ?>
+                                                    <?= $total_soal ?>
                                                 </h2>
                                             </div>
                                         </div>
@@ -135,7 +165,7 @@ if ($hitungTest >= 1) {
                                 </div>
                                 <br>
                                 <div class="row">
-                                    <div class="col-md-5">
+                                    <div class="col-md-6">
                                         <table class='table table-bordered'>
                                             <tr>
                                                 <th>Nama Kuis</th>

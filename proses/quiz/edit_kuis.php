@@ -77,10 +77,10 @@ $kuis = $stmt->fetch();
         </div>
 
         <!-- Waktu -->
-        <!-- <div class="mb-3">
-        <label for="waktu" class="form-label">Waktu</label>
-    </div> -->
-        <input type="hidden" class="form-control" id="waktu" name="waktu" placeholder="Masukkan Waktu" value="<?php echo $kuis['waktu']; ?>">
+        <div class="mb-3">
+            <label for="waktu" class="form-label">Waktu(menit)</label>
+        </div>
+        <input type="number" class="form-control" id="waktu" name="waktu" placeholder="Masukkan Waktu" value="<?php echo $kuis['waktu']; ?>">
 
         <!-- Status -->
         <div class="mb-3">

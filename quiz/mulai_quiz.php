@@ -3,7 +3,7 @@ require './../vendor/autoload.php'; // Impor library Dotenv
 require './../proses/global_fungsi.php';
 include_once "./../config/setting.php";
 include_once "./../config/koneksi.php";
-
+$id_kuis_jawab = isset($_SESSION['id_kuis_jawab']) ? intval($_SESSION['id_kuis_jawab']) : 0;
 $id_kuis = isset($_SESSION['id_kuis']) ? intval($_SESSION['id_kuis']) : 0;
 
 // Query untuk mengecek apakah kuis dengan ID tertentu ada atau tidak
@@ -15,6 +15,25 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!isset($_SESSION['unique_id']) && !isset($_SESSION['nik'])) {
     pindah($url_quiz . "404.php");
 }
+
+$keterangan = 'selesai';  // Ganti dengan nilai yang sesuai
+
+$sql = "SELECT * FROM kuis_jawab WHERE id_jawab = :id_jawab AND keterangan = :keterangan";
+$stmt = $pdo->prepare($sql);
+$stmt->bindParam(':id_jawab', $id_kuis_jawab, PDO::PARAM_INT);
+$stmt->bindParam(':keterangan', $keterangan, PDO::PARAM_STR);
+$stmt->execute();
+$kuis_jawab = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Cek apakah data ditemukan
+if ($kuis_jawab) {
+    pindah($url_quiz . "lihat_hasil.php");
+    exit();
+} else {
+    // Data tidak ditemukan atau belum selesai, lakukan tindakan lain
+    // echo "Data tidak ditemukan atau belum selesai.";
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,6 +46,10 @@ if (!isset($_SESSION['unique_id']) && !isset($_SESSION['nik'])) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- SweetAlert CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@9">
+    <script>
+        let waktu = "<?= $row['waktu']; ?>";
+        localStorage.setItem('waktu', waktu)
+    </script>
 </head>
 
 <body>
@@ -48,7 +71,7 @@ if (!isset($_SESSION['unique_id']) && !isset($_SESSION['nik'])) {
 
                         <form action="" id='startQuizForm' method="post">
                             <!-- Tambahkan input hidden untuk menyimpan data yang diperlukan -->
-                            <input type="hidden" name="id_kuis" value="1"> <!-- Gantilah dengan ID kuis yang sesuai -->
+                            <input type="hidden" name="id_kuis"> <!-- Gantilah dengan ID kuis yang sesuai -->
 
                             <button type="button" id="startQuizBtn" class="btn btn-success">Mulai Kuis</button>
                         </form>
@@ -59,7 +82,7 @@ if (!isset($_SESSION['unique_id']) && !isset($_SESSION['nik'])) {
     </div>
     <?php
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $id_kuis = isset($_SESSION['id_kuis_jawab']) ? intval($_SESSION['id_kuis_jawab']) : 0;
+
 
         // Tanggal dan waktu sekarang
         $now = date('Y-m-d H:i:s');
@@ -68,11 +91,11 @@ if (!isset($_SESSION['unique_id']) && !isset($_SESSION['nik'])) {
         $sql = "UPDATE kuis_jawab SET mulai = :mulai WHERE id_jawab = :id_kuis";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':mulai', $now, PDO::PARAM_STR);
-        $stmt->bindParam(':id_kuis', $id_kuis, PDO::PARAM_INT);
+        $stmt->bindParam(':id_kuis', $id_kuis_jawab, PDO::PARAM_INT);
 
         // Eksekusi pernyataan UPDATE
         $stmt->execute();
-        pindah($url_quiz . "soal.php");
+        pindah($url_quiz . "handle_soal.php");
     }
     ?>
 

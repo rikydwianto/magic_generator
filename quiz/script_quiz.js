@@ -54,6 +54,8 @@ document.addEventListener("DOMContentLoaded", function () {
       }).then((result) => {
         if (result.isConfirmed) {
           // Jika konfirmasi "Ya", kirim formulir
+          localStorage.clear();
+
           document.getElementById("startQuizForm").submit();
         }
       });

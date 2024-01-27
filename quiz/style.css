@@ -1,0 +1,100 @@
+body {
+  user-select: none;
+}
+#countdown {
+  color: #333;
+  /* background-color: #fff; */
+  padding: 5px;
+  display: inline-block;
+}
+
+.counter-container {
+  /* margin-top: 10px; */
+  font-size: 18px;
+  user-select: none;
+}
+
+.list-group-item {
+  padding: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.form-check-input {
+  width: 30px;
+  height: 30px;
+  margin-left: 5px;
+}
+
+.form-check-label {
+  margin-left: 40px;
+  user-select: none;
+}
+
+/* Optional: Add hover effect on list items */
+.list-group-item:hover {
+  background-color: #f8f9fa;
+  cursor: pointer;
+}
+
+#questionTitle {
+  user-select: none;
+}
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 100px;
+  margin: auto;
+  aspect-ratio: 1;
+  display: grid;
+  border: 4px solid #0000;
+  border-radius: 50%;
+  border-right-color: #70d1e9;
+  animation: l15 1s infinite linear;
+}
+.loader::before,
+.loader::after {
+  content: "";
+  grid-area: 1/1;
+  margin: 2px;
+  border: inherit;
+  border-radius: 50%;
+  animation: l15 2s infinite;
+}
+.loader::after {
+  margin: 8px;
+  animation-duration: 3s;
+}
+@keyframes l15 {
+  100% {
+    transform: rotate(1turn);
+  }
+}
+
+.loader1 {
+  width: 100px;
+  aspect-ratio: 1;
+  padding: 10px;
+  margin: auto;
+  box-sizing: border-box;
+  display: grid;
+  background: #fff;
+  filter: blur(5px) contrast(10) hue-rotate(180deg);
+  mix-blend-mode: darken;
+}
+.loader1:before,
+.loader1:after {
+  content: "";
+  grid-area: 1/1;
+  margin: 30px 0;
+  border-radius: 100px;
+  background: #ff00ff;
+  animation: l4 2s infinite linear;
+}
+.loader1:after {
+  --s: -1;
+}
+@keyframes l4 {
+  100% {
+    transform: rotate(calc(var(--s, 1) * 1turn));
+  }
+}
