@@ -294,3 +294,52 @@ function hitungSelisihWaktu($tanggalAwal, $tanggalAkhir)
 
     return sprintf('%02d:%02d:%02d', $jam, $menit, $detik);
 }
+
+function getImageTypeFromUrl($imageUrl)
+{
+    // Ambil informasi gambar menggunakan getimagesize
+    $imageInfo = @getimagesize($imageUrl);
+
+    if ($imageInfo === false) {
+        // Gagal mendapatkan informasi gambar
+        return false;
+    }
+
+    // Ambil tipe MIME dari informasi gambar
+    $imageType = $imageInfo['mime'];
+
+    return $imageType;
+}
+
+
+function cekGambarSoal($url_api, $id_soal, $ket)
+{
+    $apiUrl = $url_api . 'gambar_soal.php';  // Gantilah dengan URL API yang sesuai
+    $apiUrl .= "?id=$id_soal&ket=$ket";
+
+
+    // Membuat data yang akan dikirimkan ke API
+    $data = array(
+        'id' => $id_soal,
+        'ket' => $ket
+    );
+
+    // Menginisialisasi cURL
+    $ch = curl_init();
+
+    // Mengatur opsi cURL
+    curl_setopt($ch, CURLOPT_URL, $apiUrl);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+
+    // Menjalankan cURL dan mendapatkan hasil
+    $result = curl_exec($ch);
+
+    // Menutup sesi cURL
+    curl_close($ch);
+
+    // Mengembalikan hasil dari API dalam bentuk array
+    $hasil =  json_decode($result, true);
+    return $hasil['hasil'];
+}

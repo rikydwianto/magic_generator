@@ -31,6 +31,10 @@ $smt = $pdo->query($qsoal);
             <td><?= $kuis['nama_karyawan'] ?></td>
         </tr>
         <tr>
+            <th>Waktu Pengerjaan</th>
+            <td><?= $kuis['waktu'] ?> Menit</td>
+        </tr>
+        <tr>
             <th>&nbsp;</th>
             <td>
                 <a href="javascript:void(0)" id='openPopupBtn' class="btn btn-lg btn-primary">
@@ -50,43 +54,50 @@ $smt = $pdo->query($qsoal);
             $jawaban = $soal['jawaban'];
 
         ?>
-        <div class="col-md-12 mb-2">
-            <div class="card ">
-                <div class="card-header   d-flex justify-content-between">
-                    <h5 class="mb-0">Soal <?= $no ?>. <?= $soal['soal'] ?></h5>
-                    <a onclick="return window.confirm('Apakah anda yakin untuk mengapus ini?')"
-                        href="<?= $url . "index.php?menu=index&act=quiz&sub=kelola_soal&del&id_kuis=" . $id_kuis ?>&id_soal=<?= $soal['id_soal'] ?>"
-                        class="btn btn-danger btn-sm ">
-                        <i class="fa fa-times"></i>
-                    </a>
-                </div>
+            <div class="col-md-12 mb-2">
+                <div class="card ">
+                    <div class="card-header d-flex justify-content-between">
+                        <h5 class="mb-0">Soal <?= $no ?>. <?= $soal['soal'] ?></h5>
+                        <a onclick="return window.confirm('Apakah anda yakin untuk mengapus ini?')" href="<?= $url . "index.php?menu=index&act=quiz&sub=kelola_soal&del&id_kuis=" . $id_kuis ?>&id_soal=<?= $soal['id_soal'] ?>" class="btn btn-danger btn-sm ">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
 
-                <div class="card-body">
-                    <p class="card-text">
-                    <ul class="list-group">
+                    <div class="card-body">
                         <?php
+                        if ($soal['url_gambar'] != "") {
+                            $gambar = cekGambarSoal($url_api, $soal['id_soal'], 'soal');
+
+                        ?>
+                            <img src="<?= $gambar['url_gambar'] ?>" class="img img-fluid" alt="">
+                        <?php
+                        }
+                        ?>
+                        <p class="card-text">
+                        <ul class="list-group">
+                            <?php
                             foreach ($json as $pil) {
                                 if ($pil['id'] == $soal['jawaban']) {
                             ?>
-                        <li class="list-group-item  "><b><?= strtoupper($pil['id']) ?>. <?= $pil['teks'] ?></b>
-                        </li>
-                        <?php
+                                    <li class="list-group-item  "><b><?= strtoupper($pil['id']) ?>. <?= $pil['teks'] ?></b>
+                                    </li>
+                                <?php
                                 } else {
                                 ?>
-                        <li class="list-group-item  "><?= strtoupper($pil['id']) ?>. <?= $pil['teks'] ?></li>
-                        <?php
+                                    <li class="list-group-item  "><?= strtoupper($pil['id']) ?>. <?= $pil['teks'] ?></li>
+                            <?php
                                 }
                             }
                             ?>
-                    </ul>
-                    </p>
+                        </ul>
+                        </p>
 
-                    <!-- Pilihan -->
+                        <!-- Pilihan -->
 
-                    <!-- <p class="mt-3"><strong>Jawaban: <?= $jawaban ?></strong></p> -->
+                        <!-- <p class="mt-3"><strong>Jawaban: <?= $jawaban ?></strong></p> -->
+                    </div>
                 </div>
             </div>
-        </div>
 
         <?php
             $no++;
@@ -100,22 +111,22 @@ $smt = $pdo->query($qsoal);
 
 </div>
 <script>
-// Logika untuk membuka popup saat tombol diklik
-document.getElementById('openPopupBtn').addEventListener('click', function() {
-    // Fungsi untuk membuka popup
-    openPopup();
-});
+    // Logika untuk membuka popup saat tombol diklik
+    document.getElementById('openPopupBtn').addEventListener('click', function() {
+        // Fungsi untuk membuka popup
+        openPopup();
+    });
 
-// Fungsi untuk membuka popup
-function openPopup() {
-    let id = '<?= $id_kuis ?>'
-    // Logic untuk membuka popup (gunakan modal, dialog, atau elemen semacamnya)
-    // Contoh sederhana menggunakan window.open untuk tujuan demonstrasi
-    var popupWindow = window.open('<?= $url ?>popup_soal.php?id_kuis=' + id, 'Popup', 'width=700,height=700');
-    // Set fungsi untuk menangani peristiwa penutupan popup
-    popupWindow.onunload = function() {
-        // Fungsi untuk merefresh halaman utama
-        location.reload();
-    };
-}
+    // Fungsi untuk membuka popup
+    function openPopup() {
+        let id = '<?= $id_kuis ?>'
+        // Logic untuk membuka popup (gunakan modal, dialog, atau elemen semacamnya)
+        // Contoh sederhana menggunakan window.open untuk tujuan demonstrasi
+        var popupWindow = window.open('<?= $url ?>popup_soal.php?id_kuis=' + id, 'Popup', 'width=700,height=700');
+        // Set fungsi untuk menangani peristiwa penutupan popup
+        popupWindow.onunload = function() {
+            // Fungsi untuk merefresh halaman utama
+            location.reload();
+        };
+    }
 </script>

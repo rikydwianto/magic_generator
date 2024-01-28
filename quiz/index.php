@@ -56,7 +56,7 @@ if (isset($_GET['post-test']) && isset($_SESSION['unique_id'])) {
 
     <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-6">
+            <div class="col-md-9">
                 <div class="card">
                     <div class="card-header bg-primary text-white">
                         <h3 class="mb-0 text-center"><?= $row['nama_kuis'] ?></h3>

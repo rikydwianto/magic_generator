@@ -51,8 +51,9 @@ try {
             <tr>
                 <th>NO</th>
                 <th>Soal</th>
+                <th>Gambar</th>
                 <th>Pilihan</th>
-                <th>Jawaban</th>
+                <!-- <th>Jawaban</th> -->
                 <th>Kategori</th>
                 <th>Sub Kategori</th>
                 <th>act</th>
@@ -65,6 +66,21 @@ try {
             <tr>
                 <td><?php echo $no ?></td>
                 <td><?php echo $row['soal']; ?></td>
+                <td>
+                    <?php
+                        if ($row['url_gambar'] != "") {
+                            $gambar = cekGambarSoal($url_api, $row['id_soal'], 'soal_bank');
+                        ?>
+                    <img src="<?php echo $gambar['url_gambar']; ?>" alt="<?php echo $row['url_gambar']; ?>"
+                        style="width: 150px;" class="img ">
+                    <a href="javascript:klikGambar('<?php echo $row['id_soal']; ?>','soal_bank')"
+                        class="btn btn-link view-image" data-id="<?php echo $row['id_soal']; ?>"> lihat Gambar</a>
+                    <?php
+                        }
+
+                        ?>
+
+                </td>
                 <td>
                     <?php
 
@@ -85,9 +101,11 @@ try {
 
                     <?php }
 
+
                         ?>
+                    Jawaban : <?php echo strtoupper($row['jawaban']); ?>
                 </td>
-                <td><?php echo strtoupper($row['jawaban']); ?></td>
+                <!-- <td><?php echo strtoupper($row['jawaban']); ?></td> -->
                 <td><?php echo $row['kategori']; ?></td>
                 <td><?php echo $row['sub_kategori']; ?></td>
                 <td>
@@ -107,3 +125,27 @@ try {
         </tbody>
     </table>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="gambarModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered  modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Gambar Soal : </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="loader"></div>
+                <div class="isi"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <!-- <button type="button" class="btn btn-primary">Understood</button> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+</script>

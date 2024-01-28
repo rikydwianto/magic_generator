@@ -1,0 +1,31 @@
+# @base_url = https://tool.comdev.my.id/api/
+@base_url = http://localhost/tool/api/
+
+
+### POST Request ###
+POST {{base_url}}/soal.php?data-soal
+Content-Type: application/x-www-form-urlencoded
+
+id_kuis=25&id_jawab=190
+
+### POST Request ###
+POST {{base_url}}/soal.php?input-soal
+Content-Type: application/x-www-form-urlencoded
+
+id_kuis=1&id_jawab=118&id_soal=1&pilihan=b
+
+### POST Request ###
+POST {{base_url}}/soal.php?update-kuis
+Content-Type: application/x-www-form-urlencoded
+
+id_kuis=1&id_jawab=119&id_soal=1&pilihan=b
+
+### POST Request ###
+POST {{base_url}}/soal.php?belum-terjawab
+Content-Type: application/x-www-form-urlencoded
+
+id_kuis=1&id_jawab=119&id_soal=1&pilihan=b
+
+
+### AMBIL GAMBAR ###
+GET {{base_url}}/gambar_soal.php?id=1&ket=soal_bank

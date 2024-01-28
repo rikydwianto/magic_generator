@@ -10,4 +10,5 @@ $url = $_ENV['URL'];
 // $url = "https://localhost/comdev/";
 $url_quiz = $_ENV['URL_KUIS'];
 $url_sl = $_ENV['URL_SL'];
+$url_api = $url . 'api/';
 // $url_quiz = "http://localhost:3000/";

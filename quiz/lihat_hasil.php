@@ -73,30 +73,30 @@ if ($kuis['benar'] + $kuis['salah'] == $total_soal) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@9">
     <script>
-    localStorage.clear()
+        localStorage.clear()
     </script>
     <style>
-    body {
-        user-select: none;
-    }
+        body {
+            user-select: none;
+        }
 
-    /* Style untuk menyembunyikan titik pada elemen <li> */
-    .custom-list-item {
-        list-style-type: none;
-        padding-left: 10px;
-        padding-top: 5px;
-    }
+        /* Style untuk menyembunyikan titik pada elemen <li> */
+        .custom-list-item {
+            list-style-type: none;
+            padding-left: 10px;
+            padding-top: 5px;
+        }
 
-    /* Style tambahan sesuai kebutuhan desain */
-    .custom-list-item h5 {
-        margin-bottom: 0;
-        /* Menghilangkan margin bawah pada elemen h5 */
-    }
+        /* Style tambahan sesuai kebutuhan desain */
+        .custom-list-item h5 {
+            margin-bottom: 0;
+            /* Menghilangkan margin bawah pada elemen h5 */
+        }
 
-    .custom-list-item p {
-        margin-top: 0;
-        /* Menghilangkan margin atas pada elemen p */
-    }
+        .custom-list-item p {
+            margin-top: 0;
+            /* Menghilangkan margin atas pada elemen p */
+        }
     </style>
 
 </head>
@@ -165,7 +165,7 @@ if ($kuis['benar'] + $kuis['salah'] == $total_soal) {
                                 </div>
                                 <br>
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <table class='table table-bordered'>
                                             <tr>
                                                 <th>Nama Kuis</th>
@@ -196,8 +196,7 @@ if ($kuis['benar'] + $kuis['salah'] == $total_soal) {
                                                         echo "sudah tidak bisa post test";
                                                     } else {
                                                     ?>
-                                                    <a href="<?= $url_quiz . "index.php?id=$id_kuis&post-test&unik=$kuis[unique_id_2]" ?>"
-                                                        class="btn btn-success">LAKUKAN POST TEST</a>
+                                                        <a href="<?= $url_quiz . "index.php?id=$id_kuis&post-test&unik=$kuis[unique_id_2]" ?>" class="btn btn-success">LAKUKAN POST TEST</a>
                                                     <?php
                                                     }
                                                     ?>
@@ -213,71 +212,97 @@ if ($kuis['benar'] + $kuis['salah'] == $total_soal) {
                                 <h1 class="text-center mt-3 ">Hasil Kuis</h1>
                                 <hr>
 
-                                <?php
-                                $qsoal = "SELECT
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>NO</th>
+                                            <th>SOAL</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $qsoal = "SELECT
                                     sj.`id_soal_jawab`,
                                     sj.pilihan AS pilihuser,
                                     sj.`pilihan_benar`,
                                     soal.`soal`,
                                     soal.`pilihan`,
-                                    sj.`keterangan`
+                                    sj.`keterangan`,
+                                    soal.url_gambar,
+                                    soal.id_soal
                                 FROM
                                     soal_jawab sj
                                     RIGHT JOIN soal
                                     ON soal.`id_soal` = sj.`id_soal`
                                 WHERE id_jawab ='$id_jawab'";
-                                $no = 1;
-                                $stmt = $pdo->query($qsoal);
+                                        $no = 1;
+                                        $stmt = $pdo->query($qsoal);
 
-                                foreach ($stmt->fetchAll() as $row) {
-                                    if ($row['keterangan'] == "BENAR")
-                                        $bg = "";
-                                    else $bg = "bg-danger text-white";
-                                ?>
+                                        foreach ($stmt->fetchAll() as $row) {
+                                            if ($row['keterangan'] == "BENAR")
+                                                $bg = "";
+                                            else $bg = "bg-danger text-white";
 
-                                <li class="<?= $bg ?> custom-list-item">
-                                    <h5><?= $no ?>. <?= $row['soal'] ?></h5>
-                                    <div id="pilihan" style='padding-left:20px'>
+
+                                        ?>
+
+                                            <tr class=" ">
+                                                <td><?= $no ?></td>
+                                                <td>
+                                                    <h5><?= $row['soal'] ?></h5>
+                                                    <?php
+                                                    if ($row['url_gambar'] != "") {
+                                                        $gambar = cekGambarSoal($url_api, $row['id_soal'], 'soal');
+
+                                                    ?>
+                                                        <img src="<?= $gambar['url_gambar'] ?>" class="img img-fluid" alt="">
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                    <div id="pilihan" class='<?= $bg ?>' style='padding-left:20px'>
+
+                                                        <?php
+                                                        $pilihan = json_decode($row['pilihan'], true);
+                                                        if ($tampil_jawaban == 'ya') {
+                                                            foreach ($pilihan as $pil) {
+                                                                if ($pil['id'] == $row['pilihan_benar']) {
+                                                                    echo "<b>" . strtoupper($pil['id']) . ". " . ($pil['teks']) . "</b><br/>";
+                                                                } else {
+                                                                    echo strtoupper($pil['id']) . ". " . ($pil['teks']) . "<br/>";
+                                                                }
+                                                            }
+                                                        } else {
+                                                            foreach ($pilihan as $pil) {
+                                                                echo strtoupper($pil['id']) . ". " . ($pil['teks']) . "<br/>";
+                                                            }
+                                                        }
+                                                        ?>
+                                                        <p>
+                                                            <?php
+                                                            if ($tampil_jawaban == 'ya') {
+                                                            ?>
+                                                                Kamu menjawab: <?= strtoupper($row['pilihuser']) ?> |
+                                                                <?= $row['keterangan'] ?>
+                                                            <?php
+                                                            }
+                                                            ?>
+                                                        </p>
+
+                                                    </div>
+                                                </td>
+
+
+                                            </tr>
+
+
 
                                         <?php
-                                            $pilihan = json_decode($row['pilihan'], true);
-                                            if ($tampil_jawaban == 'ya') {
-                                                foreach ($pilihan as $pil) {
-                                                    if ($pil['id'] == $row['pilihan_benar']) {
-                                                        echo "<b>" . strtoupper($pil['id']) . ". " . ($pil['teks']) . "</b><br/>";
-                                                    } else {
-                                                        echo strtoupper($pil['id']) . ". " . ($pil['teks']) . "<br/>";
-                                                    }
-                                                }
-                                            } else {
-                                                foreach ($pilihan as $pil) {
-                                                    echo strtoupper($pil['id']) . ". " . ($pil['teks']) . "<br/>";
-                                                }
-                                            }
-                                            ?>
-                                        <p>
-                                            <?php
-                                                if ($tampil_jawaban == 'ya') {
-                                                ?>
-                                            Kamu menjawab: <?= strtoupper($row['pilihuser']) ?> |
-                                            <?= $row['keterangan'] ?>
-                                            <?php
-                                                }
-                                                ?>
-                                        </p>
-
-                                    </div>
-                                    <hr>
-                                </li>
-
-
-
-                                <?php
-                                    $no++;
-                                }
-                                ?>
-                                <a href="<?= $url_quiz . "reset.php?id=$id_kuis" ?>"
-                                    class="btn btn-danger mb-3">Reset</a>
+                                            $no++;
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+                                <a href="<?= $url_quiz . "reset.php?id=$id_kuis" ?>" class="btn btn-danger mb-3">Reset</a>
 
                             </div>
                         </div>

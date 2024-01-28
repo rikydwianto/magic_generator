@@ -75,10 +75,7 @@ function displayQuestion(data) {
   questionContainer.html("");
   // Tampilkan soal dan pilihan
   if (currentQuestion.url_gambar != null) {
-    questionContainer.append(`<h6>Perhatikan gambar dibawah</h6>`);
-    questionContainer.append(
-      `<img src='${currentQuestion.url_gambar}' class='img-fluid' />`
-    );
+    cekGambar(currentQuestion.id_soal, "soal");
   }
   questionContainer.append("<h3>" + currentQuestion.soal + "</h3>");
   questionContainer.append(`<input type="hidden" name="id_soal" id="" value="${currentQuestion.id_soal}">
@@ -309,7 +306,7 @@ function waktuHabis() {
       // Tanggapan dari server
       response.data.forEach((index) => {
         let id_soal = index.id_soal;
-        kirimData(id_jawab, id_kuis, id_soal, "Z");
+        kirimData(id_jawab, id_kuis, id_soal, "TIDAKJAWAB");
       });
       // alert("berhasil");
       window.location.href = url + "lihat_hasil.php";
@@ -324,3 +321,31 @@ function hapusWaktu() {
   localStorage.clear();
 }
 // console.log(localStorage);
+
+function cekGambar(id_soal, ket) {
+  // Pemanggilan AJAX menggunakan metode GET
+  var url_gambar = "";
+  $("#gambar").html("");
+  $.ajax({
+    type: "GET",
+    url: url_api + "gambar_soal.php", //?id=" + id_soal + "&ket=" + ket,
+    data: { id: id_soal, ket: ket },
+    dataType: "json",
+
+    success: function (response) {
+      // Menangani respons JSON
+      if (response.hasil.url_gambar != null) {
+        var gambarHTML = $("#gambar");
+
+        gambarHTML.html(`<h6>Perhatikan gambar dibawah</h6>
+        <img src='${response.hasil.url_gambar}' class='img-fluid' />
+        `);
+      }
+    },
+    error: function (xhr, status, error) {
+      // Menangani kesalahan
+      console.log(error);
+    },
+  });
+  console.log(url_gambar);
+}

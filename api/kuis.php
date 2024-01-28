@@ -13,8 +13,8 @@ if (empty($data['id_kuis']) || empty($data['id_soal'])) {
     exit;
 }
 try {
-    $stmt = $pdo->prepare("INSERT INTO soal (soal, pilihan, jawaban, id_kuis, id_bank_soal)
-    SELECT soal, pilihan, jawaban, :id_kuis, id_soal
+    $stmt = $pdo->prepare("INSERT INTO soal (soal, pilihan, jawaban, id_kuis, id_bank_soal,url_gambar)
+    SELECT soal, pilihan, jawaban, :id_kuis, id_soal,url_gambar
     FROM soal_bank
     WHERE id_soal = :id_soal;
     ");

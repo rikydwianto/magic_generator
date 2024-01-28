@@ -35,10 +35,10 @@ if ($stmt->rowCount() === 0 || $row['status'] == 'tidakaktif') {
 
 
     <script>
-    let url_api = "<?= $url . "api/" ?>";
-    let url = "<?= $url_quiz ?>";
-    let id_kuis = "<?= $id_kuis ?>";
-    let id_jawab = "<?= $id_jawab ?>";
+        let url_api = "<?= $url . "api/" ?>";
+        let url = "<?= $url_quiz ?>";
+        let id_kuis = "<?= $id_kuis ?>";
+        let id_jawab = "<?= $id_jawab ?>";
     </script>
 </head>
 
@@ -74,16 +74,15 @@ if ($stmt->rowCount() === 0 || $row['status'] == 'tidakaktif') {
                         </div>
                         <div class="card-body">
 
+                            <div id="gambar"></div>
                             <div id="questionContainer" class="question-container">
 
                             </div>
                             <div class="loader"></div>
 
                             <div id="tombol">
-                                <button id="nextBtn" type="button" onclick="validateForm()"
-                                    class="btn btn-primary mt-3">Jawab</button>
-                                <button id="cekHasil" type="button" onclick="validateForm1()"
-                                    class="btn btn-success mt-3">Jawab Dan Cek Hasil</button>
+                                <button id="nextBtn" type="button" onclick="validateForm()" class="btn btn-primary mt-3">Jawab</button>
+                                <button id="cekHasil" type="button" onclick="validateForm1()" class="btn btn-success mt-3">Jawab Dan Cek Hasil</button>
                                 <!-- <button type="button" onclick="hapusWaktu()" class="btn btn-danger mt-3">Reset
                                     Waktu</button> -->
                             </div>

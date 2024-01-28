@@ -53,7 +53,44 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
+        /* HTML: <div class="loader"></div> */
+        .loader {
+            margin: auto;
+            width: 100px;
+            aspect-ratio: 1;
+            display: grid;
+            border: 4px solid #0000;
+            border-radius: 50%;
+            border-right-color: #25b09b;
+            animation: l15 1s infinite linear;
+        }
+
+        .loader::before,
+        .loader::after {
+            content: "";
+            grid-area: 1/1;
+            margin: 2px;
+            border: inherit;
+            border-radius: 50%;
+            animation: l15 2s infinite;
+        }
+
+        .loader::after {
+            margin: 8px;
+            animation-duration: 3s;
+        }
+
+        @keyframes l15 {
+            100% {
+                transform: rotate(1turn)
+            }
+        }
     </style>
+    <script>
+        let url = "<?= $url ?>";
+        let url_api = url + "api/";
+    </script>
     <title>COMDEV TOOL</title>
 </head>
 
@@ -130,108 +167,16 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap4.min.js"></script>
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-
+    <script src="<?= $url ?>assets/js/script_index.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#example').DataTable({
-                dom: 'Bfrtip',
-                buttons: [
-                    'copyHtml5',
-                    'excelHtml5',
-                    'csvHtml5',
-                    'pdfHtml5'
-                ]
-            });
-            $('#example2').DataTable({
-                dom: 'Bfrtip',
-                buttons: [
-                    'copyHtml5',
-                    'excelHtml5',
-                    'csvHtml5',
-                    'pdfHtml5'
-                ]
-            });
-        });
 
-        $(document).ready(function() {
-            var table = $('#soalTable').DataTable();
-
-            // Tambahkan filter berdasarkan kategori dan subkategori
-            $('#kategoriFilter, #subkategoriFilter').change(function() {
-                var kategori = $('#kategoriFilter').val();
-                var subkategori = $('#subkategoriFilter').val();
-
-                table.column(4).search(kategori).draw();
-                table.column(5).search(subkategori).draw();
-            });
-        });
-        $(document).ready(function() {
-            // Tambahkan pilihan
-            $(".tambah-pilihan").click(function() {
-                var hurufTerakhir = $("#pilihan-container .input-group").length + 1;
-                var huruf = String.fromCharCode(64 +
-                    hurufTerakhir); // Mengubah angka menjadi huruf (A, B, C, ...)
-
-                var html = '<div class="input-group mb-2">' +
-                    '<div class="input-group-prepend">' +
-                    '<span class="input-group-text">' + huruf + '</span>' +
-                    '</div>' +
-                    '<input type="text" class="form-control" name="pilihan[]" placeholder="Teks Pilihan" required>' +
-                    '<div class="input-group-append">' +
-                    '<button class="btn btn-danger hapus-pilihan" type="button">-</button>' +
-                    '</div>' +
-                    '</div>';
-                $("#pilihan-container").append(html);
-            });
-
-            // Hapus pilihan
-            $("#pilihan-container").on("click", ".hapus-pilihan", function() {
-                $(this).closest('.input-group').remove();
-                // Update huruf setelah menghapus pilihan
-                $("#pilihan-container .input-group").each(function(index) {
-                    var huruf = String.fromCharCode(65 +
-                        index); // Mengubah angka menjadi huruf (A, B, C, ...)
-                    $(this).find(".input-group-prepend .input-group-text").text(huruf);
-                });
-            });
-            // Validasi pilihan tidak boleh kosong
-
-            var quill = new Quill('#editor', {
-                theme: 'snow', // Tema 'snow' cocok untuk tampilan editor yang bersih
-                modules: {
-                    toolbar: [
-                        ['bold', 'italic', 'underline', 'strike'], // Format teks
-                        ['image', 'link'], // Sisipkan gambar dan tautan
-                        [{
-                            'list': 'ordered'
-                        }, {
-                            'list': 'bullet'
-                        }], // Daftar terurut dan tidak terurut
-                        ['clean'] // Bersihkan semua format
-                    ]
-                }
-            });
-            quill.root.style.fontSize = '1.5rem';
-
-            document.getElementById('myForm').addEventListener('submit', function() {
-                document.getElementById('soal').value = quill.root.innerHTML;
-            });
-
-
-        });
-        let popupIsOpen = false;
-
-        function openNewTab(id, id_kuis) {
-            // Membuka tab baru
-            window.open('popup_jawaban.php?id=' + id + '&id_kuis=' + id_kuis, '_blank', 'width=800,height=600');
-        }
     </script>
 
 
