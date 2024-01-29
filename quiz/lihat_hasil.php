@@ -7,6 +7,22 @@ $id_kuis = isset($_SESSION['id_kuis']) ? intval($_SESSION['id_kuis']) : 0;
 $id_jawab = $_SESSION['id_kuis_jawab'];
 
 $url_api = $url . "api/";
+$data = array(
+    'id_kuis' => $id_kuis,
+    'id_jawab' => $id_jawab,
+);
+
+$options = array(
+    'http' => array(
+        'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+        'method' => 'POST',
+        'content' => http_build_query($data),
+    ),
+);
+
+$context = stream_context_create($options);
+
+$result = file_get_contents($url_api . "soal.php?update-kuis", false, $context);
 
 
 $hitung_soal = $pdo->prepare("SELECT COUNT(*) AS total_soal FROM soal WHERE id_kuis=:id_kuis");
@@ -43,22 +59,7 @@ if ($kuis['benar'] + $kuis['salah'] == $total_soal) {
 } else {
     // echo "update";
     // Data yang akan dikirim ke server
-    $data = array(
-        'id_kuis' => $id_kuis,
-        'id_jawab' => $id_jawab,
-    );
 
-    $options = array(
-        'http' => array(
-            'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-            'method' => 'POST',
-            'content' => http_build_query($data),
-        ),
-    );
-
-    $context = stream_context_create($options);
-
-    $result = file_get_contents($url_api . "soal.php?update-kuis", false, $context);
     // pindah($url_quiz . "lihat_hasil.php");
 }
 ?>
