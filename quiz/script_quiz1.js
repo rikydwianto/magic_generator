@@ -13,8 +13,8 @@ function getSoal() {
       // Proses respons dari server
       if (response.result) {
         let data = response.result;
-        if (data.total_soal <= data.soal_dijawab) {
-          window.location.href = url + "lihat_hasil.php";
+        if (data.total_soal == data.soal_dijawab) {
+          window.location.href = url + "lihat_hasil.php?disini";
         }
         localStorage.setItem("waktu", data.data_kuis.waktu);
         // console.log(localStorage);
@@ -237,7 +237,7 @@ function jawabAndCek() {
   $("#questionContainer").hide();
   $(".loader").show();
   updateKuis(id_kuis, id_jawab);
-  setTimeout(() => {
+  setTimeout(function () {
     window.location.href = url + "lihat_hasil.php";
   }, 2000);
 }
@@ -281,7 +281,7 @@ $(document).ready(function () {
       // console.log(distance);
       waktuHabis();
       updateKuis(id_kuis, id_jawab);
-      setTimeout(() => {
+      setTimeout(function () {
         window.location.href = url + "lihat_hasil.php";
       }, 3000);
     }
