@@ -21,13 +21,17 @@ if ($stmt->rowCount() === 0 || $row['status'] == 'tidakaktif') {
 }
 
 $readonly = "";
-if (isset($_GET['post-test']) && isset($_SESSION['unique_id'])) {
+if (isset($_SESSION['unique_id'])) {
     $readonly = "readonly";
     $unique_id = $_SESSION['unique_id'];
     $q = $pdo->prepare("select * from kuis_jawab where unique_id=:unik ");
     $q->bindParam(":unik", $unique_id);
     $q->execute();
+
     $hasil = $q->fetch();
+    if (!isset($_GET['unik'])) {
+        pindah($url_quiz . "index.php?id=$id_kuis&unik=$unique_id");
+    }
 } else {
     $hasil['nama'] = null;
     $hasil['cabang'] = null;

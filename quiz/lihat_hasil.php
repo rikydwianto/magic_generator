@@ -7,22 +7,6 @@ $id_kuis = isset($_SESSION['id_kuis']) ? intval($_SESSION['id_kuis']) : 0;
 $id_jawab = $_SESSION['id_kuis_jawab'];
 
 $url_api = $url . "api/";
-$data = array(
-    'id_kuis' => $id_kuis,
-    'id_jawab' => $id_jawab,
-);
-
-$options = array(
-    'http' => array(
-        'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-        'method' => 'POST',
-        'content' => http_build_query($data),
-    ),
-);
-
-$context = stream_context_create($options);
-
-$result = file_get_contents($url_api . "soal.php?update-kuis", false, $context);
 
 
 $hitung_soal = $pdo->prepare("SELECT COUNT(*) AS total_soal FROM soal WHERE id_kuis=:id_kuis");
@@ -59,6 +43,22 @@ if ($kuis['benar'] + $kuis['salah'] == $total_soal) {
 } else {
     // echo "update";
     // Data yang akan dikirim ke server
+    $data = array(
+        'id_kuis' => $id_kuis,
+        'id_jawab' => $id_jawab,
+    );
+
+    $options = array(
+        'http' => array(
+            'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method' => 'POST',
+            'content' => http_build_query($data),
+        ),
+    );
+
+    $context = stream_context_create($options);
+
+    $result = file_get_contents($url_api . "soal.php?update-kuis", false, $context);
 
     // pindah($url_quiz . "lihat_hasil.php");
 }
@@ -74,30 +74,30 @@ if ($kuis['benar'] + $kuis['salah'] == $total_soal) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@9">
     <script>
-        localStorage.clear()
+    localStorage.clear()
     </script>
     <style>
-        body {
-            user-select: none;
-        }
+    body {
+        user-select: none;
+    }
 
-        /* Style untuk menyembunyikan titik pada elemen <li> */
-        .custom-list-item {
-            list-style-type: none;
-            padding-left: 10px;
-            padding-top: 5px;
-        }
+    /* Style untuk menyembunyikan titik pada elemen <li> */
+    .custom-list-item {
+        list-style-type: none;
+        padding-left: 10px;
+        padding-top: 5px;
+    }
 
-        /* Style tambahan sesuai kebutuhan desain */
-        .custom-list-item h5 {
-            margin-bottom: 0;
-            /* Menghilangkan margin bawah pada elemen h5 */
-        }
+    /* Style tambahan sesuai kebutuhan desain */
+    .custom-list-item h5 {
+        margin-bottom: 0;
+        /* Menghilangkan margin bawah pada elemen h5 */
+    }
 
-        .custom-list-item p {
-            margin-top: 0;
-            /* Menghilangkan margin atas pada elemen p */
-        }
+    .custom-list-item p {
+        margin-top: 0;
+        /* Menghilangkan margin atas pada elemen p */
+    }
     </style>
 
 </head>
@@ -197,10 +197,12 @@ if ($kuis['benar'] + $kuis['salah'] == $total_soal) {
                                                         echo "sudah tidak bisa post test";
                                                     } else {
                                                     ?>
-                                                        <a href="<?= $url_quiz . "index.php?id=$id_kuis&post-test&unik=$kuis[unique_id_2]" ?>" class="btn btn-success">LAKUKAN POST TEST</a>
+                                                    <a href="<?= $url_quiz . "index.php?id=$id_kuis&post-test&unik=$kuis[unique_id_2]" ?>"
+                                                        class="btn btn-success">LAKUKAN POST TEST</a>
                                                     <?php
                                                     }
                                                     ?>
+                                                    <a href="" class="btn btn-danger">REFRESH</a>
                                                 </td>
                                             </tr>
 
@@ -247,22 +249,22 @@ if ($kuis['benar'] + $kuis['salah'] == $total_soal) {
 
                                         ?>
 
-                                            <tr class=" ">
-                                                <td><?= $no ?></td>
-                                                <td>
-                                                    <h5><?= $row['soal'] ?></h5>
-                                                    <?php
+                                        <tr class=" ">
+                                            <td><?= $no ?></td>
+                                            <td>
+                                                <h5><?= $row['soal'] ?></h5>
+                                                <?php
                                                     if ($row['url_gambar'] != "") {
                                                         $gambar = cekGambarSoal($url_api, $row['id_soal'], 'soal');
 
                                                     ?>
-                                                        <img src="<?= $gambar['url_gambar'] ?>" class="img img-fluid" alt="">
-                                                    <?php
+                                                <img src="<?= $gambar['url_gambar'] ?>" class="img img-fluid" alt="">
+                                                <?php
                                                     }
                                                     ?>
-                                                    <div id="pilihan" class='<?= $bg ?>' style='padding-left:20px'>
+                                                <div id="pilihan" class='<?= $bg ?>' style='padding-left:20px'>
 
-                                                        <?php
+                                                    <?php
                                                         $pilihan = json_decode($row['pilihan'], true);
                                                         if ($tampil_jawaban == 'ya') {
                                                             foreach ($pilihan as $pil) {
@@ -278,22 +280,22 @@ if ($kuis['benar'] + $kuis['salah'] == $total_soal) {
                                                             }
                                                         }
                                                         ?>
-                                                        <p>
-                                                            <?php
+                                                    <p>
+                                                        <?php
                                                             if ($tampil_jawaban == 'ya') {
                                                             ?>
-                                                                Kamu menjawab: <?= strtoupper($row['pilihuser']) ?> |
-                                                                <?= $row['keterangan'] ?>
-                                                            <?php
+                                                        Kamu menjawab: <?= strtoupper($row['pilihuser']) ?> |
+                                                        <?= $row['keterangan'] ?>
+                                                        <?php
                                                             }
                                                             ?>
-                                                        </p>
+                                                    </p>
 
-                                                    </div>
-                                                </td>
+                                                </div>
+                                            </td>
 
 
-                                            </tr>
+                                        </tr>
 
 
 
@@ -303,7 +305,8 @@ if ($kuis['benar'] + $kuis['salah'] == $total_soal) {
                                         ?>
                                     </tbody>
                                 </table>
-                                <a href="<?= $url_quiz . "reset.php?id=$id_kuis" ?>" class="btn btn-danger mb-3">Reset</a>
+                                <a href="<?= $url_quiz . "reset.php?id=$id_kuis" ?>"
+                                    class="btn btn-danger mb-3">Reset</a>
 
                             </div>
                         </div>

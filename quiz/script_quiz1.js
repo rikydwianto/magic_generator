@@ -334,7 +334,10 @@ function cekGambar(id_soal, ket) {
 
     success: function (response) {
       // Menangani respons JSON
-      if (response.hasil.url_gambar != null) {
+      if (
+        response.hasil.url_gambar != null ||
+        response.hasil.url_gambar != ""
+      ) {
         var gambarHTML = $("#gambar");
 
         gambarHTML.html(`<h6>Perhatikan gambar dibawah</h6>

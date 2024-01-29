@@ -26,7 +26,8 @@ if ($stmt->rowCount() === 0 || $row['status'] == 'tidakaktif') {
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
     <title><?= $row['nama_kuis'] ?></title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -35,10 +36,10 @@ if ($stmt->rowCount() === 0 || $row['status'] == 'tidakaktif') {
 
 
     <script>
-        let url_api = "<?= $url . "api/" ?>";
-        let url = "<?= $url_quiz ?>";
-        let id_kuis = "<?= $id_kuis ?>";
-        let id_jawab = "<?= $id_jawab ?>";
+    let url_api = "<?= $url . "api/" ?>";
+    let url = "<?= $url_quiz ?>";
+    let id_kuis = "<?= $id_kuis ?>";
+    let id_jawab = "<?= $id_jawab ?>";
     </script>
 </head>
 
@@ -81,8 +82,10 @@ if ($stmt->rowCount() === 0 || $row['status'] == 'tidakaktif') {
                             <div class="loader"></div>
 
                             <div id="tombol">
-                                <button id="nextBtn" type="button" onclick="validateForm()" class="btn btn-primary mt-3">Jawab</button>
-                                <button id="cekHasil" type="button" onclick="validateForm1()" class="btn btn-success mt-3">Jawab Dan Cek Hasil</button>
+                                <button id="nextBtn" type="button" onclick="validateForm()"
+                                    class="btn btn-primary mt-3">Jawab</button>
+                                <button id="cekHasil" type="button" onclick="validateForm1()"
+                                    class="btn btn-success mt-3">Jawab Dan Cek Hasil</button>
                                 <!-- <button type="button" onclick="hapusWaktu()" class="btn btn-danger mt-3">Reset
                                     Waktu</button> -->
                             </div>
@@ -96,7 +99,7 @@ if ($stmt->rowCount() === 0 || $row['status'] == 'tidakaktif') {
 
 
     <!-- Bootstrap JS and Popper.js -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <!-- SweetAlert JS -->
