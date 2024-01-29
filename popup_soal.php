@@ -119,8 +119,8 @@ $kuis = $stmt->fetch(); ?>
                                     if ($row['url_gambar'] != "") {
 
 
-                                        $gambar = cekGambarSoal($url_api, $row['id_soal'], 'soal');
-                                        if ($gambar) {
+                                        $gambar = cekGambarSoal($url_api, $row['id_soal'], 'soal_bank');
+                                        if ($gambar != "") {
                                     ?>
                                             <img src="<?= $gambar['url_gambar'] ?>" style="width: 300px;" class="img">
                                     <?php

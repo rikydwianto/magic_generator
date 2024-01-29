@@ -6,7 +6,7 @@
 POST {{base_url}}/soal.php?data-soal
 Content-Type: application/x-www-form-urlencoded
 
-id_kuis=25&id_jawab=190
+id_kuis=1&id_jawab=160
 
 ### POST Request ###
 POST {{base_url}}/soal.php?input-soal
