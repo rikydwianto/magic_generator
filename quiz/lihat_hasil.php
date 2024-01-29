@@ -59,7 +59,7 @@ if ($kuis['benar'] + $kuis['salah'] == $total_soal) {
     $context = stream_context_create($options);
 
     $result = file_get_contents($url_api . "soal.php?update-kuis", false, $context);
-    pindah($url_quiz . "lihat_hasil.php");
+    // pindah($url_quiz . "lihat_hasil.php");
 }
 ?>
 <!DOCTYPE html>
