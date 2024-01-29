@@ -29,6 +29,9 @@ if (isset($_SESSION['unique_id'])) {
     $q->execute();
 
     $hasil = $q->fetch();
+    if (!$hasil) {
+        pindah($url_quiz . 'reset.php?id=' . $id_kuis);
+    }
     if (!isset($_GET['unik'])) {
         pindah($url_quiz . "index.php?id=$id_kuis&unik=$unique_id");
     }

@@ -14,7 +14,7 @@ function getSoal() {
       if (response.result) {
         let data = response.result;
         if (data.total_soal <= data.soal_dijawab) {
-          //   window.location.href = url + "lihat_hasil.php";
+          window.location.href = url + "lihat_hasil.php";
         }
         localStorage.setItem("waktu", data.data_kuis.waktu);
         // console.log(localStorage);
@@ -211,13 +211,7 @@ function input_jawaban() {
   getSoal();
 }
 
-function jawabAndCek() {
-  let id_soal = $('input[name="id_soal"]').val();
-  let pilihan = $('input[name="pilihan"]:checked').val();
-  kirimData(id_jawab, id_kuis, id_soal, pilihan);
-  $("#questionContainer").hide();
-  $(".loader").show();
-  // Contoh penggunaan AJAX untuk menghitung kuis
+function updateKuis(id_kuis, id_jawab) {
   $.ajax({
     type: "POST",
     url: url_api + "soal.php?update-kuis",
@@ -228,23 +222,24 @@ function jawabAndCek() {
     dataType: "json",
     success: function (response) {
       // Tanggapan dari server
-      if (response.status == "success") {
-        // Jika penghitungan berhasil
-        setTimeout(function () {
-          $("#questionContainer").show();
-          $(".loader").hide();
-          window.location.href = url + "lihat_hasil.php";
-        }, 2000);
-      } else {
-        // Jika terjadi kesalahan pada server atau data tidak ditemukan
-        console.error("Gagal menghitung kuis.");
-      }
     },
     error: function (jqXHR, textStatus, errorThrown) {
       // Tanggapan jika terjadi kesalahan dalam melakukan AJAX
       console.error("Error: " + textStatus, errorThrown);
     },
   });
+}
+
+function jawabAndCek() {
+  let id_soal = $('input[name="id_soal"]').val();
+  let pilihan = $('input[name="pilihan"]:checked').val();
+  kirimData(id_jawab, id_kuis, id_soal, pilihan);
+  $("#questionContainer").hide();
+  $(".loader").show();
+  updateKuis(id_kuis, id_jawab);
+  setTimeout(() => {
+    window.location.href = url + "lihat_hasil.php";
+  }, 2000);
 }
 $(document).ready(function () {
   // Set the countdown duration in minutes
@@ -280,18 +275,25 @@ $(document).ready(function () {
     // If the countdown is over, display a message
     if (distance < 0) {
       clearInterval(x);
-      $("#countdown").html("00:00:00");
+      $("#countdown").html("waktu habis!");
+      $("#gambar").hide();
+      Swal.fire("STOP! Waktu Habis tunggu sampai proses selesai!");
+      // console.log(distance);
       waktuHabis();
-      // You can also add additional actions or alerts here when the countdown is finished.
-      // Clear the countdown value from localStorage
-      // localStorage.removeItem("countdown");
+      updateKuis(id_kuis, id_jawab);
+      setTimeout(() => {
+        window.location.href = url + "lihat_hasil.php";
+      }, 3000);
     }
   }, 1000); // Update every 1 second
 });
 function waktuHabis() {
   // Swal.fire({ title: "WAKTU HABIS", icon: "danger" });
   $("#questionContainer").html(
-    "<h1 class='text-center'>WAKTU HABIS <br> Soal yang belum terjawab akan otomatis disalahkan semua! <span class='loader1'></span></h1>"
+    `<h1 class='text-center'>WAKTU HABIS <br> 
+    Soal yang belum terjawab akan otomatis disalahkan semua! <br/>
+     Tunggu sampai diarahkan ke halaman berikut nya! <br/>
+     <span class='loader1'></span></h1>`
   );
   $("#nextBtn").hide();
   $.ajax({
@@ -307,9 +309,8 @@ function waktuHabis() {
       response.data.forEach((index) => {
         let id_soal = index.id_soal;
         kirimData(id_jawab, id_kuis, id_soal, "TIDAKJAWAB");
+        console.log(id_soal);
       });
-      // alert("berhasil");
-      window.location.href = url + "lihat_hasil.php";
     },
     error: function (jqXHR, textStatus, errorThrown) {
       // Tanggapan jika terjadi kesalahan dalam melakukan AJAX
@@ -334,10 +335,7 @@ function cekGambar(id_soal, ket) {
 
     success: function (response) {
       // Menangani respons JSON
-      if (
-        response.hasil.url_gambar != null ||
-        response.hasil.url_gambar != ""
-      ) {
+      if (response.hasil.url_gambar != "") {
         var gambarHTML = $("#gambar");
 
         gambarHTML.html(`<h6>Perhatikan gambar dibawah</h6>
@@ -350,5 +348,7 @@ function cekGambar(id_soal, ket) {
       console.log(error);
     },
   });
-  console.log(url_gambar);
 }
+window.addEventListener("beforeunload", function (event) {
+  updateKuis(id_kuis, id_jawab);
+});
