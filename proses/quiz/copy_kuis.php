@@ -30,8 +30,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nama_kuis_baru = $_POST['nama_kuis_baru'];
 
     // Salin data kuis
-    $query_copy_kuis = "INSERT INTO kuis (nama_kuis, nama_karyawan, tgl_kuis, waktu, status, acak, tampil_jawaban,url_gambar)
-                        SELECT :nama_kuis_baru, nama_karyawan, tgl_kuis, waktu, status, acak, tampil_jawaban,url_gambar
+    $query_copy_kuis = "INSERT INTO kuis (nama_kuis, nama_karyawan, tgl_kuis, waktu, status, acak, tampil_jawaban)
+                        SELECT :nama_kuis_baru, nama_karyawan, tgl_kuis, waktu, status, acak, tampil_jawaban
                         FROM kuis WHERE id_kuis = :id_kuis_asal";
 
     $stmt_copy_kuis = $pdo->prepare($query_copy_kuis);
@@ -43,8 +43,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $id_kuis_baru = $pdo->lastInsertId(); // Dapatkan ID kuis baru
 
         // Salin data soal
-        $query_copy_soal = "INSERT INTO soal (id_kuis, soal, pilihan, jawaban,id_bank_soal)
-                            SELECT :id_kuis_baru, soal, pilihan, jawaban,id_soal
+        $query_copy_soal = "INSERT INTO soal (id_kuis, soal, pilihan, jawaban,id_bank_soal,url_gambar)
+                            SELECT :id_kuis_baru, soal, pilihan, jawaban,id_soal,url_gambar
                             FROM soal WHERE id_kuis = :id_kuis_asal";
 
         $stmt_copy_soal = $pdo->prepare($query_copy_soal);
