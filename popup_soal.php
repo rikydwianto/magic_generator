@@ -105,6 +105,7 @@ $kuis = $stmt->fetch(); ?>
                     </thead>
                     <tbody>
                         <?php
+                        echo $id_kuis;
                         $qsoal = "SELECT * FROM soal_bank WHERE id_soal  NOT IN (SELECT id_bank_soal FROM soal WHERE id_kuis='$id_kuis')";
                         $no = 1;
                         $stmt = $pdo->query($qsoal);
@@ -179,8 +180,8 @@ $kuis = $stmt->fetch(); ?>
                 var kategori = $('#kategoriFilter').val();
                 var subkategori = $('#subkategoriFilter').val();
 
-                table.column(3).search(kategori).draw();
-                table.column(4).search(subkategori).draw();
+                table.column(4).search(kategori).draw();
+                table.column(5).search(subkategori).draw();
             });
         });
         // document.getElementById('kategoriFilter').addEventListener('change', function() {

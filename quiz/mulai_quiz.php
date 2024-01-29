@@ -47,8 +47,8 @@ if ($kuis_jawab) {
     <!-- SweetAlert CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@9">
     <script>
-        let waktu = "<?= $row['waktu']; ?>";
-        localStorage.setItem('waktu', waktu)
+    let waktu = "<?= $row['waktu']; ?>";
+    localStorage.setItem('waktu', waktu)
     </script>
 </head>
 
@@ -56,18 +56,43 @@ if ($kuis_jawab) {
 
     <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-header bg-primary text-white">
                         <h2 class="mb-0">Peringatan Kuis</h2>
                     </div>
                     <div class="card-body">
+                        <div>
+                            <table class="table">
+                                <tr>
+                                    <td>Kuis </td>
+                                    <td>:</td>
+                                    <td><?= $row['nama_kuis'] ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Waktu </td>
+                                    <td>:</td>
+                                    <td><?= $row['waktu'] ?> Menit</td>
+                                </tr>
+                                <tr>
+                                    <td>Pertanyaan </td>
+                                    <td>:</td>
+                                    <td><?= $row['acak'] == 'ya' ? "Diacak" : "Tidak diacak" ?> Menit</td>
+                                </tr>
+                                <tr>
+                                    <td>Pembuat Kuis </td>
+                                    <td>:</td>
+                                    <td><?= $row['nama_karyawan']?></td>
+                                </tr>
+                            </table>
+                        </div>
                         <p class="text-info">Quiz akan dimulai sebentar lagi. Silakan baca instruksi dengan cermat.</p>
 
                         <div class="alert alert-warning" role="alert">
                             <strong>Peringatan:</strong> Setelah memulai kuis, soal tidak dapat diulang. Pastikan Anda
                             siap untuk memulai.
                         </div>
+
 
                         <form action="" id='startQuizForm' method="post">
                             <!-- Tambahkan input hidden untuk menyimpan data yang diperlukan -->
