@@ -318,10 +318,6 @@ function waktuHabis() {
     },
   });
 }
-function hapusWaktu() {
-  localStorage.clear();
-}
-// console.log(localStorage);
 
 function cekGambar(id_soal, ket) {
   // Pemanggilan AJAX menggunakan metode GET

@@ -8,7 +8,7 @@ $id_jawab = $_SESSION['id_kuis_jawab'];
 
 $url_api = $url . "api/";
 
-
+unset($_SESSION['mengerjakan']);
 $hitung_soal = $pdo->prepare("SELECT COUNT(*) AS total_soal FROM soal WHERE id_kuis=:id_kuis");
 $hitung_soal->bindParam(":id_kuis", $id_kuis);
 $hitung_soal->execute();
@@ -73,9 +73,7 @@ if ($kuis['benar'] + $kuis['salah'] == $total_soal) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@9">
-    <script>
-    localStorage.clear()
-    </script>
+
     <style>
     body {
         user-select: none;
@@ -192,16 +190,7 @@ if ($kuis['benar'] + $kuis['salah'] == $total_soal) {
                                             <tr>
                                                 <th></th>
                                                 <td>
-                                                    <?php
-                                                    if ($hitungTest >= 3) {
-                                                        echo "sudah tidak bisa post test";
-                                                    } else {
-                                                    ?>
-                                                    <a href="<?= $url_quiz . "index.php?id=$id_kuis&post-test&unik=$kuis[unique_id_2]" ?>"
-                                                        class="btn btn-success">LAKUKAN POST TEST</a>
-                                                    <?php
-                                                    }
-                                                    ?>
+
                                                     <a href="" class="btn btn-danger">REFRESH</a>
                                                 </td>
                                             </tr>
@@ -305,6 +294,16 @@ if ($kuis['benar'] + $kuis['salah'] == $total_soal) {
                                         ?>
                                     </tbody>
                                 </table>
+                                <?php
+                                if ($hitungTest >= 3) {
+                                    echo "sudah tidak bisa post test";
+                                } else {
+                                ?>
+                                <a href="<?= $url_quiz . "index.php?id=$id_kuis&post-test&unik=$kuis[unique_id_2]" ?>"
+                                    class="btn btn-success mb-3">LAKUKAN POST TEST</a>
+                                <?php
+                                }
+                                ?>
                                 <a href="<?= $url_quiz . "reset.php?id=$id_kuis" ?>"
                                     class="btn btn-danger mb-3">Reset</a>
 

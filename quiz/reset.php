@@ -6,4 +6,11 @@ include_once "./../config/koneksi.php";
 unset($_SESSION['unique_id']);
 unset($_SESSION['id_kuis']);
 unset($_SESSION['id_kuis_jawab']);
+
+?>
+<script>
+localStorage.removeItem('unique_id');
+</script>
+<?php
+
 pindah($url_quiz . "index.php?id=$_GET[id]");

@@ -28,6 +28,10 @@ if (isset($_GET['del'])) {
     }
 }
 ?>
+<a href="<?= $url . "index.php?menu=index&act=quiz&sub=lihat_prepost&id_kuis=$id_kuis" ?>"
+    class="btn btn-primary mb-3">Lihat
+    jawaban pre post test</a>
+
 <table id="example1" class="table table-striped table-bordered" style="width:100%">
     <thead>
         <tr>

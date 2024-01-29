@@ -6,7 +6,8 @@ include_once "./../config/koneksi.php";
 
 // var_dump($_SESSION);
 $id_kuis = isset($_GET['id']) ? intval($_GET['id']) : 0;
-
+?>
+<?php
 // Query untuk mengecek apakah kuis dengan ID tertentu ada atau tidak
 $sql = "SELECT * FROM kuis WHERE id_kuis = :id_kuis";
 $stmt = $pdo->prepare($sql);
@@ -19,19 +20,21 @@ if ($stmt->rowCount() === 0 || $row['status'] == 'tidakaktif') {
     pindah($url_quiz . "404.php"); // Gantilah 404.php dengan halaman 404 yang sesuai
     exit();
 }
+// var_dump($_SESSION);
 
 $readonly = "";
-if (isset($_SESSION['unique_id'])) {
+if (isset($_GET['post-test'])) {
     $readonly = "readonly";
-    $unique_id = $_SESSION['unique_id'];
-    $q = $pdo->prepare("select * from kuis_jawab where unique_id=:unik ");
+    $unique_id = $_GET['unik'];
+    $q = $pdo->prepare("select * from kuis_jawab where unique_id=:unik and id_kuis=:id_kuis");
     $q->bindParam(":unik", $unique_id);
+    $q->bindParam(":id_kuis", $id_kuis);
     $q->execute();
 
     $hasil = $q->fetch();
-    if (!$hasil) {
-        pindah($url_quiz . 'reset.php?id=' . $id_kuis);
-    }
+    // if (!$hasil) {
+    //     pindah($url_quiz . 'reset.php?id=' . $id_kuis);
+    // }
     if (!isset($_GET['unik'])) {
         pindah($url_quiz . "index.php?id=$id_kuis&unik=$unique_id");
     }
@@ -39,13 +42,14 @@ if (isset($_SESSION['unique_id'])) {
     $hasil['nama'] = null;
     $hasil['cabang'] = null;
     $hasil['nik'] = null;
+    $hasil['unique_id_2'] = null;
+    $hasil['nik'] = null;
+}
+if (isset($_SESSION['mengerjakan']) && $_SESSION['mengerjakan'] == 'ya') {
+    pindah($url_quiz . "handle_soal.php");
+}
 
-    if (isset($_SESSION['unique_id']) && isset($_SESSION['nik'])) {
-        if ($_SESSION['id_kuis'] == $id_kuis) {
-            pindah($url_quiz . "mulai_quiz.php");
-        }
-    }
-} ?>
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -57,6 +61,48 @@ if (isset($_SESSION['unique_id'])) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- SweetAlert CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@9">
+    <script>
+        let url_api = "<?php echo $url_api ?>";
+        let url_quiz = "<?php echo $url_quiz ?>";
+        let id_kuis = "<?= $id_kuis ?>";
+
+        var url = window.location.href;
+
+        var urlParams = new URLSearchParams(url);
+
+        if (urlParams.has('post-test')) {
+            var postTestValue = urlParams.get('post-test');
+        } else {
+
+
+
+            var dataLocalStorage = localStorage.getItem("unique_id");
+
+            if (dataLocalStorage != "") {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", url_api + "info_kuis.php", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        var jsonResponse = JSON.parse(xhr.responseText);
+                        let unik2 = (jsonResponse[0]?.unique_id_2);
+                        if (unik2 !== undefined && unik2 !== null && unik2 !== "") {
+                            window.location.href = url_quiz + 'index.php?id=' + id_kuis + '&post-test&unik=' + unik2
+                        } else {
+                            // console.log("Tidak ada data");
+                        }
+
+
+
+                    }
+                };
+
+                xhr.send("data=" + encodeURIComponent(dataLocalStorage) + "&id_kuis=" + id_kuis);
+            }
+        }
+    </script>
+
 </head>
 
 <body>
@@ -77,6 +123,7 @@ if (isset($_SESSION['unique_id'])) {
                             <div class="form-group">
                                 <label for="nama">Nama:</label>
                                 <input type="text" class="form-control" value='<?= $hasil['nama'] ? $hasil['nama'] : "" ?>' <?= $readonly ?> id="nama" name="nama" placeholder="Masukkan Nama Anda" required>
+                                <input type="hidden" class="form-control" value='<?= $hasil['unique_id_2'] ? $hasil['unique_id_2'] : "" ?>' <?= $readonly ?> id="unique_2" name="unique_2">
                             </div>
                             <div class="form-group">
 
@@ -111,7 +158,7 @@ if (isset($_SESSION['unique_id'])) {
         // Tanggal sekarang
         $now = date('Y-m-d H:i:s');
         $jenis = 'pre';
-        if (isset($_GET['post-test']) && isset($_SESSION['unique_id'])) {
+        if (isset($_GET['post-test'])) {
             $jenis = 'post';
             $unique_id_2 = $_GET['unik'];
         } else $unique_id_2 = $unique_id;
@@ -132,10 +179,20 @@ if (isset($_SESSION['unique_id'])) {
         // Eksekusi query
         try {
             $stmt->execute();
+            $id_jawab = $pdo->lastInsertId();
             // echo "Data berhasil disimpan!";
             $_SESSION['unique_id'] = $unique_id;
             $_SESSION['id_kuis'] = $id_kuis;
-            $_SESSION['id_kuis_jawab'] = $pdo->lastInsertId();
+            $_SESSION['id_kuis_jawab'] = $id_jawab;
+
+
+    ?>
+            <script>
+                let unik = "<?= $unique_id ?>";
+                localStorage.setItem('unique_id', unik);
+            </script>
+    <?php
+
             pindah($url_quiz . "mulai_quiz.php");
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
@@ -156,7 +213,9 @@ if (isset($_SESSION['unique_id'])) {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
     <script src='<?= $url_quiz . 'script_quiz.js' ?>'></script>
-
+    <script>
+        // console.log(localStorage)
+    </script>
 </body>
 
 </html>

@@ -47,8 +47,8 @@ if ($kuis_jawab) {
     <!-- SweetAlert CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@9">
     <script>
-    let waktu = "<?= $row['waktu']; ?>";
-    localStorage.setItem('waktu', waktu)
+        let waktu = "<?= $row['waktu']; ?>";
+        localStorage.setItem('waktu', waktu)
     </script>
 </head>
 
@@ -77,12 +77,12 @@ if ($kuis_jawab) {
                                 <tr>
                                     <td>Pertanyaan </td>
                                     <td>:</td>
-                                    <td><?= $row['acak'] == 'ya' ? "Diacak" : "Tidak diacak" ?> Menit</td>
+                                    <td><?= $row['acak'] == 'ya' ? "Diacak" : "Tidak diacak" ?> </td>
                                 </tr>
                                 <tr>
                                     <td>Pembuat Kuis </td>
                                     <td>:</td>
-                                    <td><?= $row['nama_karyawan']?></td>
+                                    <td><?= $row['nama_karyawan'] ?></td>
                                 </tr>
                             </table>
                         </div>
@@ -111,7 +111,6 @@ if ($kuis_jawab) {
 
         // Tanggal dan waktu sekarang
         $now = date('Y-m-d H:i:s');
-        $_SESSION['waktu_mulai'] = $now;
         // Update kolom 'mulai' di tabel 'kuis_jawab'
         $sql = "UPDATE kuis_jawab SET mulai = :mulai WHERE id_jawab = :id_kuis";
         $stmt = $pdo->prepare($sql);
@@ -120,6 +119,7 @@ if ($kuis_jawab) {
 
         // Eksekusi pernyataan UPDATE
         $stmt->execute();
+        $_SESSION['mengerjakan'] = 'ya';
         pindah($url_quiz . "handle_soal.php");
     }
     ?>
@@ -133,6 +133,8 @@ if ($kuis_jawab) {
 
     <script src='<?= $url_quiz . 'script_quiz.js' ?>'></script>
 
+    <script>
+    </script>
 </body>
 
 </html>

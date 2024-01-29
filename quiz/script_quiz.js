@@ -54,7 +54,9 @@ document.addEventListener("DOMContentLoaded", function () {
       }).then((result) => {
         if (result.isConfirmed) {
           // Jika konfirmasi "Ya", kirim formulir
-          localStorage.clear();
+
+          localStorage.removeItem("countdown");
+          localStorage.removeItem("waktu");
 
           document.getElementById("startQuizForm").submit();
         }

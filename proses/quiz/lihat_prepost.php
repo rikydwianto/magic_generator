@@ -84,6 +84,9 @@ ORDER BY pre_test_score DESC, post_test_1_score DESC, post_test_2_score DESC, po
 $stmt = $pdo->query($query);
 $hasilQuery = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+<a href="<?= $url . "index.php?menu=index&act=quiz&sub=lihat_jawaban&id_kuis=$id_kuis" ?>"
+    class="btn btn-primary mb-3">Lihat
+    Per Jawaban</a>
 <table class='table table-bordered'>
     <thead>
         <tr>
@@ -100,29 +103,35 @@ $hasilQuery = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <tbody>
 
         <?php foreach ($hasilQuery as $hasil) : ?>
-            <tr>
-                <td><?php echo $hasil['cabang']; ?></td>
-                <td><?php echo $hasil['nik']; ?></td>
-                <td><?php echo proper($hasil['nama'])  ?></td>
-                <td><a href="javascript:void(0)" onclick="openNewTab('<?= $hasil['id_jawab_pre_test'] ?>','<?= $id_kuis ?>')"><?php echo $hasil['pre_test_score']; ?></a>
-                </td>
-                <td><a href="javascript:void(0)" onclick="openNewTab('<?= $hasil['id_jawab_post_test_1'] ?>','<?= $id_kuis ?>')"><?php echo $hasil['post_test_1_score']; ?></a>
-                </td>
-                <td><a href="javascript:void(0)" onclick="openNewTab('<?= $hasil['id_jawab_post_test_2'] ?>','<?= $id_kuis ?>')"><?php echo $hasil['post_test_2_score']; ?></a>
-                </td>
-                <td><a href="javascript:void(0)" onclick="openNewTab('<?= $hasil['id_jawab_post_test_3'] ?>','<?= $id_kuis ?>')"><?php echo $hasil['post_test_3_score']; ?></a>
-                </td>
-                <td>
-                    <?php
+        <tr>
+            <td><?php echo $hasil['cabang']; ?></td>
+            <td><?php echo $hasil['nik']; ?></td>
+            <td><?php echo proper($hasil['nama'])  ?></td>
+            <td><a href="javascript:void(0)"
+                    onclick="openNewTab('<?= $hasil['id_jawab_pre_test'] ?>','<?= $id_kuis ?>')"><?php echo $hasil['pre_test_score']; ?></a>
+            </td>
+            <td><a href="javascript:void(0)"
+                    onclick="openNewTab('<?= $hasil['id_jawab_post_test_1'] ?>','<?= $id_kuis ?>')"><?php echo $hasil['post_test_1_score']; ?></a>
+            </td>
+            <td><a href="javascript:void(0)"
+                    onclick="openNewTab('<?= $hasil['id_jawab_post_test_2'] ?>','<?= $id_kuis ?>')"><?php echo $hasil['post_test_2_score']; ?></a>
+            </td>
+            <td><a href="javascript:void(0)"
+                    onclick="openNewTab('<?= $hasil['id_jawab_post_test_3'] ?>','<?= $id_kuis ?>')"><?php echo $hasil['post_test_3_score']; ?></a>
+            </td>
+            <td>
+                <?php
                     if ($superuser === 'superuser') {
                     ?>
-                        <a onclick="return window.confirm('Apakah yakin untuk menghapus?')" href="<?= $url . "index.php?menu=index&act=quiz&sub=lihat_prepost&id_kuis=$id_kuis&id_unik=$hasil[unique_id_2]" ?>" class="btn btn-danger"><i class="fa fa-times"></i></a>
-                    <?php
+                <a onclick="return window.confirm('Apakah yakin untuk menghapus?')"
+                    href="<?= $url . "index.php?menu=index&act=quiz&sub=lihat_prepost&id_kuis=$id_kuis&id_unik=$hasil[unique_id_2]" ?>"
+                    class="btn btn-danger"><i class="fa fa-times"></i></a>
+                <?php
                     }
                     ?>
 
-                </td>
-            </tr>
+            </td>
+        </tr>
         <?php endforeach; ?>
 
     </tbody>
