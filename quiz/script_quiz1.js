@@ -1,42 +1,49 @@
-function getSoal() {
-  $(".loader").show();
-  $("#questionContainer").hide();
-  $.ajax({
-    url: url_api + "soal.php?data-soal", // Ganti dengan URL yang sesuai
-    method: "POST",
-    data: {
+var isCountdownPaused = false;
+
+function ajaxRequest(url, method, data) {
+  return new Promise(function (resolve, reject) {
+    $.ajax({
+      url: url,
+      method: method,
+      data: data,
+      dataType: "json",
+      success: resolve,
+      error: reject,
+    });
+  });
+}
+async function getSoal() {
+  try {
+    $(".loader").show();
+    $("#questionContainer").hide();
+
+    const response = await ajaxRequest(url_api + "soal.php?data-soal", "POST", {
       id_kuis: id_kuis,
       id_jawab: id_jawab,
-    },
-    dataType: "json",
-    success: function (response) {
-      // Proses respons dari server
-      if (response.result) {
-        let data = response.result;
-        if (data.total_soal == data.soal_dijawab) {
-          window.location.href = url + "lihat_hasil.php?disini";
-        }
-        localStorage.setItem("waktu", data.data_kuis.waktu);
-        // console.log(localStorage);
-        setTimeout(function () {
-          hitung_soal(response.result);
-          displayQuestion(response.result);
-          $(".loader").hide();
-          $("#questionContainer").show();
-        }, 100);
-        //   tombol(response.result);
-      } else {
-        console.error("Gagal mendapatkan soal dari server");
+    });
+
+    // Proses respons dari server
+    if (response.result) {
+      let data = response.result;
+      if (data.total_soal == data.soal_dijawab) {
+        // window.location.href = url + "lihat_hasil.php?selesai";
       }
-    },
-    error: function (jqXHR, textStatus, errorThrown) {
-      console.error(
-        "Gagal melakukan permintaan Ajax:",
-        textStatus,
-        errorThrown
-      );
-    },
-  });
+
+      localStorage.setItem("waktu", data.data_kuis.waktu);
+
+      // Menunggu selama 1 detik menggunakan setTimeout
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      hitung_soal(response.result);
+      displayQuestion(response.result);
+      $(".loader").hide();
+      $("#questionContainer").show();
+    } else {
+      console.error("Gagal mendapatkan soal dari server");
+    }
+  } catch (error) {
+    console.error("Gagal melakukan permintaan Ajax:", error);
+  }
 }
 
 // Panggil fungsi getSoal saat halaman dimuat
@@ -46,12 +53,10 @@ function hitung_soal(data) {
   let soal = $("#hitung_soal");
   let soal_ke = parseInt(data.soal_dijawab) + 1;
   let total_soal = parseInt(data.total_soal);
-  soal.html("Soal ke-" + soal_ke + " dari " + data.total_soal);
 
+  soal.html("Soal ke-" + soal_ke + " dari " + data.total_soal);
   let btn = $("#nextBtn");
   let cekHasil = $("#cekHasil");
-  //   cekHasil.hide();
-  //   console.log(`dari ${soal_ke}`, "total soal : ", total_soal);
   if (soal_ke == total_soal) {
     btn.hide();
     cekHasil.show();
@@ -105,7 +110,6 @@ function displayQuestion(data) {
         `;
   });
   questionContainer.append("</ul>");
-  //   console.log(currentQuestion.id_soal);
 }
 
 function validateForm() {
@@ -169,9 +173,7 @@ function confirmAndSubmit() {
     confirmButtonText: "Ya, kirim jawaban",
     cancelButtonText: "Batal",
   }).then((result) => {
-    // Jika pengguna mengonfirmasi, submit formulir
     if (result.isConfirmed) {
-      //   Swal.fire("berhasil");
       input_jawaban();
     } else {
       Swal.fire({
@@ -184,6 +186,7 @@ function confirmAndSubmit() {
 }
 
 function kirimData(id_jawab, id_kuis, id_soal, pilihan) {
+  pauseCountdown();
   $.ajax({
     type: "POST",
     url: url_api + "soal.php?input-soal",
@@ -195,12 +198,12 @@ function kirimData(id_jawab, id_kuis, id_soal, pilihan) {
     },
     dataType: "json",
     success: function (response) {
-      //   console.log(response);
-      // Tambahkan logika atau tindakan lainnya setelah berhasil mengirim data
+      resumeCountdown();
+
+      getSoal();
     },
     error: function (error) {
       console.error("Gagal mengirim data:", error);
-      // Tambahkan logika atau tindakan lainnya setelah gagal mengirim data
     },
   });
 }
@@ -208,7 +211,6 @@ function input_jawaban() {
   let id_soal = $('input[name="id_soal"]').val();
   let pilihan = $('input[name="pilihan"]:checked').val();
   kirimData(id_jawab, id_kuis, id_soal, pilihan);
-  getSoal();
 }
 
 function updateKuis(id_kuis, id_jawab) {
@@ -216,15 +218,12 @@ function updateKuis(id_kuis, id_jawab) {
     type: "POST",
     url: url_api + "soal.php?update-kuis",
     data: {
-      id_kuis: id_kuis, // Ganti dengan ID kuis yang sesuai
-      id_jawab: id_jawab, // Ganti dengan ID jawab yang sesuai
+      id_kuis: id_kuis,
+      id_jawab: id_jawab,
     },
     dataType: "json",
-    success: function (response) {
-      // Tanggapan dari server
-    },
+    success: function (response) {},
     error: function (jqXHR, textStatus, errorThrown) {
-      // Tanggapan jika terjadi kesalahan dalam melakukan AJAX
       console.error("Error: " + textStatus, errorThrown);
     },
   });
@@ -241,54 +240,57 @@ function jawabAndCek() {
     window.location.href = url + "lihat_hasil.php";
   }, 2000);
 }
-$(document).ready(function () {
-  // Set the countdown duration in minutes
-  var countdownDuration = parseInt(localStorage.getItem("waktu")); // Change this to your desired countdown duration in minutes
+var countdownDuration = parseInt(localStorage.getItem("waktu"));
+var storedCountdown = localStorage.getItem("countdown");
+var endTime;
+var endTime;
 
-  // Check if there is a countdown value in localStorage
-  var storedCountdown = localStorage.getItem("countdown");
-  var endTime;
+if (storedCountdown) {
+  endTime = parseInt(storedCountdown, 10);
+} else {
+  endTime = new Date().getTime() + countdownDuration * 60 * 1000;
+  localStorage.setItem("countdown", endTime);
+}
 
-  if (storedCountdown) {
-    endTime = parseInt(storedCountdown, 10);
-  } else {
-    // Calculate the end time based on the current time and countdown duration
-    endTime = new Date().getTime() + countdownDuration * 60 * 1000;
-    // Save the end time to localStorage
-    localStorage.setItem("countdown", endTime);
-  }
+var isCountdownPaused = false;
 
-  var x = setInterval(function () {
-    // Get the current time
+// Fungsi untuk mengurangi waktu
+function updateCountdown() {
+  if (!isCountdownPaused) {
     var now = new Date().getTime();
-
-    // Calculate the remaining time in milliseconds
     var distance = endTime - now;
-
-    // Calculate minutes and seconds
     var minutes = Math.floor(distance / (1000 * 60));
     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-    // Display the countdown
     $("#countdown").html(minutes + "m " + seconds + "d ");
 
-    // If the countdown is over, display a message
     if (distance < 0) {
-      clearInterval(x);
-      $("#countdown").html("waktu habis!");
+      clearInterval(countdownInterval);
+      $("#countdown").html("Waktu habis!");
       $("#gambar").hide();
       Swal.fire("STOP! Waktu Habis tunggu sampai proses selesai!");
-      // console.log(distance);
       waktuHabis();
       updateKuis(id_kuis, id_jawab);
+
       setTimeout(function () {
         window.location.href = url + "lihat_hasil.php";
       }, 3000);
     }
-  }, 1000); // Update every 1 second
-});
+  }
+}
+
+// Memulai perhitungan waktu
+var countdownInterval = setInterval(updateCountdown, 1000);
+
+function pauseCountdown() {
+  isCountdownPaused = true;
+}
+
+function resumeCountdown() {
+  isCountdownPaused = false;
+}
+
 function waktuHabis() {
-  // Swal.fire({ title: "WAKTU HABIS", icon: "danger" });
   $("#questionContainer").html(
     `<h1 class='text-center'>WAKTU HABIS <br> 
     Soal yang belum terjawab akan otomatis disalahkan semua! <br/>
@@ -300,16 +302,14 @@ function waktuHabis() {
     type: "POST",
     url: url_api + "soal.php?belum-terjawab",
     data: {
-      id_kuis: id_kuis, // Ganti dengan ID kuis yang sesuai
-      id_jawab: id_jawab, // Ganti dengan ID jawab yang sesuai
+      id_kuis: id_kuis,
+      id_jawab: id_jawab,
     },
     dataType: "json",
     success: function (response) {
-      // Tanggapan dari server
       response.data.forEach((index) => {
         let id_soal = index.id_soal;
         kirimData(id_jawab, id_kuis, id_soal, "TIDAKJAWAB");
-        console.log(id_soal);
       });
     },
     error: function (jqXHR, textStatus, errorThrown) {
@@ -330,7 +330,6 @@ function cekGambar(id_soal, ket) {
     dataType: "json",
 
     success: function (response) {
-      // Menangani respons JSON
       if (response.hasil.url_gambar != "") {
         var gambarHTML = $("#gambar");
 
@@ -340,7 +339,6 @@ function cekGambar(id_soal, ket) {
       }
     },
     error: function (xhr, status, error) {
-      // Menangani kesalahan
       console.log(error);
     },
   });

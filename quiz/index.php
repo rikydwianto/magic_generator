@@ -16,10 +16,11 @@ $stmt->execute();
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 // ... (tampilkan halaman kuis)
 // Jika kuis tidak ditemukan, redirect ke halaman 404
-if ($stmt->rowCount() === 0 || $row['status'] == 'tidakaktif') {
+if ($stmt->rowCount() === 0) {
     pindah($url_quiz . "404.php"); // Gantilah 404.php dengan halaman 404 yang sesuai
     exit();
 }
+
 // var_dump($_SESSION);
 
 $readonly = "";
@@ -48,7 +49,12 @@ if (isset($_GET['post-test'])) {
 if (isset($_SESSION['mengerjakan']) && $_SESSION['mengerjakan'] == 'ya') {
     pindah($url_quiz . "handle_soal.php");
 }
-
+$disabled = 'disabled';
+if ($row['status'] == 'aktif') {
+    $disabled = '';
+} else {
+    $readonly = 'readonly';
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -60,7 +66,7 @@ if (isset($_SESSION['mengerjakan']) && $_SESSION['mengerjakan'] == 'ya') {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- SweetAlert CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@9">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@9"> -->
     <script>
         let url_api = "<?php echo $url_api ?>";
         let url_quiz = "<?php echo $url_quiz ?>";
@@ -141,7 +147,18 @@ if (isset($_SESSION['mengerjakan']) && $_SESSION['mengerjakan'] == 'ya') {
                                 }
                                 ?>
                             </div>
-                            <button type="button" class="btn btn-primary" name='input' id="submitBtn">Submit</button>
+
+                            <?php
+                            if ($row['status'] != 'aktif') {
+                                pesan("Kuis Sedang Tidak Diaktifkan", 'danger');
+                            }
+                            ?>
+                            <button type="button" <?= $disabled ?> class="btn btn-primary" name='input' id="submitBtn">KIRIM</button>
+                            <?php if (isset($_GET['post-test'])) {
+                            ?>
+                                <a href="<?= $url_quiz . 'reset.php?id=' . $id_kuis ?>" class="btn btn-danger">ISI BARU</a>
+                            <?php
+                            } ?>
                         </form>
                     </div>
                 </div>
@@ -205,12 +222,12 @@ if (isset($_SESSION['mengerjakan']) && $_SESSION['mengerjakan'] == 'ya') {
 
 
 
-    <!-- Bootstrap JS and Popper.js -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- SweetAlert JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+
 
     <script src='<?= $url_quiz . 'script_quiz.js' ?>'></script>
     <script>

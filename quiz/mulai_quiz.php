@@ -45,7 +45,7 @@ if ($kuis_jawab) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- SweetAlert CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@9">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@9"> -->
     <script>
         let waktu = "<?= $row['waktu']; ?>";
         localStorage.setItem('waktu', waktu)

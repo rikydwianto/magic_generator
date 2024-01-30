@@ -7,8 +7,8 @@ $(document).ready(function () {
         text: "Apakah Anda yakin ingin mengirimkan formulir?",
         icon: "question",
         showCancelButton: true,
-        confirmButtonText: "Ya",
-        cancelButtonText: "Tidak",
+        confirmButtonText: "Ya, Lanjutkan!",
+        cancelButtonText: "Tidak, Batalkan",
         reverseButtons: true,
         customClass: {
           confirmButton: "btn btn-success",

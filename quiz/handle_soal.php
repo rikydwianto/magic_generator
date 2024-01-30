@@ -31,15 +31,16 @@ if ($stmt->rowCount() === 0 || $row['status'] == 'tidakaktif') {
     <title><?= $row['nama_kuis'] ?></title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@9">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@9"> -->
     <link rel="stylesheet" href="<?= $url_quiz . 'style.css' ?>">
 
 
+
     <script>
-    let url_api = "<?= $url . "api/" ?>";
-    let url = "<?= $url_quiz ?>";
-    let id_kuis = "<?= $id_kuis ?>";
-    let id_jawab = "<?= $id_jawab ?>";
+        let url_api = "<?= $url . "api/" ?>";
+        let url = "<?= $url_quiz ?>";
+        let id_kuis = "<?= $id_kuis ?>";
+        let id_jawab = "<?= $id_jawab ?>";
     </script>
 </head>
 
@@ -57,7 +58,7 @@ if ($stmt->rowCount() === 0 || $row['status'] == 'tidakaktif') {
                                 <div class="row gx-2">
                                     <div class="col">
                                         <div class="">
-                                            <h4 class="mb-0" id='hitung_soal'>Soal ke 1 dari 4</h4>
+                                            <h4 class="mb-0" id='hitung_soal'></h4>
                                         </div>
                                     </div>
                                     <div class="col">
@@ -82,10 +83,8 @@ if ($stmt->rowCount() === 0 || $row['status'] == 'tidakaktif') {
                             <div class="loader"></div>
 
                             <div id="tombol">
-                                <button id="nextBtn" type="button" onclick="validateForm()"
-                                    class="btn btn-primary mt-3">Jawab</button>
-                                <button id="cekHasil" type="button" onclick="validateForm1()"
-                                    class="btn btn-success mt-3">Jawab Dan Cek Hasil</button>
+                                <button id="nextBtn" type="button" onclick="validateForm()" class="btn btn-primary mt-3">Jawab</button>
+                                <button id="cekHasil" type="button" onclick="validateForm1()" class="btn btn-success mt-3">Jawab Dan Cek Hasil</button>
                                 <!-- <button type="button" onclick="hapusWaktu()" class="btn btn-danger mt-3">Reset
                                     Waktu</button> -->
                             </div>
@@ -99,12 +98,11 @@ if ($stmt->rowCount() === 0 || $row['status'] == 'tidakaktif') {
 
 
     <!-- Bootstrap JS and Popper.js -->
-    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- SweetAlert JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 
 
     <script src='<?= $url_quiz . 'script_quiz1.js' ?>'></script>

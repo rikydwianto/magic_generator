@@ -60,8 +60,14 @@ if ($kuis['benar'] + $kuis['salah'] == $total_soal) {
 
     $result = file_get_contents($url_api . "soal.php?update-kuis", false, $context);
 
-    // pindah($url_quiz . "lihat_hasil.php");
+    pindah($url_quiz . "lihat_hasil.php");
 }
+
+$qqq = $pdo->prepare("SELECT COUNT(*) AS tidak_jawab FROM soal_jawab WHERE pilihan='TIDAKJAWAB' AND id_kuis =:id_kuis AND id_jawab=:id_jawab");
+$qqq->bindParam(":id_kuis", $id_kuis);
+$qqq->bindParam(":id_jawab", $id_jawab);
+$qqq->execute();
+$hitung_tidak_jawab = $qqq->fetch()['tidak_jawab'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -72,30 +78,29 @@ if ($kuis['benar'] + $kuis['salah'] == $total_soal) {
     <title><?= $row['nama_kuis'] ?></title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@9">
 
     <style>
-    body {
-        user-select: none;
-    }
+        body {
+            user-select: none;
+        }
 
-    /* Style untuk menyembunyikan titik pada elemen <li> */
-    .custom-list-item {
-        list-style-type: none;
-        padding-left: 10px;
-        padding-top: 5px;
-    }
+        /* Style untuk menyembunyikan titik pada elemen <li> */
+        .custom-list-item {
+            list-style-type: none;
+            padding-left: 10px;
+            padding-top: 5px;
+        }
 
-    /* Style tambahan sesuai kebutuhan desain */
-    .custom-list-item h5 {
-        margin-bottom: 0;
-        /* Menghilangkan margin bawah pada elemen h5 */
-    }
+        /* Style tambahan sesuai kebutuhan desain */
+        .custom-list-item h5 {
+            margin-bottom: 0;
+            /* Menghilangkan margin bawah pada elemen h5 */
+        }
 
-    .custom-list-item p {
-        margin-top: 0;
-        /* Menghilangkan margin atas pada elemen p */
-    }
+        .custom-list-item p {
+            margin-top: 0;
+            /* Menghilangkan margin atas pada elemen p */
+        }
     </style>
 
 </head>
@@ -172,7 +177,7 @@ if ($kuis['benar'] + $kuis['salah'] == $total_soal) {
                                             </tr>
                                             <tr>
                                                 <th>Nama</th>
-                                                <td><?= $kuis['nama'] ?></td>
+                                                <td><?= $kuis['nama'] ?>(<?= $kuis['nik'] ?>)</td>
                                             </tr>
                                             <tr>
                                                 <th>Cabang</th>
@@ -181,6 +186,10 @@ if ($kuis['benar'] + $kuis['salah'] == $total_soal) {
                                             <tr>
                                                 <th>Lama Pengerjaan</th>
                                                 <td><?= $kuis['pengerjaan'] ?></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Tidak Terjawab</th>
+                                                <td><?= $hitung_tidak_jawab ? $hitung_tidak_jawab : 0 ?> soal</td>
                                             </tr>
                                             <tr>
                                                 <th>Jenis Test</th>
@@ -238,22 +247,22 @@ if ($kuis['benar'] + $kuis['salah'] == $total_soal) {
 
                                         ?>
 
-                                        <tr class=" ">
-                                            <td><?= $no ?></td>
-                                            <td>
-                                                <h5><?= $row['soal'] ?></h5>
-                                                <?php
+                                            <tr class=" ">
+                                                <td><?= $no ?></td>
+                                                <td>
+                                                    <h5><?= $row['soal'] ?></h5>
+                                                    <?php
                                                     if ($row['url_gambar'] != "") {
                                                         $gambar = cekGambarSoal($url_api, $row['id_soal'], 'soal');
 
                                                     ?>
-                                                <img src="<?= $gambar['url_gambar'] ?>" class="img img-fluid" alt="">
-                                                <?php
+                                                        <img src="<?= $gambar['url_gambar'] ?>" class="img img-fluid" alt="">
+                                                    <?php
                                                     }
                                                     ?>
-                                                <div id="pilihan" class='<?= $bg ?>' style='padding-left:20px'>
+                                                    <div id="pilihan" class='<?= $bg ?>' style='padding-left:20px'>
 
-                                                    <?php
+                                                        <?php
                                                         $pilihan = json_decode($row['pilihan'], true);
                                                         if ($tampil_jawaban == 'ya') {
                                                             foreach ($pilihan as $pil) {
@@ -269,22 +278,22 @@ if ($kuis['benar'] + $kuis['salah'] == $total_soal) {
                                                             }
                                                         }
                                                         ?>
-                                                    <p>
-                                                        <?php
+                                                        <p>
+                                                            <?php
                                                             if ($tampil_jawaban == 'ya') {
                                                             ?>
-                                                        Kamu menjawab: <?= strtoupper($row['pilihuser']) ?> |
-                                                        <?= $row['keterangan'] ?>
-                                                        <?php
+                                                                Kamu menjawab: <?= strtoupper($row['pilihuser']) ?> |
+                                                                <?= $row['keterangan'] ?>
+                                                            <?php
                                                             }
                                                             ?>
-                                                    </p>
+                                                        </p>
 
-                                                </div>
-                                            </td>
+                                                    </div>
+                                                </td>
 
 
-                                        </tr>
+                                            </tr>
 
 
 
@@ -299,13 +308,11 @@ if ($kuis['benar'] + $kuis['salah'] == $total_soal) {
                                     echo "sudah tidak bisa post test";
                                 } else {
                                 ?>
-                                <a href="<?= $url_quiz . "index.php?id=$id_kuis&post-test&unik=$kuis[unique_id_2]" ?>"
-                                    class="btn btn-success mb-3">LAKUKAN POST TEST</a>
+                                    <a href="<?= $url_quiz . "index.php?id=$id_kuis&post-test&unik=$kuis[unique_id_2]" ?>" class="btn btn-success mb-3">LAKUKAN POST TEST</a>
                                 <?php
                                 }
                                 ?>
-                                <a href="<?= $url_quiz . "reset.php?id=$id_kuis" ?>"
-                                    class="btn btn-danger mb-3">Reset</a>
+                                <a href="<?= $url_quiz . "reset.php?id=$id_kuis" ?>" class="btn btn-danger mb-3">Reset</a>
 
                             </div>
                         </div>
@@ -315,12 +322,11 @@ if ($kuis['benar'] + $kuis['salah'] == $total_soal) {
     </div>
 
 
-    <!-- Bootstrap JS and Popper.js -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- SweetAlert JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+
 
     <script src='<?= $url_quiz . 'script_quiz.js' ?>'></script>
 
