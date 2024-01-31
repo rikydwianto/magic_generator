@@ -68,46 +68,11 @@ if ($row['status'] == 'aktif') {
     <!-- SweetAlert CSS -->
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@9"> -->
     <script>
-        let url_api = "<?php echo $url_api ?>";
-        let url_quiz = "<?php echo $url_quiz ?>";
-        let id_kuis = "<?= $id_kuis ?>";
-
-        var url = window.location.href;
-
-        var urlParams = new URLSearchParams(url);
-
-        if (urlParams.has('post-test')) {
-            var postTestValue = urlParams.get('post-test');
-        } else {
-
-
-
-            var dataLocalStorage = localStorage.getItem("unique_id");
-
-            if (dataLocalStorage != "") {
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", url_api + "info_kuis.php", true);
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                        var jsonResponse = JSON.parse(xhr.responseText);
-                        let unik2 = (jsonResponse[0]?.unique_id_2);
-                        if (unik2 !== undefined && unik2 !== null && unik2 !== "") {
-                            window.location.href = url_quiz + 'index.php?id=' + id_kuis + '&post-test&unik=' + unik2
-                        } else {
-                            // console.log("Tidak ada data");
-                        }
-
-
-
-                    }
-                };
-
-                xhr.send("data=" + encodeURIComponent(dataLocalStorage) + "&id_kuis=" + id_kuis);
-            }
-        }
+    let url_api = "<?php echo $url_api ?>";
+    let url_quiz = "<?php echo $url_quiz ?>";
+    let id_kuis = "<?= $id_kuis ?>";
     </script>
+    <script src="<?= $url_quiz . 'index.js?v='.$timestamp ?>"></script>
 
 </head>
 
@@ -124,25 +89,35 @@ if ($row['status'] == 'aktif') {
                         <form id="karyawanForm" method="post">
                             <div class="form-group">
                                 <label for="cabang">Cabang:</label>
-                                <input type="text" class="form-control" value='<?= $hasil['cabang'] ? $hasil['cabang'] : "" ?>' <?= $readonly ?> id="cabang" name="cabang" placeholder="Masukkan Nama Cabang" required>
+                                <input type="text" class="form-control"
+                                    value='<?= $hasil['cabang'] ? $hasil['cabang'] : "" ?>' <?= $readonly ?> id="cabang"
+                                    name="cabang" placeholder="Masukkan Nama Cabang" required>
                             </div>
                             <div class="form-group">
                                 <label for="nama">Nama:</label>
-                                <input type="text" class="form-control" value='<?= $hasil['nama'] ? $hasil['nama'] : "" ?>' <?= $readonly ?> id="nama" name="nama" placeholder="Masukkan Nama Anda" required>
-                                <input type="hidden" class="form-control" value='<?= $hasil['unique_id_2'] ? $hasil['unique_id_2'] : "" ?>' <?= $readonly ?> id="unique_2" name="unique_2">
+                                <input type="text" class="form-control"
+                                    value='<?= $hasil['nama'] ? $hasil['nama'] : "" ?>' <?= $readonly ?> id="nama"
+                                    name="nama" placeholder="Masukkan Nama Anda" required>
+                                <input type="hidden" class="form-control"
+                                    value='<?= $hasil['unique_id_2'] ? $hasil['unique_id_2'] : "" ?>' <?= $readonly ?>
+                                    id="unique_2" name="unique_2">
                             </div>
                             <div class="form-group">
 
                                 <?php
                                 if ($row['anggota'] == 'ya') {
                                 ?>
-                                    <label for="nik">CENTER:</label>
-                                    <input type="text" class="form-control" value='<?= $hasil['nik'] ? $hasil['nik'] : "" ?>' <?= $readonly ?> id="nik" name="nik" placeholder="Masukkan CENTER" required>
+                                <label for="nik">CENTER:</label>
+                                <input type="text" class="form-control"
+                                    value='<?= $hasil['nik'] ? $hasil['nik'] : "" ?>' <?= $readonly ?> id="nik"
+                                    name="nik" placeholder="Masukkan CENTER" required>
                                 <?php
                                 } else {
                                 ?>
-                                    <label for="nik">NIK:</label>
-                                    <input type="text" class="form-control" value='<?= $hasil['nik'] ? $hasil['nik'] : "" ?>' <?= $readonly ?> id="nik" name="nik" placeholder="Masukkan NIK Anda" required>
+                                <label for="nik">NIK:</label>
+                                <input type="text" class="form-control"
+                                    value='<?= $hasil['nik'] ? $hasil['nik'] : "" ?>' <?= $readonly ?> id="nik"
+                                    name="nik" placeholder="Masukkan NIK Anda" required>
                                 <?php
                                 }
                                 ?>
@@ -153,10 +128,11 @@ if ($row['status'] == 'aktif') {
                                 pesan("Kuis Sedang Tidak Diaktifkan", 'danger');
                             }
                             ?>
-                            <button type="button" <?= $disabled ?> class="btn btn-primary" name='input' id="submitBtn">KIRIM</button>
+                            <button type="button" <?= $disabled ?> class="btn btn-primary" name='input'
+                                id="submitBtn">KIRIM</button>
                             <?php if (isset($_GET['post-test'])) {
                             ?>
-                                <a href="<?= $url_quiz . 'reset.php?id=' . $id_kuis ?>" class="btn btn-danger">ISI BARU</a>
+                            <a href="<?= $url_quiz . 'reset.php?id=' . $id_kuis ?>" class="btn btn-danger">ISI BARU</a>
                             <?php
                             } ?>
                         </form>
@@ -204,10 +180,10 @@ if ($row['status'] == 'aktif') {
 
 
     ?>
-            <script>
-                let unik = "<?= $unique_id ?>";
-                localStorage.setItem('unique_id', unik);
-            </script>
+    <script>
+    let unik = "<?= $unique_id ?>";
+    localStorage.setItem('unique_id', unik);
+    </script>
     <?php
 
             pindah($url_quiz . "mulai_quiz.php");
@@ -215,6 +191,7 @@ if ($row['status'] == 'aktif') {
             echo "Error: " . $e->getMessage();
         }
     }
+
 
 
 
@@ -229,9 +206,9 @@ if ($row['status'] == 'aktif') {
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 
 
-    <script src='<?= $url_quiz . 'script_quiz.js' ?>'></script>
+    <script src='<?= $url_quiz . 'script_quiz.js?v=' . $timestamp ?>'></script>
     <script>
-        // console.log(localStorage)
+    // console.log(localStorage)
     </script>
 </body>
 

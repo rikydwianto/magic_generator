@@ -131,7 +131,7 @@ if ($kuis_jawab) {
     <!-- SweetAlert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
-    <script src='<?= $url_quiz . 'script_quiz.js' ?>'></script>
+    <script src='<?= $url_quiz . 'script_quiz.js?v=' . $timestamp ?>'></script>
 
     <script>
     </script>

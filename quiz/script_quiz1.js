@@ -39,10 +39,10 @@ async function getSoal() {
       $(".loader").hide();
       $("#questionContainer").show();
     } else {
-      console.error("Gagal mendapatkan soal dari server");
+      // console.error("Gagal mendapatkan soal dari server");
     }
   } catch (error) {
-    console.error("Gagal melakukan permintaan Ajax:", error);
+    // console.error("Gagal melakukan permintaan Ajax:", error);
   }
 }
 

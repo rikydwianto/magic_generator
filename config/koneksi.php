@@ -1,8 +1,9 @@
-
 <?php
 date_default_timezone_set('Asia/Jakarta');
 header("X-XSS-Protection: 1; mode=block");
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 
+$timestamp = time();
 
 
 // Mengakses variabel konfigurasi
