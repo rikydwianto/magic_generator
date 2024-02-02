@@ -483,5 +483,5 @@ $filename = "CEK PAR $nama_cabang $tgl_delin_awal - $tgl_delin_akhir.xlsx";
 $writer->save($folder . $filename);
 $delete = "delete from deliquency where session='$sesi'";
 $pdo->query($delete);
-header("location:download.php?filename=" . $filename);
+pindah("download.php?filename=" . $filename);
 ?>
