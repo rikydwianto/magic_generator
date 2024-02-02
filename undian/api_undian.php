@@ -1,4 +1,7 @@
 <?php
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 require './../vendor/autoload.php'; // Impor library Dotenv
 require './../proses/global_fungsi.php';
 include_once "./../config/setting.php";
