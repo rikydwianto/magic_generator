@@ -13,16 +13,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
 
         // Pernyataan SQL untuk mencari data berdasarkan unique_id
-        $sql = "SELECT * FROM kuis_jawab WHERE unique_id = :unique_id and id_kuis=:id_kuis";
+        $sql = "SELECT * FROM kuis_jawab WHERE unique_id = :unique_id and id_kuis=:id_kuis ";
         // echo $unik;
         // Persiapkan dan jalankan pernyataan SQL
         $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':unique_id', $unik, PDO::PARAM_STR);
-        $stmt->bindParam(':id_kuis', $id_kuis, PDO::PARAM_STR);
+        $stmt->bindParam(':unique_id', $unik);
+        $stmt->bindParam(':id_kuis', $id_kuis);
         $stmt->execute();
 
         // Ambil hasil pencarian
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
 
         // Mengubah hasil ke format JSON
         $jsonResult = json_encode($result);

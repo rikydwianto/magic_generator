@@ -13,9 +13,7 @@ include_once "./../config/koneksi.php";
     <title>UNDIAN DOORPRIZE KOMIDA REGIONAL H</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@900&family=Julius+Sans+One&family=Kanit:wght@200&family=Kodchasan:ital,wght@0,500;0,600;1,400&family=Montserrat+Alternates:wght@600&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@900&family=Julius+Sans+One&family=Kanit:wght@200&family=Kodchasan:ital,wght@0,500;0,600;1,400&family=Montserrat+Alternates:wght@600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
 
@@ -60,6 +58,7 @@ include_once "./../config/koneksi.php";
                                     <th>NIK</th>
                                     <th>CABANG</th>
                                     <th>NAMA</th>
+                                    <th>Dapat</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -69,13 +68,14 @@ include_once "./../config/koneksi.php";
                                 $hasil = $q->fetchAll(PDO::FETCH_ASSOC);
                                 foreach ($hasil as $kar) {
                                 ?>
-                                <tr>
-                                    <td><?= $no ?></td>
-                                    <td><?= $kar['nik'] ?></td>
-                                    <td><?= $kar['cabang'] ?></td>
-                                    <td><?= $kar['nama'] ?></td>
+                                    <tr>
+                                        <td><?= $no ?></td>
+                                        <td><?= $kar['nik'] ?></td>
+                                        <td><?= $kar['cabang'] ?></td>
+                                        <td><?= $kar['nama'] ?></td>
+                                        <td><?= $kar['dapat'] ?></td>
 
-                                </tr>
+                                    </tr>
                                 <?php
                                     $no++;
                                 }
@@ -117,10 +117,10 @@ include_once "./../config/koneksi.php";
                                         $cab  = $result->fetchAll(PDO::FETCH_ASSOC);
                                         foreach ($cab as $caba) {
                                         ?>
-                                        <tr>
-                                            <td><?= $caba['cabang'] ?></td>
-                                            <td><?= $caba['total_staff'] ?></td>
-                                        </tr>
+                                            <tr>
+                                                <td><?= $caba['cabang'] ?></td>
+                                                <td><?= $caba['total_staff'] ?></td>
+                                            </tr>
                                         <?php
                                         }
                                         ?>
@@ -137,7 +137,7 @@ include_once "./../config/koneksi.php";
 
 
     <script>
-    var url = "<?= $url . 'undian/' ?>";
+        var url = "<?= $url . 'undian/' ?>";
     </script>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -146,68 +146,68 @@ include_once "./../config/koneksi.php";
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
     <script>
-    $(document).ready(function() {
-        var table = $('#table').DataTable();
+        $(document).ready(function() {
+            var table = $('#table').DataTable();
 
-        // Tambahkan filter berdasarkan kategori dan subkategori
-        $('#cabangSelect').change(function() {
-            var cabang = $('#cabangSelect').val();
+            // Tambahkan filter berdasarkan kategori dan subkategori
+            $('#cabangSelect').change(function() {
+                var cabang = $('#cabangSelect').val();
 
-            table.column(2).search(cabang).draw();
-            // table.column(5).search(subkategori).draw();
-        });
-    });
-
-
-
-    const channel = new BroadcastChannel('myChannel');
-
-    // Mendengarkan pesan yang dikirim ke channel
-    channel.addEventListener('message', event => {
-        // Mendapatkan data dari pesan
-        const receivedData = event.data;
-
-        cekDetail(receivedData)
-        // peringatan(receivedData);
-        // Lakukan sesuatu dengan data yang diterima
-    });
-    // cekDetail('003729/2017')
-
-    function cekDetail(nik) {
-        $.ajax({
-            type: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            url: url + 'api_undian.php?ambil_nik', // Sesuaikan dengan lokasi file update_api.php
-            data: {
-                nik: nik,
-            },
-            success: function(response) {
-                var data = response.data
-
-                document.getElementById("detailId").innerHTML = "<strong>NIK :</strong> " + data.nik;
-                document.getElementById("detailNama").innerHTML = "<strong>Nama:</strong> " + data.nama;
-                document.getElementById("detailCabang").innerHTML = "<strong>Cabang:</strong> " + data
-                    .cabang;
-
-                // Menampilkan gambar (photo)
-                document.getElementById("detailPhoto").src = data.photo;
-                document.getElementById("detailPhoto").alt = "Photo of " + data.nama;
-            },
-
+                table.column(2).search(cabang).draw();
+                // table.column(5).search(subkategori).draw();
+            });
         });
 
 
-    }
 
-    function peringatan(data) {
-        Swal.fire({
-            title: 'ADA PEMENANG',
-            icon: 'success',
-            text: data + ' MENJADI PEMENANG SILAHKAN DI CEK!'
-        })
-    }
+        const channel = new BroadcastChannel('myChannel');
+
+        // Mendengarkan pesan yang dikirim ke channel
+        channel.addEventListener('message', event => {
+            // Mendapatkan data dari pesan
+            const receivedData = event.data;
+
+            cekDetail(receivedData)
+            // peringatan(receivedData);
+            // Lakukan sesuatu dengan data yang diterima
+        });
+        // cekDetail('003729/2017')
+
+        function cekDetail(nik) {
+            $.ajax({
+                type: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                url: url + 'api_undian.php?ambil_nik', // Sesuaikan dengan lokasi file update_api.php
+                data: {
+                    nik: nik,
+                },
+                success: function(response) {
+                    var data = response.data
+
+                    document.getElementById("detailId").innerHTML = "<strong>NIK :</strong> " + data.nik;
+                    document.getElementById("detailNama").innerHTML = "<strong>Nama:</strong> " + data.nama;
+                    document.getElementById("detailCabang").innerHTML = "<strong>Cabang:</strong> " + data
+                        .cabang;
+
+                    // Menampilkan gambar (photo)
+                    document.getElementById("detailPhoto").src = data.photo;
+                    document.getElementById("detailPhoto").alt = "Photo of " + data.nama;
+                },
+
+            });
+
+
+        }
+
+        function peringatan(data) {
+            Swal.fire({
+                title: 'ADA PEMENANG',
+                icon: 'success',
+                text: data + ' MENJADI PEMENANG SILAHKAN DI CEK!'
+            })
+        }
     </script>
 </body>
 

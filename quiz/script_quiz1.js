@@ -268,13 +268,18 @@ function updateCountdown() {
       clearInterval(countdownInterval);
       $("#countdown").html("Waktu habis!");
       $("#gambar").hide();
-      Swal.fire("STOP! Waktu Habis tunggu sampai proses selesai!");
+      Swal.fire({
+        icon: "warning",
+        title: `WAKTU HABIS`,
+        allowOutsideClick: false,
+        text: `WAKTU HABIS, SISA SOAL TIDAK TERJAWAB OTOMATIS SALAH`,
+      });
       waktuHabis();
       updateKuis(id_kuis, id_jawab);
 
       setTimeout(function () {
         window.location.href = url + "lihat_hasil.php";
-      }, 3000);
+      }, 2000);
     }
   }
 }

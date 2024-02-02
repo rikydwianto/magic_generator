@@ -62,11 +62,21 @@ include_once "./../config/koneksi.php";
         <h1>UNDIAN DOORPRIZE</h1>
         <h1>KOMIDA REGIONAL H</h1>
         <hr>
-        <h1 id="result" class="mt-4"></h1>
+        <h1 id="result" class="mt-4">000000/0000</h1>
         <hr class="mt-5">
         <button class="btn btn-primary btn-lg" id='mulai' onclick="shuffleNumbers()">MULAI UNDIAN</button>
         <button class="btn btn-danger btn-lg" id='stop' onclick="stopShuffling()">STOP</button>
     </div>
+    <audio id="undianSound" loop>
+        <source src="drumroll.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+    <audio id="winnerSound" loop>
+        <source src="undian.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
+
 
 
 
@@ -78,8 +88,29 @@ include_once "./../config/koneksi.php";
     var interval;
     var winner;
     var numbers = [];
+    var undianSound = document.getElementById("undianSound");
+
+    var winnerSound = document.getElementById("winnerSound");
+
+    // Fungsi untuk memainkan suara winner
+    function playWinnerSound() {
+        winnerSound.play();
+    }
+
+    // Fungsi untuk memulai suara
+    function playUndianSound() {
+        undianSound.play();
+    }
+
+    // Fungsi untuk menghentikan suara
+    function stopUndianSound() {
+        undianSound.pause();
+        undianSound.currentTime = 0;
+    }
+
 
     function shuffleNumbers() {
+        playUndianSound()
         // Menghentikan interval sebelumnya jika ada
         clearInterval(interval);
 
@@ -114,7 +145,7 @@ include_once "./../config/koneksi.php";
             winner = numbers[randomIndex];
             i++;
 
-        }, 50); // Mengatur interval 50 ms antara setiap langkah pengacakan
+        }, 30); // Mengatur interval 50 ms antara setiap langkah pengacakan
     }
 
     // Fungsi untuk mengacak array
@@ -152,6 +183,8 @@ include_once "./../config/koneksi.php";
 
     function stopShuffling() {
         // Menghentikan pengacakan jika tombol "Henti Pengacakan" ditekan
+        stopUndianSound()
+        playWinnerSound()
         clearInterval(interval);
         let pemenang = winner
 
@@ -179,6 +212,33 @@ include_once "./../config/koneksi.php";
         }, 500);
 
     }
+
+
+    // Dapatkan elemen tombol "Mulai Undian" dan "Stop"
+    var mulaiButton = document.getElementById('mulai');
+    var stopButton = document.getElementById('stop');
+
+    // Event listener untuk tombol "Mulai Undian"
+    mulaiButton.addEventListener('click', function() {
+        shuffleNumbers();
+    });
+
+    // Event listener untuk tombol "Stop"
+    stopButton.addEventListener('click', function() {
+        stopShuffling();
+    });
+
+    // Event listener untuk mendengarkan event keyboard
+    document.addEventListener('keydown', function(event) {
+        // Jika tombol "Enter" ditekan, panggil fungsi shuffleNumbers()
+        if (event.key === 'Enter') {
+            shuffleNumbers();
+        }
+        // Jika tombol "Space" ditekan, panggil fungsi stopShuffling()
+        else if (event.key === ' ') {
+            stopShuffling();
+        }
+    });
     </script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
