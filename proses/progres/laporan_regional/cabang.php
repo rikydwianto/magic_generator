@@ -12,7 +12,7 @@
 
                     <option value="">Pilih Cabang</option>
                     <?php
-                    $query = "SELECT * FROM cabang where regional='$regional' order by wilayah asc";
+                    $query = "SELECT * FROM cabang where regional='$regional' order by kode_cabang asc";
                     $result = $pdo->query($query);
 
                     // Loop untuk menampilkan setiap elemen dalam array sebagai opsi

@@ -22,6 +22,7 @@ $jabatanMenu = array(
     'Regional' => array(
         'Dashboard' => array('link' => 'index', 'icon' => 'fa-home'),
         'Cabang' => array('link' => 'cabang/index', 'icon' => 'fa-store'),
+        'Cek Laporan' => array('link' => 'laporan_regional/cek_laporan', 'icon' => 'fa-solid fa-calendar-days'),
         'Rekap Per Regional' => array('link' => 'laporan_regional/regional', 'icon' => 'fa-file-excel'),
         'Laporan Per Cabang ' => array('link' => 'laporan_regional/cabang', 'icon' => 'fa-file-excel'),
         'Laporan Per Staff ' => array('link' => 'laporan_regional/staff', 'icon' => 'fa-file-excel'),
@@ -67,28 +68,28 @@ $jabatanPengguna = $jabatan;
 </nav>
 
 <style>
-.sidebar {
-    background-color: #2c3e50;
-    /* Sidebar background color */
-    color: #ecf0f1;
-    /* Text color */
-}
+    .sidebar {
+        background-color: #2c3e50;
+        /* Sidebar background color */
+        color: #ecf0f1;
+        /* Text color */
+    }
 
-.nav-link {
-    color: #ecf0f1 !important;
-    /* Text color for links */
-    transition: background-color 0.3s;
-}
+    .nav-link {
+        color: #ecf0f1 !important;
+        /* Text color for links */
+        transition: background-color 0.3s;
+    }
 
-.nav-link:hover {
-    background-color: #34495e;
-    /* Hover background color for links */
-}
+    .nav-link:hover {
+        background-color: #34495e;
+        /* Hover background color for links */
+    }
 
-.nav-link.active {
-    background-color: #2980b9;
-    /* Active background color for the selected link */
-    color: #ecf0f1 !important;
-    /* Text color for the selected link */
-}
+    .nav-link.active {
+        background-color: #2980b9;
+        /* Active background color for the selected link */
+        color: #ecf0f1 !important;
+        /* Text color for the selected link */
+    }
 </style>
