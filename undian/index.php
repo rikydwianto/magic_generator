@@ -145,7 +145,7 @@ include_once "./../config/koneksi.php";
             winner = numbers[randomIndex];
             i++;
 
-        }, 30); // Mengatur interval 50 ms antara setiap langkah pengacakan
+        }, 50); // Mengatur interval 50 ms antara setiap langkah pengacakan
     }
 
     // Fungsi untuk mengacak array
@@ -175,7 +175,7 @@ include_once "./../config/koneksi.php";
             success: function(response) {
 
 
-                window.location.href = url
+
             },
 
         });
@@ -187,7 +187,7 @@ include_once "./../config/koneksi.php";
         playWinnerSound()
         clearInterval(interval);
         let pemenang = winner
-
+        updateUndian(winner);
         // https://www.komida.co.id/apphris/muka/007068-2019.jpg
         setTimeout(() => {
             const channel = new BroadcastChannel('myChannel');
@@ -200,45 +200,17 @@ include_once "./../config/koneksi.php";
                 allowOutsideClick: false,
                 text: `KEPADA NIK : ${winner} BERHAK MENDAPAT DOORPRIZE`,
                 width: 800,
-                height: 500,
 
 
             }).then((result) => {
                 if (result.isConfirmed) {
-                    updateUndian(winner);
+                    window.location.href = url
 
                 }
             });
         }, 500);
 
     }
-
-
-    // Dapatkan elemen tombol "Mulai Undian" dan "Stop"
-    var mulaiButton = document.getElementById('mulai');
-    var stopButton = document.getElementById('stop');
-
-    // Event listener untuk tombol "Mulai Undian"
-    mulaiButton.addEventListener('click', function() {
-        shuffleNumbers();
-    });
-
-    // Event listener untuk tombol "Stop"
-    stopButton.addEventListener('click', function() {
-        stopShuffling();
-    });
-
-    // Event listener untuk mendengarkan event keyboard
-    document.addEventListener('keydown', function(event) {
-        // Jika tombol "Enter" ditekan, panggil fungsi shuffleNumbers()
-        if (event.key === 'Enter') {
-            shuffleNumbers();
-        }
-        // Jika tombol "Space" ditekan, panggil fungsi stopShuffling()
-        else if (event.key === ' ') {
-            stopShuffling();
-        }
-    });
     </script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
