@@ -109,23 +109,31 @@ $url = $url_sl; // . 'sl/';
                 $stmt->execute([$id_staff]);
                 $detailAkun = $stmt->fetch(PDO::FETCH_ASSOC);
                 if ($detailAkun) {
+                    $cabang = $detailAkun['cabang'];
                 } else {
                     pindah($url . "login_staff.php");
                 }
                 $menuPath = "./proses/";
                 @$menu = $_GET['menu'];
                 $indexPath = $menuPath . $menu . ".php";
-                if ($menu == "" || $menu == "index") {
-                    include $menuPath . "index" . ".php";
+                $pass = $detailAkun['password'];
+                if ($pass == '123456' || $pass == '1sampai9') {
+                    include "./../sl/proses/user/ganti_password.php";
                 } else {
-                    if (file_exists($indexPath)) {
-                        // File index.php ditemukan, lakukan inclusion
-                        include $indexPath;
+                    if ($menu == "" || $menu == "index") {
+                        include $menuPath . "index" . ".php";
                     } else {
-                        // File index.php tidak ditemukan, tampilkan pesan 404
-                        echo 'Halaman tidak ditemukan';
+                        if (file_exists($indexPath)) {
+                            // File index.php ditemukan, lakukan inclusion
+                            include $indexPath;
+                        } else {
+                            // File index.php tidak ditemukan, tampilkan pesan 404
+                            echo 'Halaman tidak ditemukan';
+                        }
                     }
                 }
+
+
                 ?>
 
             </div>
