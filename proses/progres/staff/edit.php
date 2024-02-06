@@ -13,6 +13,15 @@ try {
         $staff = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($staff) {
+            $nik = $staff['nik_staff'];
+            $regex = '/^\d{4}\/\d{2}\/\d{2}$/';
+
+            if (preg_match($regex, $nik)) {
+                echo "NIK Training";
+            } else {
+                echo "bukan nim training";
+            }
+
 ?>
 <form action="" method="post">
     <input type="hidden" name="id_staff" value="<?php echo $staff['id_staff']; ?>">
@@ -69,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Query untuk memperbarui data staff berdasarkan id_staff
     $query = "UPDATE staff SET nik_staff = ?, nama_staff = ?, cabang = ?,status=? WHERE id_staff = ?";
     $stmt = $pdo->prepare($query);
-    $stmt->execute([$nik_staff, $nama_staff, $cabang,$status, $id_staff]);
+    $stmt->execute([$nik_staff, $nama_staff, $cabang, $status, $id_staff]);
     alert("Update Berhasil");
     pindah(menu_progress("staff/index"));
 } else {
