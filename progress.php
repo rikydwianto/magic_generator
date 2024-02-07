@@ -185,7 +185,7 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
     <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap4.min.js"></script>
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-    <script src="<?= $url ?>assets/js/script_progres.js"></script>
+    <script src="<?= $url ?>assets/js/script_progres.js?v=<?= $timestamp ?>"></script>
 
 
 </body>
