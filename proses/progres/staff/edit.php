@@ -29,7 +29,8 @@ try {
     <div class="form-group">
         <label for="nik_staff">NIK Staff:</label>
         <input type="text" class="form-control" id="nik_staff" name="nik_staff"
-            pattern="(^\d{6}/\d{4}$)|(^\d{4}/\d{2}/\d{2}$)" value="<?php echo $staff['nik_staff']; ?>" required>
+            pattern="(^\d{6}/\d{4}$)|(^\d{4}/\d{2}/\d{2}$)" readonly value="<?php echo $staff['nik_staff']; ?>"
+            required>
     </div>
 
     <div class="form-group">
@@ -40,8 +41,21 @@ try {
 
     <div class="form-group">
         <label for="cabang">Cabang:</label>
-        <input type="text" class="form-control" readonly id="cabang" name="cabang"
-            value="<?php echo $staff['cabang']; ?>" required>
+        <select class="form-control" id="cabang" name="cabang" required>
+            <?php
+                        $query = "SELECT * FROM cabang where regional='$regional' order by kode_cabang asc";
+                        $result = $pdo->query($query);
+
+                        // Loop untuk menampilkan setiap elemen dalam array sebagai opsi
+                        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                            $selcab = $row['nama_cabang'] == $staff['cabang'] ? "selected" : "";
+                            echo '<option ' . $selcab . ' value="' . $row['nama_cabang'] . '">' . $row['kode_cabang'] . " - " . $row['nama_cabang'] .  " - " . $row['wilayah'] . '</option>';
+                        }
+
+                        ?>
+        </select>
+        <!-- <input type="text" class="form-control" readonly id="cabang" name="cabang"
+            value="<?php echo $staff['cabang']; ?>" required> -->
     </div>
     <div class="form-group">
         <label for="status">Status:</label>

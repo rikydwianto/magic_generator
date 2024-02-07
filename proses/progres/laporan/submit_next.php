@@ -18,7 +18,7 @@ Sudah dibuat!, Terima Kasih ");
     pindah(menu_progress("laporan/submit&error&minggu=$minggu&bulan=$bulan&tahun=$tahun&pesan=$pesan"));
 }
 
-$query = "SELECT  COUNT(*) as jumlah_staff FROM staff where cabang='$cabang'";
+$query = "SELECT  COUNT(*) as jumlah_staff FROM staff where cabang='$cabang' and status='aktif'";
 
 $hit_ = $pdo->prepare($query);
 $hit_->execute();
@@ -104,200 +104,245 @@ where cabang_staff= :cabang and minggu= :minggu and bulan=:bulan and tahun=:tahu
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
-    <form action="" method="post">
-        <div class="row">
-            <input type="hidden" name="manager_cabang" value="<?= $detailAkun['nama'] ?>">
-            <input type="hidden" name="nama_cabang" value="<?= $detailAkun['nama_cabang'] ?>">
-            <input type="hidden" name="regional" value="<?= $detailAkun['regional'] ?>">
-            <input type="hidden" name="wilayah" value="<?= $detailAkun['wilayah'] ?>">
-            <input type="hidden" name="minggu" value="<?= $minggu ?>">
-            <input type="hidden" name="bulan" value="<?= $bulan ?>">
-            <input type="hidden" name="tahun" value="<?= $tahun ?>">
-            <input type="hidden" name="total_staff_laporan" value="<?= $result['jumlah_staff'] ?>">
-            <input type="hidden" name="total_am" value="<?= $result['total_anggota_masuk'] ?>">
-            <input type="hidden" name="total_ak" value="<?= $result['total_anggota_keluar'] ?>">
-            <input type="hidden" name="total_nett_agt" value="<?= $result['total_nett_anggota'] ?>">
-            <input type="hidden" name="total_naik_par" value="<?= ($result['total_naik_par']) ?>">
-            <input type="hidden" name="total_turun_par" value="<?= ($result['total_turun_par']) ?>">
-            <input type="hidden" name="total_nett_par" value="<?= ($result['total_nett_par']) ?>">
-            <input type="hidden" name="total_pembiayaan_lain" value="<?= $result['total_pemb_lain'] ?>">
-            <input type="hidden" name="total_anggota_cuti" value="<?= $result['total_agt_cuti'] ?>">
-            <input type="hidden" name="total_pengajuan_tpk" value="<?= $result['total_agt_tpk'] ?>">
+<form action="" method="post">
+    <div class="row">
+        <input type="hidden" name="manager_cabang" value="<?= $detailAkun['nama'] ?>">
+        <input type="hidden" name="nama_cabang" value="<?= $detailAkun['nama_cabang'] ?>">
+        <input type="hidden" name="regional" value="<?= $detailAkun['regional'] ?>">
+        <input type="hidden" name="wilayah" value="<?= $detailAkun['wilayah'] ?>">
+        <input type="hidden" name="minggu" value="<?= $minggu ?>">
+        <input type="hidden" name="bulan" value="<?= $bulan ?>">
+        <input type="hidden" name="tahun" value="<?= $tahun ?>">
+        <input type="hidden" name="total_staff_laporan" value="<?= $result['jumlah_staff'] ?>">
+        <input type="hidden" name="total_am" value="<?= $result['total_anggota_masuk'] ?>">
+        <input type="hidden" name="total_ak" value="<?= $result['total_anggota_keluar'] ?>">
+        <input type="hidden" name="total_nett_agt" value="<?= $result['total_nett_anggota'] ?>">
+        <input type="hidden" name="total_naik_par" value="<?= ($result['total_naik_par']) ?>">
+        <input type="hidden" name="total_turun_par" value="<?= ($result['total_turun_par']) ?>">
+        <input type="hidden" name="total_nett_par" value="<?= ($result['total_nett_par']) ?>">
+        <input type="hidden" name="total_pembiayaan_lain" value="<?= $result['total_pemb_lain'] ?>">
+        <input type="hidden" name="total_anggota_cuti" value="<?= $result['total_agt_cuti'] ?>">
+        <input type="hidden" name="total_pengajuan_tpk" value="<?= $result['total_agt_tpk'] ?>">
 
 
-            <div class="col-lg-4 col-sm-12">
-                <h4>INFORMASI</h4>
-                <table class="table table-bordered">
-                    <tbody>
+        <div class="col-lg-4 col-sm-12">
+            <h4>INFORMASI</h4>
+            <table class="table table-bordered">
+                <tbody>
 
-                        <tr>
-                            <th scope="row" style="width: 40%;">Manager Cabang</th>
-                            <td><?= $detailAkun['nama'] ?></td>
-                        </tr>
-                        <tr>
-                            <th scope="row" style="width: 30%;">Nama Cabang</th>
-                            <td><?= $detailAkun['kode_cabang'] ?> - <?= $detailAkun['nama_cabang'] ?></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Regional</th>
-                            <td>Reg. <?= $detailAkun['regional'] ?></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Wilayah</th>
-                            <td>wilayah <?= $detailAkun['wilayah'] ?></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Minggu</th>
-                            <td>ke <?= $minggu ?></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Bulan</th>
-                            <td><?= $bulanArray[$bulan] ?></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Tahun</th>
-                            <td><?= $tahun ?></td>
-                        </tr>
+                    <tr>
+                        <th scope="row" style="width: 40%;">Manager Cabang</th>
+                        <td><?= $detailAkun['nama'] ?></td>
+                    </tr>
+                    <tr>
+                        <th scope="row" style="width: 30%;">Nama Cabang</th>
+                        <td><?= $detailAkun['kode_cabang'] ?> - <?= $detailAkun['nama_cabang'] ?></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Regional</th>
+                        <td>Reg. <?= $detailAkun['regional'] ?></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Wilayah</th>
+                        <td>wilayah <?= $detailAkun['wilayah'] ?></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Minggu</th>
+                        <td>ke <?= $minggu ?></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Bulan</th>
+                        <td><?= $bulanArray[$bulan] ?></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Tahun</th>
+                        <td><?= $tahun ?></td>
+                    </tr>
 
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-lg-8 col-sm-12">
-                <h4>Progress Laporan - Sudah Approve</h4>
-                <table class="table table-bordered">
-                    <tbody>
-                        <tr>
-                            <th scope="row" style="width: 30%;">Total Staff Laporan </th>
-                            <td><?= $result['jumlah_staff'] ?> Staff Laporan/<?= $jml_staff ?> Total Staff</td>
-                        </tr>
-                        <tr>
-                            <th scope="row" style="width: 30%;">Total Anggota </th>
-                            <td>
-                                <h5 class=' text-lg text-<?= $result['total_nett_anggota'] > 0 ? "success" : "danger" ?>'>
-                                    AM : <?= $result['total_anggota_masuk'] ?> |
-                                    AK : <?= $result['total_anggota_keluar'] ?> |
-                                    NETT : <?= $result['total_nett_anggota'] ?>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-8 col-sm-12">
+            <h4>Progress Laporan - Sudah Approve</h4>
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th scope="row" style="width: 30%;">Total Staff Laporan </th>
+                        <td><?= $result['jumlah_staff'] ?> Staff Laporan/<?= $jml_staff ?> Total Staff</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" style="width: 30%;">Total Anggota </th>
+                        <td>
+                            <h5 class=' text-lg text-<?= $result['total_nett_anggota'] > 0 ? "success" : "danger" ?>'>
+                                AM : <?= $result['total_anggota_masuk'] ?> |
+                                AK : <?= $result['total_anggota_keluar'] ?> |
+                                NETT : <?= $result['total_nett_anggota'] ?>
 
-                                </h5>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row" style="width: 30%;">Total Outstanding PAR </th>
-                            <td>
-                                <h6 class=' text-lg text-<?= $result['total_nett_par'] < 0 ? "success" : "danger" ?>'>
-                                    PAR NAIK : <?= rupiah($result['total_naik_par']) ?> |
-                                    AK : <?= rupiah($result['total_turun_par']) ?> <br />
-                                    NETT : <?= rupiah($result['total_nett_par']) ?>
+                            </h5>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" style="width: 30%;">Total Outstanding PAR </th>
+                        <td>
+                            <h6 class=' text-lg text-<?= $result['total_nett_par'] < 0 ? "success" : "danger" ?>'>
+                                PAR NAIK : <?= rupiah($result['total_naik_par']) ?> |
+                                AK : <?= rupiah($result['total_turun_par']) ?> <br />
+                                NETT : <?= rupiah($result['total_nett_par']) ?>
 
-                                </h6>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row" style="width: 30%;">Total Pembiayaan Lain </th>
-                            <td>
-                                <h6>
-                                    <?php
+                            </h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" style="width: 30%;">Total Pembiayaan Lain </th>
+                        <td>
+                            <h6>
+                                <?php
                                     foreach ($pinjamanArray as $kode => $teks) {
                                         $kd = 'total_' . $kode;
                                         // echo $kd;
                                         echo $kode . " : " . ($result["$kd"] ? $result["$kd"] : 0) . " | ";
                                     }
                                     ?>
-                                    TOTAL : <?= $result['total_pemb_lain'] ?>
-                                </h6>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row" style="width: 30%;">Total Anggota Cuti </th>
-                            <td>
+                                TOTAL : <?= $result['total_pemb_lain'] ?>
+                            </h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" style="width: 30%;">Total Anggota Cuti </th>
+                        <td>
 
-                                <?= $result['total_agt_cuti'] ?>
+                            <?= $result['total_agt_cuti'] ?>
 
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row" style="width: 30%;">Total Pengajuan TPK </th>
-                            <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" style="width: 30%;">Total Pengajuan TPK </th>
+                        <td>
 
-                                <?= $result['total_agt_tpk'] ?>
+                            <?= $result['total_agt_tpk'] ?>
 
-                            </td>
-                        </tr>
-                    </tbody>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-lg-12 mt-2">
+            <h3>DETAIL LAPORAN</h3>
+            <div class="scroll-box">
+                <table class='table table-bordered table-responsive'>
+                    <tr>
+                        <th>NO</th>
+                        <th>NIK</th>
+                        <th>NAMA</th>
+                        <th>AM</th>
+                        <th>AK</th>
+                        <th>NETT AGT</th>
+                        <th>PAR NAIK</th>
+                        <th>PAR TURUN</th>
+                        <th>NETT PAR</th>
+                        <th>PEMB LAIN</th>
+                        <th>KETERANGAN</th>
+                    </tr>
+
+                    <?php
+                        $no = 1;
+                        foreach ($data as $row) : ?>
+                    <tr>
+                        <td><?= $no++ ?></td>
+                        <td><?= $row['nik_staff'] ?></td>
+                        <td><?= $row['nama_staff'] ?></td>
+                        <td><?= $row['anggota_masuk'] ?></td>
+                        <td><?= $row['anggota_keluar'] ?></td>
+                        <td><?= $row['nett_anggota'] ?></td>
+                        <td><?= rupiah($row['naik_par']) ?></td>
+                        <td><?= rupiah($row['turun_par']) ?></td>
+                        <td><?= rupiah($row['nett_par']) ?></td>
+                        <td><?= $row['pemb_lain'] ?></td>
+                        <td><?= $row['keterangan'] ?></td>
+                    </tr>
+
+                    <?php endforeach; ?>
                 </table>
             </div>
 
-            <div class="col-lg-12 mt-2">
-                <h3>DETAIL LAPORAN</h3>
-                <div class="scroll-box">
-                    <table class='table table-bordered table-responsive'>
-                        <tr>
-                            <th>NO</th>
-                            <th>NIK</th>
-                            <th>NAMA</th>
-                            <th>AM</th>
-                            <th>AK</th>
-                            <th>NETT AGT</th>
-                            <th>PAR NAIK</th>
-                            <th>PAR TURUN</th>
-                            <th>NETT PAR</th>
-                            <th>PEMB LAIN</th>
-                            <th>KETERANGAN</th>
-                        </tr>
+        </div>
+        <div class="col-lg-12 mt-2">
 
-                        <?php
-                        $no = 1;
-                        foreach ($data as $row) : ?>
-                            <tr>
-                                <td><?= $no++ ?></td>
-                                <td><?= $row['nik_staff'] ?></td>
-                                <td><?= $row['nama_staff'] ?></td>
-                                <td><?= $row['anggota_masuk'] ?></td>
-                                <td><?= $row['anggota_keluar'] ?></td>
-                                <td><?= $row['nett_anggota'] ?></td>
-                                <td><?= rupiah($row['naik_par']) ?></td>
-                                <td><?= rupiah($row['turun_par']) ?></td>
-                                <td><?= rupiah($row['nett_par']) ?></td>
-                                <td><?= $row['pemb_lain'] ?></td>
-                                <td><?= $row['keterangan'] ?></td>
-                            </tr>
+            <?php
 
-                        <?php endforeach; ?>
-                    </table>
-                </div>
+                $q_belum = $pdo->prepare("select * from staff where cabang='$cabang' 
+                and nik_staff not in(select nik_staff from capaian_staff where cabang_staff= :cabang and minggu= :minggu and bulan=:bulan and tahun=:tahun and status='approve' ) ");
+                $q_belum->bindParam(":cabang", $cabang);
+                $q_belum->bindParam(":tahun", $tahun);
+                $q_belum->bindParam(":bulan", $bulan);
+                $q_belum->bindParam(":minggu", $minggu);
+                $q_belum->execute();
+                $data = $q_belum->fetchAll(PDO::FETCH_ASSOC);
 
-            </div>
-            <div class="col">
-                <h2>Submit Laporan</h2>
+                if ($data) {
+                ?>
+            <h3>BELUM LAPORAN</h3>
+            <div class="scroll-box">
+                <table class='table table-bordered table-responsive'>
+                    <tr>
+                        <th>NO</th>
+                        <th>NIK</th>
+                        <th>NAMA</th>
+                        <th>KETERANGAN</th>
+                    </tr>
 
-                <div class="form-floating">
-                    <textarea class="form-control" name="keterangan" style="height: 100px" placeholder="Isi Keterangan" id="floatingTextarea"></textarea>
-                    <label for="floatingTextarea">Keterangan</label>
-                </div>
+                    <?php
+                            $no = 1;
+                            foreach ($data as $row) : ?>
+                    <tr>
+                        <td><?= $no++ ?></td>
+                        <td><?= $row['nik_staff'] ?></td>
+                        <td><?= $row['nama_staff'] ?></td>
+                        <td>belum</td>
+                    </tr>
 
-
-
+                    <?php endforeach; ?>
+                </table>
             </div>
             <?php
+                }
+                ?>
+
+
+        </div>
+        <div class="col">
+            <h2>Submit Laporan</h2>
+
+            <div class="form-floating">
+                <textarea class="form-control" name="keterangan" style="height: 100px" placeholder="Isi Keterangan"
+                    id="floatingTextarea"></textarea>
+                <label for="floatingTextarea">Keterangan</label>
+            </div>
+
+
+
+        </div>
+        <?php
             $disabled = $result['jumlah_staff'] == $jml_staff ? "" : "disabled";
             ?>
-            <button type="submit" <?= $disabled ?> name='kirim' class="btn btn-success mt-3">Submit Laporan</button>
-            <a href="<?= menu_progress("laporan/submit") ?>" class="btn btn-danger mt-3"><i class="fa fa-arrow-left"></i>
-                Kembali</a>
-        </div>
+        <button type="submit" <?= $disabled ?> name='kirim' class="btn btn-success mt-3">Submit Laporan</button>
+        <a href="<?= menu_progress("laporan/submit") ?>" class="btn btn-danger mt-3"><i class="fa fa-arrow-left"></i>
+            Kembali</a>
+    </div>
     <?php
 }
     ?>
-    </form>
-    <style>
-        .scroll-box {
-            max-height: 300px;
-            overflow-y: scroll;
-            border: 1px solid #ccc;
-            padding: 10px;
-        }
-    </style>
-    <?php
+</form>
+<style>
+.scroll-box {
+    max-height: 300px;
+    overflow-y: scroll;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+</style>
+<?php
     if (isset($_POST['kirim'])) {
         // Tangkap data dari formulir
         $manager_cabang = $_POST['manager_cabang'];

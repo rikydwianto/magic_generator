@@ -17,4 +17,11 @@ $(document).ready(function () {
   $("#filterMinggu").on("change", function () {
     table.column(4).search(this.value).draw(); // Ubah angka 7 sesuai dengan indeks kolom minggu
   });
+
+  var table1 = $("#cabang").DataTable();
+
+  // Filter berdasarkan bulan
+  $("#filtercabang").on("change", function () {
+    table1.column(1).search(this.value).draw(); // Ubah angka 5 sesuai dengan indeks kolom bulan
+  });
 });

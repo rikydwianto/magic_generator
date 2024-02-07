@@ -1,4 +1,44 @@
 <h2 class="mb-4">Form Input Staff Lapang Cabang <?= $detailAkun['nama_cabang'] ?></h2>
+
+<?php
+try {
+
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $nik_staff = $_POST['nik_staff'];
+        $nama_staff = $_POST['nama_staff'];
+        $password = $_POST['password'];
+        $status = $_POST['status'];
+        $cabang = $detailAkun['nama_cabang'];
+
+        // Query untuk mengecek apakah data sudah ada
+        $cekQuery = "SELECT COUNT(*) FROM staff WHERE nik_staff = ?";
+        $cekStmt = $pdo->prepare($cekQuery);
+        $cekStmt->execute([$nik_staff]);
+        $jumlahData = $cekStmt->fetchColumn();
+        if ($jumlahData > 0) {
+?>
+<div class="alert alert-danger" role="alert">
+    <?php echo "Data tidak diinput karena Staff dengan NIK $nik_staff sudah ada di cabang $cabang  .";; ?>
+</div>
+<?php
+
+        } else {
+            // Data belum ada, lakukan INSERT
+            $insertQuery = "INSERT INTO staff (nik_staff, nama_staff, cabang, password,status) VALUES (?, ?, ?, ?,?)";
+            $insertStmt = $pdo->prepare($insertQuery);
+            $insertStmt->execute([$nik_staff, $nama_staff, $cabang, $password, $status]);
+
+            echo "Data Staff berhasil disimpan.";
+            pindah(menu_progress("staff/index"));
+        }
+    }
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+}
+
+
+?>
 <form action="" method="post">
     <div class="form-group">
         <label for="nik_staff">NIK Staff:</label>
@@ -32,43 +72,3 @@
 
     <button type="submit" class="btn btn-primary">Simpan Data</button>
 </form>
-
-<?php
-try {
-
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $nik_staff = $_POST['nik_staff'];
-        $nama_staff = $_POST['nama_staff'];
-        $password = $_POST['password'];
-        $status = $_POST['status'];
-        $cabang = $detailAkun['nama_cabang'];
-
-        // Query untuk mengecek apakah data sudah ada
-        $cekQuery = "SELECT COUNT(*) FROM staff WHERE nik_staff = ? AND cabang = ?";
-        $cekStmt = $pdo->prepare($cekQuery);
-        $cekStmt->execute([$nik_staff, $cabang]);
-        $jumlahData = $cekStmt->fetchColumn();
-        if ($jumlahData > 0) {
-?>
-<div class="alert alert-danger" role="alert">
-    <?php echo "Data tidak diinput karena Staff dengan NIK $nik_staff dan cabang $cabang sudah ada.";; ?>
-</div>
-<?php
-
-        } else {
-            // Data belum ada, lakukan INSERT
-            $insertQuery = "INSERT INTO staff (nik_staff, nama_staff, cabang, password,status) VALUES (?, ?, ?, ?,?)";
-            $insertStmt = $pdo->prepare($insertQuery);
-            $insertStmt->execute([$nik_staff, $nama_staff, $cabang, $password,$status]);
-
-            echo "Data Staff berhasil disimpan.";
-            pindah(menu_progress("staff/index"));
-        }
-    }
-} catch (PDOException $e) {
-    echo "Error: " . $e->getMessage();
-}
-
-
-?>

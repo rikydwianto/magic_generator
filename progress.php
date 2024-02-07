@@ -123,7 +123,7 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
 
                     <!-- Konten -->
                     <main role="main" class="col-md-10 ml-sm-auto col-lg-10 ">
-                        <div id="content">
+                        <div id="content" class="table-responsive">
 
                             <?php
                             if ($regional == "" && $id_login == "") {

@@ -96,7 +96,7 @@ $url = $url_sl; // . 'sl/';
                 </div>
 
             </div>
-            <div class="col-md-8 ms-sm-auto col-lg-10 px-md-4 main-content">
+            <div class="col-md-8 ms-sm-auto col-lg-10 px-md-4 main-content table-responsive">
                 <!-- Your main content goes here -->
                 <?php
                 $id_staff =  $_SESSION['id_staff'];
@@ -157,8 +157,9 @@ $url = $url_sl; // . 'sl/';
     <!-- Include JSignature library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jSignature/2.1.2/jSignature.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script src="<?= $url . "script.js" ?>"></script>
+    <script src="<?= $url . "script.js?v=" . $timestamp ?>"></script>
     <script>
     var url = "<?= $url ?>";
     // Tambahkan script berikut untuk menangani toggle sidebar pada mode mobile
