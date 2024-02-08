@@ -8,7 +8,7 @@
             <div class="form-group">
                 <label for="cabang">Cabang:</label>
 
-                <select class="form-control" id="cabang" name="cabang" required>
+                <select class="form-control" name="cabang" required>
 
                     <option value="">Pilih Cabang</option>
                     <?php
@@ -29,7 +29,7 @@
         </div>
         <div class="col">
             <label for="filterBulan">Filter Bulan:</label>
-            <select class='form-control' name='bulan' required id="filterBulan">
+            <select class='form-control' name='bulan' required>
                 <option value="">Pilih Bulan</option>
                 <?php
 
@@ -43,7 +43,7 @@
         <div class="col">
             <label for="filterTahun">Filter Tahun:</label>
             <!-- <input type="text" id="filterTahun"> -->
-            <select class='form-control' required name="tahun" id="filterTahun">
+            <select class='form-control' required name="tahun">
                 <option value="semua">Pilih tahun</option>
                 <?php
                 for ($i = 2023; $i <= 2026; $i++) {
@@ -123,201 +123,201 @@ GROUP BY
 ?>
 
 
-    <table class=' table table-bordered table-hover table-striped '>
-        <thead class="table-light">
-            <?php
+<table class='table table table-bordered table-hover table-striped '>
+    <thead class="table-light">
+        <?php
             if ($result) {
             ?>
-                <tr>
-                    <th colspan="32" class="text-center">
-                        LAPORAN PER STAFF BULAN <?= strtoupper($bulanArray[$bulan]) ?> TAHUN <?= $tahun ?> <br>
-                        CABANG <?= $cabang ?> WILAYAH <?= $result[0]['wilayah'] ?> REGIONAL <?= $regional ?>
-                    </th>
-                <?php
+        <tr>
+            <th colspan="32" class="text-center">
+                LAPORAN PER STAFF BULAN <?= strtoupper($bulanArray[$bulan]) ?> TAHUN <?= $tahun ?> <br>
+                CABANG <?= $cabang ?> WILAYAH <?= $result[0]['wilayah'] ?> REGIONAL <?= $regional ?>
+            </th>
+            <?php
             }
                 ?>
 
-                </tr>
-                <tr>
-                    <th rowspan="2" align="middle">NIK</th>
-                    <th rowspan="2" align="middle">NAMA</th>
-                    <th colspan="6" class='text-center'>NET AGT</th>
-                    <th colspan="6" class='text-center'>AGT CUTI</th>
-                    <th colspan="6" class='text-center'>PEMB LAIN</th>
-                    <th colspan="6" class='text-center'>TPK</th>
-                    <th colspan="6" class='text-center'>NETT PAR</th>
-                </tr>
-                <tr class='text-center'>
-                    <th>1</th>
-                    <th>2</th>
-                    <th>3</th>
-                    <th>4</th>
-                    <th>5</th>
-                    <th>jml</th> <!-- Kolom jml untuk NET AGT -->
-                    <th>1</th>
-                    <th>2</th>
-                    <th>3</th>
-                    <th>4</th>
-                    <th>5</th>
-                    <th>jml</th> <!-- Kolom jml untuk NETT PAR -->
-                    <th>1</th>
-                    <th>2</th>
-                    <th>3</th>
-                    <th>4</th>
-                    <th>5</th>
-                    <th>jml</th> <!-- Kolom jml untuk AGT CUti -->
-                    <th>1</th>
-                    <th>2</th>
-                    <th>3</th>
-                    <th>4</th>
-                    <th>5</th>
-                    <th>jml</th> <!-- Kolom jml untuk PEMB LAIN -->
-                    <th>1</th>
-                    <th>2</th>
-                    <th>3</th>
-                    <th>4</th>
-                    <th>5</th>
-                    <th>jml</th> <!-- Kolom Total untuk TPK -->
-                </tr>
-        </thead>
-        <tbody>
-            <?php
+        </tr>
+        <tr>
+            <th rowspan="2" align="middle">NIK</th>
+            <th rowspan="2" align="middle">NAMA</th>
+            <th colspan="6" class='text-center'>NET AGT</th>
+            <th colspan="6" class='text-center'>AGT CUTI</th>
+            <th colspan="6" class='text-center'>PEMB LAIN</th>
+            <th colspan="6" class='text-center'>TPK</th>
+            <th colspan="6" class='text-center'>NETT PAR</th>
+        </tr>
+        <tr class='text-center'>
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+            <th>5</th>
+            <th>jml</th> <!-- Kolom jml untuk NET AGT -->
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+            <th>5</th>
+            <th>jml</th> <!-- Kolom jml untuk NETT PAR -->
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+            <th>5</th>
+            <th>jml</th> <!-- Kolom jml untuk AGT CUti -->
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+            <th>5</th>
+            <th>jml</th> <!-- Kolom jml untuk PEMB LAIN -->
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+            <th>5</th>
+            <th>jml</th> <!-- Kolom Total untuk TPK -->
+        </tr>
+    </thead>
+    <tbody>
+        <?php
             if ($result) {
             ?>
-                <?php foreach ($result as $row) : ?>
-                    <tr>
+        <?php foreach ($result as $row) : ?>
+        <tr>
 
-                        <td><?= $row['nik_staff'] ?></td>
-                        <td><?= $row['nama_staff'] ?></td>
-                        <?php
+            <td><?= $row['nik_staff'] ?></td>
+            <td><?= $row['nama_staff'] ?></td>
+            <?php
                         $total = 0;
                         for ($i = 1; $i <= 5; $i++) {
                             $nilai = $row['nett_minggu_' . $i];
                             $total += $nilai;
                         ?>
-                            <th class='text-center <?= warnaPlusMinus($nilai) ?>'><?= $nilai ?></th>
-                        <?php
+            <th class='text-center <?= warnaPlusMinus($nilai) ?>'><?= $nilai ?></th>
+            <?php
                         }
                         ?>
-                        <th class='text-center <?= warnaPlusMinus($total) ?>'><?= $total ?></th> <!-- Kolom Total NET AGT -->
+            <th class='text-center <?= warnaPlusMinus($total) ?>'><?= $total ?></th> <!-- Kolom Total NET AGT -->
 
-                        <?php
+            <?php
                         $total = 0;
                         for ($i = 1; $i <= 5; $i++) {
                             $nilai = $row['agt_cuti_minggu_' . $i];
                             $total += $nilai;
                         ?>
-                            <th class='text-center <?= warnaPlusMinus($nilai) ?>'><?= $nilai ?></th>
-                        <?php
+            <th class='text-center <?= warnaPlusMinus($nilai) ?>'><?= $nilai ?></th>
+            <?php
                         }
                         ?>
-                        <th class='text-center <?= warnaPlusMinus($total) ?>'><?= $total ?></th><!-- Kolom Total AGT CUti -->
-                        <?php
+            <th class='text-center <?= warnaPlusMinus($total) ?>'><?= $total ?></th><!-- Kolom Total AGT CUti -->
+            <?php
                         $total = 0;
                         for ($i = 1; $i <= 5; $i++) {
                             $nilai = $row['pemb_lain_minggu_' . $i];
                             $total += $nilai;
                         ?>
-                            <th class='text-center <?= warnaPlusMinus($nilai) ?>'><?= $nilai ?></th>
-                        <?php
+            <th class='text-center <?= warnaPlusMinus($nilai) ?>'><?= $nilai ?></th>
+            <?php
                         }
                         ?>
-                        <th class='text-center <?= warnaPlusMinus($total) ?>'><?= $total ?></th><!-- Kolom Total PEMB LAIN -->
-                        <?php
+            <th class='text-center <?= warnaPlusMinus($total) ?>'><?= $total ?></th><!-- Kolom Total PEMB LAIN -->
+            <?php
                         $total = 0;
                         for ($i = 1; $i <= 5; $i++) {
                             $nilai = $row['agt_tpk_minggu_' . $i];
                             $total += $nilai;
                         ?>
-                            <th class='text-center <?= warnaPlusMinus($nilai) ?>'><?= $nilai ?></th>
-                        <?php
+            <th class='text-center <?= warnaPlusMinus($nilai) ?>'><?= $nilai ?></th>
+            <?php
                         }
                         ?>
-                        <th class='text-center <?= warnaPlusMinus($total) ?>'><?= $total ?></th> <!-- Kolom Total TPK -->
-                        <?php
+            <th class='text-center <?= warnaPlusMinus($total) ?>'><?= $total ?></th> <!-- Kolom Total TPK -->
+            <?php
                         $total = 0;
                         for ($i = 1; $i <= 5; $i++) {
                             $nilai = $row['nett_par_minggu_' . $i];
                             $total += $nilai;
                         ?>
-                            <th class=' <?= warnaPlusMinusPar($nilai) ?>'><?= angka($nilai) ?></th>
-                        <?php
+            <th class=' <?= warnaPlusMinusPar($nilai) ?>'><?= angka($nilai) ?></th>
+            <?php
                         }
                         ?>
-                        <th class=' <?= warnaPlusMinusPar($total) ?>'><?= angka($total) ?></th>
-                        <!-- Kolom Total NETT PAR -->
-                    </tr>
-                <?php endforeach; ?>
-            <?php
+            <th class=' <?= warnaPlusMinusPar($total) ?>'><?= angka($total) ?></th>
+            <!-- Kolom Total NETT PAR -->
+        </tr>
+        <?php endforeach; ?>
+        <?php
             } else {
             ?>
-                <tr>
+        <tr>
 
-                    <th colspan="32" class='text-center'>Data tidak tersedia!</th>
-                </tr>
-            <?php
+            <th colspan="32" class='text-center'>Data tidak tersedia!</th>
+        </tr>
+        <?php
             }
             ?>
 
-        </tbody>
-        <tfoot>
-            <tr>
+    </tbody>
+    <tfoot>
+        <tr>
 
 
-                <th colspan="2">TOTAL</th>
-                <?php
+            <th colspan="2">TOTAL</th>
+            <?php
                 $total = 0;
                 for ($i = 1; $i <= 5; $i++) {
                     $nilai = getTotalMinggu('nett_anggota', $cabang, $i, $bulan, $tahun);
                     $total += $nilai;
                 ?>
-                    <th class='text-center <?= warnaPlusMinus($nilai) ?>'><?= $nilai ?></th>
-                <?php } ?>
-                <th class='text-center <?= warnaPlusMinus($total) ?>'><?= $total ?></th>
+            <th class='text-center <?= warnaPlusMinus($nilai) ?>'><?= $nilai ?></th>
+            <?php } ?>
+            <th class='text-center <?= warnaPlusMinus($total) ?>'><?= $total ?></th>
 
-                <?php
+            <?php
                 $total = 0;
                 for ($i = 1; $i <= 5; $i++) {
                     $nilai = getTotalMinggu('agt_cuti', $cabang, $i, $bulan, $tahun);
                     $total += $nilai;
                 ?>
-                    <th class='text-center <?= warnaPlusMinus($nilai) ?>'><?= $nilai ?></th>
-                <?php } ?>
-                <th class='text-center <?= warnaPlusMinus($total) ?>'><?= $total ?></th>
+            <th class='text-center <?= warnaPlusMinus($nilai) ?>'><?= $nilai ?></th>
+            <?php } ?>
+            <th class='text-center <?= warnaPlusMinus($total) ?>'><?= $total ?></th>
 
-                <?php
+            <?php
                 $total = 0;
                 for ($i = 1; $i <= 5; $i++) {
                     $nilai = getTotalMinggu('pemb_lain', $cabang, $i, $bulan, $tahun);
                     $total += $nilai;
                 ?>
-                    <th class='text-center <?= warnaPlusMinus($nilai) ?>'><?= $nilai ?></th>
-                <?php } ?>
-                <th class='text-center <?= warnaPlusMinus($total) ?>'><?= $total ?></th>
+            <th class='text-center <?= warnaPlusMinus($nilai) ?>'><?= $nilai ?></th>
+            <?php } ?>
+            <th class='text-center <?= warnaPlusMinus($total) ?>'><?= $total ?></th>
 
 
-                <?php
+            <?php
                 $total = 0;
                 for ($i = 1; $i <= 5; $i++) {
                     $nilai = getTotalMinggu('agt_tpk', $cabang, $i, $bulan, $tahun);
                     $total += $nilai;
                 ?>
-                    <th class='text-center <?= warnaPlusMinus($nilai) ?>'><?= $nilai ?></th>
-                <?php } ?>
-                <th class='text-center <?= warnaPlusMinus($total) ?>'><?= $total ?></th>
-                <?php
+            <th class='text-center <?= warnaPlusMinus($nilai) ?>'><?= $nilai ?></th>
+            <?php } ?>
+            <th class='text-center <?= warnaPlusMinus($total) ?>'><?= $total ?></th>
+            <?php
                 $total = 0;
                 for ($i = 1; $i <= 5; $i++) {
                     $nilai = getTotalMinggu('nett_par', $cabang, $i, $bulan, $tahun);
                     $total += $nilai;
                 ?>
-                    <th class='text-right <?= warnaPlusMinusPar($nilai) ?>'><?= angka($nilai) ?></th>
-                <?php } ?>
-                <th class='text-right <?= warnaPlusMinusPar($total) ?>'><?= angka($total) ?></th>
-            </tr>
-        </tfoot>
+            <th class='text-right <?= warnaPlusMinusPar($nilai) ?>'><?= angka($nilai) ?></th>
+            <?php } ?>
+            <th class='text-right <?= warnaPlusMinusPar($total) ?>'><?= angka($total) ?></th>
+        </tr>
+    </tfoot>
 
-    </table>
+</table>
 <?php
 }
 ?>
