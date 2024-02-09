@@ -29,6 +29,8 @@
         <div class="col">
             <label for="filterBulan">Filter Bulan:</label>
             <select class='form-control' name='bulan' required id="filterBulan">
+                <option value="">Pilih Bulan</option>
+
                 <?php
 
                 foreach ($bulanArray as $kodeBulan => $namaBulan) {
