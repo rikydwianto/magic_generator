@@ -333,13 +333,8 @@ document.getElementById('submitBtn').addEventListener('click', function() {
     imageDataTextarea.value = imageData; // Anda perlu memiliki imageData yang telah didefinisikan sebelumnya
     document.getElementById("form_capaian").appendChild(imageDataTextarea);
 
-
     // Tambahkan elemen input hidden ke dalam form
     document.getElementById('form_capaian').appendChild(konfirmasiInput);
-
-
-
-
 
     document.getElementById('form_capaian').submit();
 });

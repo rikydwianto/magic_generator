@@ -11,6 +11,7 @@
             <th scope="col">Nama Cabang</th>
             <th scope="col">Regional</th>
             <th scope="col">Wilayah</th>
+            <th scope="col">Total Staff</th>
             <th scope="col">ACT</th>
         </tr>
     </thead>
@@ -22,23 +23,30 @@
 
             $no = 1;
             while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                $qq = $pdo->prepare("SELECT COUNT(*) AS total_staff FROM staff WHERE cabang=? GROUP BY cabang ");
+                $qq->execute([$row['nama_cabang']]);
+                @$hitung_staff = $qq->fetch()['total_staff'];
         ?>
 
-                <tr>
-                    <th scope="row"><?= $no++ ?></th>
-                    <td><?= $row['kode_cabang'] ?></td>
-                    <td><?= $row['nama_cabang'] ?></td>
-                    <td>Regional <?= $row['regional'] ?></td>
-                    <td><?= $row['wilayah'] ?></td>
-                    <td>
-                        <a href="<?= menu_progress("cabang/edit&id=$row[id_cabang]") ?>" class="btn btn-warning">
-                            <fa class="fa fa-gear text-white"></fa>
-                        </a>
-                        <a href="<?= menu_progress("cabang/hapus&id=$row[id_cabang]") ?>" onclick="return window.confirm('Yakin untuk menghapus ini?')" class="btn btn-danger">
-                            <fa class="fa fa-times"></fa>
-                        </a>
-                    </td>
-                </tr>
+        <tr>
+            <th scope="row"><?= $no++ ?></th>
+            <td><?= $row['kode_cabang'] ?></td>
+            <td><?= $row['nama_cabang'] ?></td>
+            <td>Regional <?= $row['regional'] ?></td>
+            <td><?= $row['wilayah'] ?></td>
+            <td>
+                <?= @$hitung_staff ?>
+            </td>
+            <td>
+                <a href="<?= menu_progress("cabang/edit&id=$row[id_cabang]") ?>" class="btn btn-warning">
+                    <fa class="fa fa-gear text-white"></fa>
+                </a>
+                <a href="<?= menu_progress("cabang/hapus&id=$row[id_cabang]") ?>"
+                    onclick="return window.confirm('Yakin untuk menghapus ini?')" class="btn btn-danger">
+                    <fa class="fa fa-times"></fa>
+                </a>
+            </td>
+        </tr>
         <?php
             }
         } catch (PDOException $e) {
