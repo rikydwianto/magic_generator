@@ -186,8 +186,8 @@ where cabang_staff= :cabang and minggu= :minggu and bulan=:bulan and tahun=:tahu
                         <td>
                             <h6 class=' text-lg text-<?= $result['total_nett_par'] < 0 ? "success" : "danger" ?>'>
                                 PAR NAIK : <?= rupiah($result['total_naik_par']) ?> |
-                                AK : <?= rupiah($result['total_turun_par']) ?> <br />
-                                NETT : <?= rupiah($result['total_nett_par']) ?>
+                                PAR TURUN : <?= rupiah($result['total_turun_par']) ?> <br />
+                                NETT PAR : <?= rupiah($result['total_nett_par']) ?>
 
                             </h6>
                         </td>
