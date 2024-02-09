@@ -18,6 +18,7 @@ $(document).ready(function () {
   });
 
   var table1 = $("#cabang").DataTable();
+  var tablebiasa = $("#table").DataTable();
 
   // Filter berdasarkan bulan
   $("#filtercabang").on("change", function () {

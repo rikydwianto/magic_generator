@@ -192,10 +192,10 @@ $nik = $_GET['nik'];
         </div>
 
     </div>
-    <div class="row m-2">
+    <div class="row m-2 table-responsive">
         <h3>DETAIL</h3>
         <hr>
-        <table class='table table-bordered'>
+        <table class='table table-bordered '>
             <thead>
                 <tr>
                     <th>NO</th>
@@ -212,6 +212,7 @@ $nik = $_GET['nik'];
                     <th>PEMB LAIN</th>
                     <th>CUTI</th>
                     <th>PENGAJUAN TPK</th>
+                    <th>KETERANGAN</th>
                 </tr>
             </thead>
             <tbody>
@@ -237,6 +238,7 @@ $nik = $_GET['nik'];
                     <td><?= $row['pemb_lain'] ?></td>
                     <td><?= $row['agt_cuti'] ?></td>
                     <td><?= $row['agt_tpk'] ?></td>
+                    <td><?= $row['keterangan'] ?></td>
                 </tr>
                 <?php
                 }

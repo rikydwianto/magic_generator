@@ -23,7 +23,7 @@
 
             $no = 1;
             while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                $qq = $pdo->prepare("SELECT COUNT(*) AS total_staff FROM staff WHERE cabang=? GROUP BY cabang ");
+                $qq = $pdo->prepare("SELECT COUNT(*) AS total_staff FROM staff WHERE cabang=? and status='aktif' GROUP BY cabang ");
                 $qq->execute([$row['nama_cabang']]);
                 @$hitung_staff = $qq->fetch()['total_staff'];
         ?>

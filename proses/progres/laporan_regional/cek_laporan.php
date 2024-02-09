@@ -22,7 +22,7 @@
                 <?php
 
                 foreach ($bulanArray as $kodeBulan => $namaBulan) {
-                    $selbulan = $kodeBulan == date("m") ? "selected" : "";
+                    $selbulan = $kodeBulan == $_GET['bulan'] ? "selected" : "";
                     echo "<option $selbulan value='{$kodeBulan}'>{$namaBulan}</option>";
                 }
                 ?>
@@ -72,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['bulan']) && isset($_GET[
             <th>WILAYAH</th>
             <th>LAPORAN</th>
             <th>WAKTU</th>
+            <th>Staff</th>
             <th>KETERANGAN</th>
             <!-- <th>KET MANAGER</th> -->
         </tr>
@@ -121,6 +122,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['bulan']) && isset($_GET[
                         $ket = 'Manager dan SL belum input laporan';
                     }
                 }
+                $qq = $pdo->prepare("SELECT COUNT(*) AS total_staff FROM staff WHERE cabang=? and status='aktif' GROUP BY cabang ");
+                $qq->execute([$cab['nama_cabang']]);
+                @$hitung_staff = $qq->fetch()['total_staff'];
             ?>
         <tr>
             <td><?= $no ?></td>
@@ -129,6 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['bulan']) && isset($_GET[
             <td class='text-center'><?= $cab['wilayah'] ?></td>
             <td class='text-center'><?= $laporan ?></td>
             <td><?= $waktu ?></td>
+            <td class='text-center'><?= $hitung_staff ?></td>
             <td><?= $ket ?></td>
             <!-- <td><?= $ket_laporan ?></td> -->
         </tr>
