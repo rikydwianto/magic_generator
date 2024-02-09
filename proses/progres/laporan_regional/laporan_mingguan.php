@@ -78,14 +78,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['bulan']) && isset($_GET[
         $data = $cek_laporan->fetchAll(PDO::FETCH_ASSOC);
         $no = 1;
 ?>
-<table class='table table-bordered mt-3' id='table'>
+<table class='table table-striped mt-3' id='table' border="1">
     <thead>
         <tr>
             <th>NO</th>
             <th>CABANG</th>
+            <th>NIK</th>
+            <th>NAMA</th>
             <th>Minggu</th>
-            <th>Bulan</th>
-            <th>Tahun</th>
             <th>AM</th>
             <th>AK</th>
             <th>NETT</th>
@@ -96,6 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['bulan']) && isset($_GET[
             <th>CUTI</th>
             <th>TPK</th>
             <th>KETERANGAN</th>
+            <th>#</th>
         </tr>
     </thead>
     <tbody>
@@ -105,9 +106,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['bulan']) && isset($_GET[
         <tr>
             <td><?= $no++ ?></td>
             <td><?= $row['cabang_staff'] ?></td>
+            <td><?= $row['nik_staff'] ?></td>
+            <td><?= $row['nama_staff'] ?></td>
             <td><?= $row['minggu'] ?></td>
-            <td><?= $bulanArray[$row['bulan']] ?></td>
-            <td><?= $row['tahun'] ?></td>
             <td><?= $row['anggota_masuk'] ?></td>
             <td><?= $row['anggota_keluar'] ?></td>
             <td><?= $row['nett_anggota'] ?></td>
@@ -118,6 +119,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['bulan']) && isset($_GET[
             <td><?= $row['agt_cuti'] ?></td>
             <td><?= $row['agt_tpk'] ?></td>
             <td><?= $row['keterangan'] ?></td>
+            <td>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Action
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Approve</a></li>
+                        <li><a class="dropdown-item" href="#">Konfirmasi</a></li>
+                        <li><a class="dropdown-item" href="#">Pending</a></li>
+                        <li><a class="dropdown-item" href="<?= menu_progress('') ?>"
+                                onclick="return window.confirm('yakin akan dihapus?')">Hapus</a></li>
+                    </ul>
+                </div>
+            </td>
         </tr>
         <?php
                 }
