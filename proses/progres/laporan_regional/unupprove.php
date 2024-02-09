@@ -29,7 +29,7 @@ if (isset($_GET['lakukan']) && isset($_GET['id'])) {
     <tbody>
         <?php
         $no = 1;
-        $stmt = $pdo->query("SELECT * FROM capaian_cabang where regional='$regional'");
+        $stmt = $pdo->query("SELECT * FROM capaian_cabang where regional='$regional' order by tahun,bulan,minggu desc");
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach ($rows as $row) {
         ?>
