@@ -115,9 +115,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['bulan']) && isset($_GET[
             <td><?= $row['anggota_masuk'] ?></td>
             <td><?= $row['anggota_keluar'] ?></td>
             <td><?= $row['nett_anggota'] ?></td>
-            <td><?= angka($row['naik_par']) ?></td>
-            <td><?= angka($row['turun_par']) ?></td>
-            <td><?= angka($row['nett_par']) ?></td>
+            <td><?= ($row['naik_par']) ?></td>
+            <td><?= ($row['turun_par']) ?></td>
+            <td><?= ($row['nett_par']) ?></td>
             <td><?= $row['pemb_lain'] ?></td>
             <td><?= $row['agt_cuti'] ?></td>
             <td><?= $row['agt_tpk'] ?></td>
