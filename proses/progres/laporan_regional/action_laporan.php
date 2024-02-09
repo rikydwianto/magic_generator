@@ -1,5 +1,9 @@
 <?php
 $id = $_GET['id'];
+$bulan = $_GET['bulan'];
+$minggu = $_GET['minggu'];
+$tahun = $_GET['tahun'];
+$status = $_GET['status1'];
 if (isset($_GET['status'])) {
     $status = $_GET['status'];
     $update = $pdo->prepare("UPDATE capaian_staff set status=:status where id_capaian_staff=:id  ");

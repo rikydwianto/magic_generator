@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['bulan']) && isset($_GET[
             foreach ($list_cabang as $cab) {
                 $cek_laporan = $pdo->prepare("SELECT * from capaian_cabang 
                 where nama_cabang=:cabang and regional=:regional and minggu=:minggu 
-                and bulan=:bulan and tahun=:tahun and status='done'
+                and bulan=:bulan and tahun=:tahun 
                 ");
                 $cek_laporan->bindParam(":cabang", $cab['nama_cabang']);
                 $cek_laporan->bindParam(":regional", $cab['regional']);
@@ -95,10 +95,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['bulan']) && isset($_GET[
                 $cek_laporan = $cek_laporan->fetch();
                 // var_dump($cek_laporan)
                 if ($cek_laporan) {
-                    $ket = 'SUDAH LAPORAN';
-                    $laporan = 'DONE';
-                    $waktu = $cek_laporan['created_at'];
-                    $ket_laporan = $cek_laporan['keterangan'];
+                    if ($cek_laporan['status'] == 'done') {
+                        $ket = 'SUDAH LAPORAN';
+                        $laporan =  $cek_laporan['status'];
+                        $waktu = $cek_laporan['created_at'];
+                        $ket_laporan = $cek_laporan['keterangan'];
+                    } else {
+                        $ket = 'Pending, Harap Diperbaiki';
+                        $laporan =  $cek_laporan['status'];
+                        $waktu = $cek_laporan['created_at'];
+                        $ket_laporan = $cek_laporan['keterangan'];
+                    }
                 } else {
                     $laporan = '';
                     $ket = '';

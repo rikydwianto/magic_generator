@@ -6,16 +6,19 @@ $bulan = isset($_GET['bulan']) ? $_GET['bulan'] : '';
 $tahun = isset($_GET['tahun']) ? $_GET['tahun'] : '';
 $cabang = isset($_GET['cabang']) ? $_GET['cabang'] : $detailAkun['nama_cabang'];
 
-$stmtCheck = $pdo->prepare("SELECT id FROM capaian_cabang WHERE minggu = ? AND bulan = ? AND tahun = ? and status='done' and nama_cabang=?");
+$stmtCheck = $pdo->prepare("SELECT id,status,keterangan FROM capaian_cabang WHERE minggu = ? AND bulan = ? AND tahun = ?  and nama_cabang=?");
 $stmtCheck->execute([$minggu, $bulan, $tahun, $cabang]);
 $existingData = $stmtCheck->fetch(PDO::FETCH_ASSOC);
-
-if ($existingData) {
+$edit = '';
+if ($existingData['status'] == 'done') {
     $pesan = urlencode("Laporan Cabang $cabang <strong>minggu-$minggu Bulan-$bulanArray[$bulan] tahun $tahun </strong>
 Sudah dibuat!, Terima Kasih ");
     // alert("Laporan sudah ada/sudah disubmit");
     // pindah(menu_progress("laporan/submit"));
     pindah(menu_progress("laporan/submit&error&minggu=$minggu&bulan=$bulan&tahun=$tahun&pesan=$pesan"));
+} else {
+    $edit = 'ya';
+    $id_laporan_cabang = $existingData['id'];
 }
 
 $query = "SELECT  COUNT(*) as jumlah_staff FROM staff where cabang='$cabang' and status='aktif'";
@@ -316,7 +319,7 @@ where cabang_staff= :cabang and minggu= :minggu and bulan=:bulan and tahun=:tahu
 
             <div class="form-floating">
                 <textarea class="form-control" name="keterangan" style="height: 100px" placeholder="Isi Keterangan"
-                    id="floatingTextarea"></textarea>
+                    id="floatingTextarea"><?= @$existingData['keterangan'] ?></textarea>
                 <label for="floatingTextarea">Keterangan</label>
             </div>
 
@@ -364,18 +367,38 @@ where cabang_staff= :cabang and minggu= :minggu and bulan=:bulan and tahun=:tahu
         $total_pengajuan_tpk = $_POST['total_pengajuan_tpk'];
         $keterangan = $_POST['keterangan'];
 
-        // Persiapkan dan eksekusi kueri SQL untuk menyimpan data
-        $stmt = $pdo->prepare("INSERT INTO capaian_cabang 
-        (manager_cabang, nama_cabang, regional, wilayah, minggu, bulan, tahun, total_staff_laporan, 
-        total_am, total_ak, total_nett_agt, total_naik_par, total_turun_par, total_nett_par, 
-        total_pembiayaan_lain, total_anggota_cuti, total_pengajuan_tpk,keterangan,status) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,'done')");
+        if ($edit == 'ya') {
+            $stmt = $pdo->prepare("
+            UPDATE capaian_cabang 
+            SET manager_cabang = ?, total_staff_laporan = ?, total_am = ?, total_ak = ?, 
+            total_nett_agt = ?, total_naik_par = ?, total_turun_par = ?, total_nett_par = ?, 
+            total_pembiayaan_lain = ?, total_anggota_cuti = ?, total_pengajuan_tpk = ?, keterangan = ?, status = 'done'
+            WHERE id=?
+        ");
 
-        $stmt->execute([
-            $manager_cabang, $nama_cabang, $regional, $wilayah, $minggu, $bulan, $tahun,
-            $total_staff_laporan, $total_am, $total_ak, $total_nett_agt, $total_naik_par, $total_turun_par,
-            $total_nett_par, $total_pembiayaan_lain, $total_anggota_cuti, $total_pengajuan_tpk, $keterangan
-        ]);
+            $stmt->execute([
+                $manager_cabang, $total_staff_laporan, $total_am, $total_ak, $total_nett_agt, $total_naik_par,
+                $total_turun_par, $total_nett_par, $total_pembiayaan_lain, $total_anggota_cuti,
+                $total_pengajuan_tpk, $keterangan, $id_laporan_cabang
+            ]);
+        } else {
+            // Persiapkan dan eksekusi kueri SQL untuk menyimpan data
+            $stmt = $pdo->prepare("INSERT INTO capaian_cabang 
+            (manager_cabang, nama_cabang, regional, wilayah, minggu, bulan, tahun, total_staff_laporan, 
+            total_am, total_ak, total_nett_agt, total_naik_par, total_turun_par, total_nett_par, 
+            total_pembiayaan_lain, total_anggota_cuti, total_pengajuan_tpk,keterangan,status) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,'done')");
+
+            $stmt->execute([
+                $manager_cabang, $nama_cabang, $regional, $wilayah, $minggu, $bulan, $tahun,
+                $total_staff_laporan, $total_am, $total_ak, $total_nett_agt, $total_naik_par, $total_turun_par,
+                $total_nett_par, $total_pembiayaan_lain, $total_anggota_cuti, $total_pengajuan_tpk, $keterangan
+            ]);
+
+            // Persiapkan dan eksekusi kueri SQL untuk menyimpan data
+        }
+
+
         alert("Berhasil disimpan!");
         // $pesan = urlencode("Laporan <strong>minggu-$minggu Bulan-$bulanArray[$bulan] tahun $tahun </strong>
         // Sudah dibuat!, Terima Kasih ");

@@ -63,6 +63,38 @@ document.addEventListener("DOMContentLoaded", function () {
   naikParInput.addEventListener("input", hitungNettPar);
   turunParInput.addEventListener("input", hitungNettPar);
 });
+
+function validateInput() {
+  var regex = /^[1-9]\d*00$/; // Validasi apakah angka merupakan kelipatan seratus
+
+  var naikParValue = document
+    .getElementById("naikParInput")
+    .value.replace(/\D/g, "");
+  var turunParValue = document
+    .getElementById("turunParInput")
+    .value.replace(/\D/g, "");
+  var submitBtn = document.getElementById("tm_simpan");
+  var konfirm = document.getElementById("tm_konfirmasi");
+  var val = document.getElementById("keterangan");
+  var hasil = naikParValue % 100;
+  var hasil_1 = turunParValue % 100;
+  // alert(hasil);
+  if ((hasil > 0 && hasil <= 99) || (hasil_1 > 0 && hasil_1 <= 99)) {
+    // konfirm.disabled = false;
+    submitBtn.disabled = true;
+    // konfirm.disabled = true;
+    val.innerHTML =
+      "Format OS PAR TIDAK SESUAI! <br> Note : * dimaksud adalah balance bukan total anggotanya contoh 1.000.000";
+  } else {
+    submitBtn.disabled = false;
+    val.innerHTML = "";
+  }
+  // if (parseInt(naikParValue) === 0 && parseInt(turunParValue) === 0) {
+  //   submitBtn.disabled = false;
+  //   val.innerHTML = "";
+  // }
+}
+validateInput();
 $(document).ready(function () {
   $("#tabelCapaianStaff").DataTable();
 });

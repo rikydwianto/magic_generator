@@ -57,16 +57,17 @@ error_reporting(0);
             <div class="col">
                 <div class="form-group">
                     <label for="naik_par">Outstanding Par Naik:</label>
-                    <input type="text" <?= $disabled ?> oninput="formatAngka(this)"
-                        value="<?= formatNumber($hasil['naik_par']) ?>" class="form-control" name="naik_par">
+                    <input type="text" <?= $disabled ?> oninput="formatAngka(this);validateInput()"
+                        value="<?= formatNumber($hasil['naik_par']) ?>" id='naikParInput' class="form-control"
+                        name="naik_par">
                 </div>
             </div>
             <div class="col">
                 <div class="form-group">
                     <label for="turun_par">Outstanding Par Turun:</label>
                     <input type="text" <?= $disabled ?> placeholder="3000000"
-                        value="<?= formatNumber($hasil['turun_par']) ?>" oninput="formatAngka(this)"
-                        class="form-control" name="turun_par">
+                        value="<?= formatNumber($hasil['turun_par']) ?>" id='turunParInput'
+                        oninput="formatAngka(this);validateInput()" class="form-control" name="turun_par">
                 </div>
             </div>
             <div class="col">
@@ -135,6 +136,7 @@ error_reporting(0);
                     kenaikan</small></label>
             <textarea class="form-control" <?= $disabled ?> name="keterangan"><?= $hasil['keterangan'] ?></textarea>
         </div>
+        <div id="keterangan"></div>
         <?php
         if ($disabled != "") {
         ?>
@@ -146,7 +148,7 @@ error_reporting(0);
         }
         ?>
         <a href='<?= menu_sl("laporan/index") ?>' class="btn btn-danger"><i class="fa fa-arrow-left"></i> KEMBALI</a>
-        <button type="submit" name='simpan' <?= $disabled ?> class="btn btn-primary">SIMPAN</button>
+        <button type="submit" name='simpan' <?= $disabled ?> id='tm_simpan' class="btn btn-primary">SIMPAN</button>
         <?php
         if ($hasil && $status == 'pending') {
         ?>
@@ -154,7 +156,8 @@ error_reporting(0);
             onclick="return window.confirm('Apakah yakin akan menyetujui laporan ini?')"
             class="btn btn-success">KONFIRMASI</button> -->
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" class="btn btn-success" id='tm_konfirmasi' data-bs-toggle="modal"
+            data-bs-target="#exampleModal">
             KONFIRMASI
         </button>
         <?php

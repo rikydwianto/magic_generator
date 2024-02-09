@@ -23,6 +23,7 @@ $jabatanMenu = array(
         'Dashboard' => array('link' => 'index', 'icon' => 'fa-home'),
         'Cabang' => array('link' => 'cabang/index', 'icon' => 'fa-store'),
         'Cek Laporan' => array('link' => 'laporan_regional/cek_laporan', 'icon' => 'fa-solid fa-calendar-days'),
+        'Un Approve Laporan Manager' => array('link' => 'laporan_regional/unupprove', 'icon' => 'fa-solid fa-gears'),
         'Semua Laporan' => array('link' => 'laporan_regional/laporan_mingguan', 'icon' => 'fa-solid fa-calendar-days'),
         'Rekap Per Regional' => array('link' => 'laporan_regional/regional', 'icon' => 'fa-file-excel'),
         'Laporan Per Cabang ' => array('link' => 'laporan_regional/cabang', 'icon' => 'fa-file-excel'),
