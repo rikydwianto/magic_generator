@@ -130,10 +130,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['bulan']) && isset($_GET[
                         Action
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Approve</a></li>
-                        <li><a class="dropdown-item" href="#">Konfirmasi</a></li>
-                        <li><a class="dropdown-item" href="#">Pending</a></li>
-                        <li><a class="dropdown-item" href="<?= menu_progress('') ?>"
+                        <li><a class="dropdown-item"
+                                href="<?= menu_progress("laporan_regional/action_laporan&status1=$status&bulan=$bulan&minggu=$minggu&tahun=$tahun&status=approve&id=$row[id_capaian_staff]") ?>">Approve</a>
+                        </li>
+                        <li><a class="dropdown-item"
+                                href="<?= menu_progress("laporan_regional/action_laporan&status1=$status&bulan=$bulan&minggu=$minggu&tahun=$tahun&status=konfirmasi&id=$row[id_capaian_staff]") ?>">Konfirmasi</a>
+                        </li>
+                        <li><a class="dropdown-item"
+                                href="<?= menu_progress("laporan_regional/action_laporan&status1=$status&bulan=$bulan&minggu=$minggu&tahun=$tahun&status=pending&id=$row[id_capaian_staff]") ?>">Pending</a>
+                        </li>
+                        <li><a class="dropdown-item"
+                                href="<?= menu_progress("laporan_regional/action_laporan&status1=$status&bulan=$bulan&minggu=$minggu&tahun=$tahun&hapus&id=$row[id_capaian_staff]") ?>"
                                 onclick="return window.confirm('yakin akan dihapus?')">Hapus</a></li>
                     </ul>
                 </div>
