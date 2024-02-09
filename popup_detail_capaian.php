@@ -236,7 +236,7 @@ $nik = $_GET['nik'];
                     <td><?= angka($row['nett_par']) ?></td>
                     <td><?= $row['pemb_lain'] ?></td>
                     <td><?= $row['agt_cuti'] ?></td>
-                    <td><?= $row['agt_cuti'] ?></td>
+                    <td><?= $row['agt_tpk'] ?></td>
                 </tr>
                 <?php
                 }

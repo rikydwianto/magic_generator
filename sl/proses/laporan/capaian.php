@@ -109,20 +109,20 @@ error_reporting(0);
             <div class="col">
 
                 <div class="form-group">
-                    <label for="agt_tpk">Anggota Cuti <br> <small>Total Anggota cuti yang
+                    <label for="agt_cuti">Anggota Cuti <br> <small>Total Anggota cuti yang
                             dimiliki</small></label>
-                    <input type="number" <?= $disabled ?> value="<?= $hasil['agt_tpk'] ?>" class="form-control"
-                        id="agt_tpk" name="agt_tpk">
+                    <input type="number" <?= $disabled ?> value="<?= $hasil['agt_cuti'] ?>" class="form-control"
+                        id="agt_cuti" name="agt_cuti">
 
                 </div>
             </div>
             <div class="col">
 
                 <div class="form-group">
-                    <label for="agt_cuti">Pengajuan Anggota TPK <br> <small>Total Anggota yang diajukan TPK minggu
+                    <label for="agt_tpk">Pengajuan Anggota TPK <br> <small>Total Anggota yang diajukan TPK minggu
                             ini</small></label>
-                    <input type="number" <?= $disabled ?> value="<?= $hasil['agt_cuti'] ?>" class="form-control"
-                        id="agt_cuti" name="agt_cuti">
+                    <input type="number" <?= $disabled ?> value="<?= $hasil['agt_tpk'] ?>" class="form-control"
+                        id="agt_tpk" name="agt_tpk">
 
                 </div>
             </div>
