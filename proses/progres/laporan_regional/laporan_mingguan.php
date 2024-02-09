@@ -97,6 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['bulan']) && isset($_GET[
             <th>PEMB LAIN</th>
             <th>CUTI</th>
             <th>TPK</th>
+            <th>STATUS</th>
             <th>KETERANGAN</th>
             <th>#</th>
         </tr>
@@ -120,6 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['bulan']) && isset($_GET[
             <td><?= $row['pemb_lain'] ?></td>
             <td><?= $row['agt_cuti'] ?></td>
             <td><?= $row['agt_tpk'] ?></td>
+            <td><?= $row['status'] ?></td>
             <td><?= $row['keterangan'] ?></td>
             <td>
                 <div class="btn-group" role="group">
