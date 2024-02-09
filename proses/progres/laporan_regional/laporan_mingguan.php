@@ -4,7 +4,7 @@
     <input type="hidden" name="menu" value="laporan_regional/laporan_mingguan">
 
     <div class="row gx-3">
-        <div class="col">
+        <!-- <div class="col">
             <label for="filterstatus">Filter Status:</label>
             <select class='form-control' name="status" required id="filterstatus">
                 <option value="approve">Approve</option>
@@ -12,7 +12,7 @@
                 <option value="pending">Pending</option>
             </select>
 
-        </div>
+        </div> -->
         <div class="col">
             <label for="filterMinggu">Filter Minggu:</label>
             <select class='form-control' name="minggu" required id="filterMinggu">
@@ -62,20 +62,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['bulan']) && isset($_GET[
     $bulan = $_GET['bulan'];
     $minggu = $_GET['minggu'];
     $tahun = $_GET['tahun'];
-    $status = $_GET['status'];
+    $status = 'all';
     $tm = '';
     try {
         if ($minggu != 'all') $tm = "and minggu='$minggu'";
         $cek_laporan = $pdo->prepare("SELECT * from capaian_staff cs 
         inner join detail_capaian_staff dc on cs.id_capaian_staff=dc.id_capaian_staff 
         where  regional=:regional
-        and bulan=:bulan and tahun=:tahun and status=:status $tm
+        and bulan=:bulan and tahun=:tahun  $tm
         order by nett_anggota desc
         ");
         $cek_laporan->bindParam(":regional", $regional);
         $cek_laporan->bindParam(":bulan", $bulan);
         $cek_laporan->bindParam(":tahun", $tahun);
-        $cek_laporan->bindParam(":status", $status);
+        // $cek_laporan->bindParam(":status", $status);
         $cek_laporan->execute();
         $data = $cek_laporan->fetchAll(PDO::FETCH_ASSOC);
         $no = 1;
