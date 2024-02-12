@@ -113,7 +113,7 @@ if (isset($_GET['minggu']) && isset($_GET['bulan'])) {
             <th>AK</th>
             <th>NETT</th>
             <th>AGT CUTI</th>
-            <th>PENGAJUAN TPK</th>
+            <th>TPK</th>
             <th>PEMB LAIN</th>
             <th>PAR NAIK</th>
             <th>PAR TURUN</th>
@@ -169,9 +169,9 @@ if (isset($_GET['minggu']) && isset($_GET['bulan'])) {
             <td class='text-center'><?= $total_anggota_cuti ?></td>
             <td class='text-center'><?= $total_pengajuan_tpk ?></td>
             <td class='text-center'><?= $total_pembiayaan_lain ?></td>
-            <td class='text-center'><?= rupiah($total_naik_par) ?></td>
-            <td class='text-center'><?= rupiah($total_turun_par) ?></td>
-            <td class='text-center'><?= rupiah($total_nett_par) ?></td>
+            <td class=''><?= rupiah($total_naik_par) ?></td>
+            <td class=''><?= rupiah($total_turun_par) ?></td>
+            <td class=''><?= rupiah($total_nett_par) ?></td>
             <td></td>
         </tr>
     </tfoot>

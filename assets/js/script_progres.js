@@ -18,10 +18,14 @@ $(document).ready(function () {
   });
 
   var table1 = $("#cabang").DataTable();
-  var tablebiasa = $("#table").DataTable();
 
   // Filter berdasarkan bulan
   $("#filtercabang").on("change", function () {
     table1.column(1).search(this.value).draw(); // Ubah angka 5 sesuai dengan indeks kolom bulan
+  });
+
+  var tablebiasa = $("#table").DataTable({
+    dom: "Bfrtip",
+    buttons: ["excel"],
   });
 });
