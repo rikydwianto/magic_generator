@@ -150,9 +150,9 @@ if (isset($_GET['minggu']) && isset($_GET['bulan'])) {
             <td class='text-center'><?= $row['total_anggota_cuti'] ?></td>
             <td class='text-center'><?= $row['total_pengajuan_tpk'] ?></td>
             <td class='text-center'><?= $row['total_pembiayaan_lain'] ?></td>
-            <td class='text-center'><?= rupiah($row['total_naik_par']) ?></td>
-            <td class='text-center'><?= rupiah($row['total_turun_par']) ?></td>
-            <td class='text-center'><?= rupiah($row['total_nett_par']) ?></td>
+            <td class=''><?= rupiah($row['total_naik_par']) ?></td>
+            <td class=''><?= rupiah($row['total_turun_par']) ?></td>
+            <td class=''><?= rupiah($row['total_nett_par']) ?></td>
             <td><?= $row['status'] ?></td>
         </tr>
         <?php
