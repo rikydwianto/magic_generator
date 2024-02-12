@@ -10,17 +10,16 @@ $stmtCheck = $pdo->prepare("SELECT id,status,keterangan FROM capaian_cabang WHER
 $stmtCheck->execute([$minggu, $bulan, $tahun, $cabang]);
 $existingData = $stmtCheck->fetch(PDO::FETCH_ASSOC);
 $edit = '';
-if ($existingData['status'] == 'done') {
-    $pesan = urlencode("Laporan Cabang $cabang <strong>minggu-$minggu Bulan-$bulanArray[$bulan] tahun $tahun </strong>
-Sudah dibuat!, Terima Kasih ");
-    // alert("Laporan sudah ada/sudah disubmit");
-    // pindah(menu_progress("laporan/submit"));
-    pindah(menu_progress("laporan/submit&error&minggu=$minggu&bulan=$bulan&tahun=$tahun&pesan=$pesan"));
-} else {
-    $edit = 'ya';
-    $id_laporan_cabang = $existingData['id'];
+if ($existingData) {
+    if ($existingData['status'] == 'done') {
+        $pesan = urlencode("Laporan Cabang $cabang <strong>minggu-$minggu Bulan-$bulanArray[$bulan] tahun $tahun </strong>
+        Sudah dibuat!, Terima Kasih ");
+        pindah(menu_progress("laporan/submit&error&minggu=$minggu&bulan=$bulan&tahun=$tahun&pesan=$pesan"));
+    } else {
+        $edit = 'ya';
+        $id_laporan_cabang = $existingData['id'];
+    }
 }
-
 $query = "SELECT  COUNT(*) as jumlah_staff FROM staff where cabang='$cabang' and status='aktif'";
 
 $hit_ = $pdo->prepare($query);
