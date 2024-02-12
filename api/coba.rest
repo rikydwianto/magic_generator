@@ -1,31 +1,12 @@
 # @base_url = https://tool.comdev.my.id/api/
-@base_url = http://localhost/tool/api/
+@base_url = http://localhost/tool/api/mobile/
 
 
 ### POST Request ###
-POST {{base_url}}/soal.php?data-soal
-Content-Type: application/x-www-form-urlencoded
+POST {{base_url}}/index.php?action=login_staff
+Content-Type: application/json
 
-id_kuis=1&id_jawab=160
-
-### POST Request ###
-POST {{base_url}}/soal.php?input-soal
-Content-Type: application/x-www-form-urlencoded
-
-id_kuis=1&id_jawab=118&id_soal=1&pilihan=b
-
-### POST Request ###
-POST {{base_url}}/soal.php?update-kuis
-Content-Type: application/x-www-form-urlencoded
-
-id_kuis=1&id_jawab=119&id_soal=1&pilihan=b
-
-### POST Request ###
-POST {{base_url}}/soal.php?belum-terjawab
-Content-Type: application/x-www-form-urlencoded
-
-id_kuis=1&id_jawab=119&id_soal=1&pilihan=b
-
-
-### AMBIL GAMBAR ###
-GET {{base_url}}/gambar_soal.php?id=1&ket=soal_bank
+{
+  "nik": "007288/2019",
+  "password": "1sampai10"
+}
