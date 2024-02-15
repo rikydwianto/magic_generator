@@ -80,27 +80,27 @@ $hitung_tidak_jawab = $qqq->fetch()['tidak_jawab'];
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
     <style>
-        body {
-            user-select: none;
-        }
+    body {
+        user-select: none;
+    }
 
-        /* Style untuk menyembunyikan titik pada elemen <li> */
-        .custom-list-item {
-            list-style-type: none;
-            padding-left: 10px;
-            padding-top: 5px;
-        }
+    /* Style untuk menyembunyikan titik pada elemen <li> */
+    .custom-list-item {
+        list-style-type: none;
+        padding-left: 10px;
+        padding-top: 5px;
+    }
 
-        /* Style tambahan sesuai kebutuhan desain */
-        .custom-list-item h5 {
-            margin-bottom: 0;
-            /* Menghilangkan margin bawah pada elemen h5 */
-        }
+    /* Style tambahan sesuai kebutuhan desain */
+    .custom-list-item h5 {
+        margin-bottom: 0;
+        /* Menghilangkan margin bawah pada elemen h5 */
+    }
 
-        .custom-list-item p {
-            margin-top: 0;
-            /* Menghilangkan margin atas pada elemen p */
-        }
+    .custom-list-item p {
+        margin-top: 0;
+        /* Menghilangkan margin atas pada elemen p */
+    }
     </style>
 
 </head>
@@ -235,7 +235,7 @@ $hitung_tidak_jawab = $qqq->fetch()['tidak_jawab'];
                                     soal_jawab sj
                                     RIGHT JOIN soal
                                     ON soal.`id_soal` = sj.`id_soal`
-                                WHERE id_jawab ='$id_jawab'";
+                                WHERE id_jawab ='$id_jawab' order by sj.id_jawab asc";
                                         $no = 1;
                                         $stmt = $pdo->query($qsoal);
 
@@ -247,22 +247,22 @@ $hitung_tidak_jawab = $qqq->fetch()['tidak_jawab'];
 
                                         ?>
 
-                                            <tr class=" ">
-                                                <td><?= $no ?></td>
-                                                <td>
-                                                    <h5><?= $row['soal'] ?></h5>
-                                                    <?php
+                                        <tr class=" ">
+                                            <td><?= $no ?></td>
+                                            <td>
+                                                <h5><?= $row['soal'] ?></h5>
+                                                <?php
                                                     if ($row['url_gambar'] != "") {
                                                         $gambar = cekGambarSoal($url_api, $row['id_soal'], 'soal');
 
                                                     ?>
-                                                        <img src="<?= $gambar['url_gambar'] ?>" class="img img-fluid" alt="">
-                                                    <?php
+                                                <img src="<?= $gambar['url_gambar'] ?>" class="img img-fluid" alt="">
+                                                <?php
                                                     }
                                                     ?>
-                                                    <div id="pilihan" class='<?= $bg ?>' style='padding-left:20px'>
+                                                <div id="pilihan" class='<?= $bg ?>' style='padding-left:20px'>
 
-                                                        <?php
+                                                    <?php
                                                         $pilihan = json_decode($row['pilihan'], true);
                                                         if ($tampil_jawaban == 'ya') {
                                                             foreach ($pilihan as $pil) {
@@ -278,22 +278,22 @@ $hitung_tidak_jawab = $qqq->fetch()['tidak_jawab'];
                                                             }
                                                         }
                                                         ?>
-                                                        <p>
-                                                            <?php
+                                                    <p>
+                                                        <?php
                                                             if ($tampil_jawaban == 'ya') {
                                                             ?>
-                                                                Kamu menjawab: <?= strtoupper($row['pilihuser']) ?> |
-                                                                <?= $row['keterangan'] ?>
-                                                            <?php
+                                                        Kamu menjawab: <?= strtoupper($row['pilihuser']) ?> |
+                                                        <?= $row['keterangan'] ?>
+                                                        <?php
                                                             }
                                                             ?>
-                                                        </p>
+                                                    </p>
 
-                                                    </div>
-                                                </td>
+                                                </div>
+                                            </td>
 
 
-                                            </tr>
+                                        </tr>
 
 
 
@@ -308,11 +308,13 @@ $hitung_tidak_jawab = $qqq->fetch()['tidak_jawab'];
                                     echo "sudah tidak bisa post test";
                                 } else {
                                 ?>
-                                    <a href="<?= $url_quiz . "index.php?id=$id_kuis&post-test&unik=$kuis[unique_id_2]" ?>" class="btn btn-success mb-3">LAKUKAN POST TEST</a>
+                                <a href="<?= $url_quiz . "index.php?id=$id_kuis&post-test&unik=$kuis[unique_id_2]" ?>"
+                                    class="btn btn-success mb-3">LAKUKAN POST TEST</a>
                                 <?php
                                 }
                                 ?>
-                                <a href="<?= $url_quiz . "reset.php?id=$id_kuis" ?>" class="btn btn-danger mb-3">Reset</a>
+                                <a href="<?= $url_quiz . "reset.php?id=$id_kuis" ?>"
+                                    class="btn btn-danger mb-3">Reset</a>
 
                             </div>
                         </div>

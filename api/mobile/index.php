@@ -26,21 +26,43 @@ if ($token == $secretKey) {
 
     switch ($method) {
         case 'GET':
-            // Ambil data pengguna
-            break;
+            if ($menu == 'detail_capaian') {
+                $id = $_GET['id'];
+                detailCapaian($pdo, $id);
+            }
 
+
+            break;
+        case 'PUT':
+            if ($menu == 'update_ttd') {
+                $data = json_decode(file_get_contents('php://input'), true);
+                updateTTD($pdo, $data);
+            } else if ($menu == 'update_capaian') {
+                $data = json_decode(file_get_contents('php://input'), true);
+                // echo json_encode($data);
+                updateCapaian($pdo, $data);
+            }
+
+            break;
         case 'POST':
             if ($menu == 'login_staff') {
                 $data = json_decode(file_get_contents('php://input'), true);
                 $nik = $data['nik'];
                 $password = $data['password'];
                 loginStaff($pdo, $nik, $password);
-            }
-            if ($menu == 'login_admin') {
+            } else if ($menu == 'login_admin') {
                 $data = json_decode(file_get_contents('php://input'), true);
                 $nik = $data['nik'];
                 $password = $data['password'];
                 loginAdmin($pdo, $nik, $password);
+            } else if ($menu == 'ambil_staff') {
+                $data = json_decode(file_get_contents('php://input'), true);
+                $id = $data['id_staff'];
+
+                DetailSL($pdo, $id);
+            } else if ($menu == 'data_laporan') {
+                $data = json_decode(file_get_contents('php://input'), true);
+                cekLaporan($pdo, $data);
             }
 
 
