@@ -374,30 +374,40 @@ function detailAdmin($pdo, $id)
 
 function laporanPerCabang($pdo, $cabang)
 {
-    $query = "SELECT
-   cs.id_capaian_staff,
-  cs.nik_staff,
-  cs.nama_staff,
-  cs.cabang_staff,
-  cs.regional,
-  cs.wilayah,
-  cs.minggu,
-  cs.bulan,
-  cs.tahun,
-  cs.created_at,
-  cs.status,
-  dc.keterangan
-  FROM
-    capaian_staff cs
-    JOIN detail_capaian_staff dc
-      ON cs.id_capaian_staff = dc.id_capaian_staff
-    JOIN cabang c
-      ON c.`nama_cabang` = cs.`cabang_staff`
-      WHERE (c.`id_cabang`=? OR c.`nama_cabang`=?) AND STATUS <>'approve'
-        ORDER BY created_at DESC";
-    $stmt = $pdo->prepare($query);
-    $stmt->execute([$cabang, $cabang]);
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $id = $_GET['id'];
+    $stmt = $pdo->prepare('SELECT * FROM users WHERE id = ?  ');
+    $stmt->execute([$id]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($user['jabatan'] == 'Regional') {
+        $regional = $user['regional'];
+        $query = "SELECT cs.id_capaian_staff, cs.nik_staff, cs.nama_staff, cs.cabang_staff, cs.regional, cs.wilayah, cs.minggu, cs.bulan, cs.tahun, cs.created_at, cs.status, dc.keterangan 
+        FROM
+        capaian_staff cs
+        JOIN detail_capaian_staff dc
+          ON cs.id_capaian_staff = dc.id_capaian_staff
+        JOIN cabang c
+          ON c.`nama_cabang` = cs.`cabang_staff`
+          WHERE (c.`regional`=? ) AND STATUS <>'approve'
+            ORDER BY created_at DESC";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$regional]);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+        $query = "SELECT cs.id_capaian_staff, cs.nik_staff, cs.nama_staff, cs.cabang_staff, cs.regional, cs.wilayah, cs.minggu, cs.bulan, cs.tahun, cs.created_at, cs.status, dc.keterangan 
+        FROM
+        capaian_staff cs
+        JOIN detail_capaian_staff dc
+          ON cs.id_capaian_staff = dc.id_capaian_staff
+        JOIN cabang c
+          ON c.`nama_cabang` = cs.`cabang_staff`
+          WHERE (c.`id_cabang`=? OR c.`nama_cabang`=?) AND STATUS <>'approve'
+            ORDER BY created_at DESC";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$cabang, $cabang]);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
 
     if ($result) {
         $pesan = "Data berhasil diload";
