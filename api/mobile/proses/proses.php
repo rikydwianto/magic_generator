@@ -372,9 +372,9 @@ function detailAdmin($pdo, $id)
     echo json_encode(['status' => $status, 'message' => $pesan, 'data' => $data]);
 }
 
-function laporanPerCabang($pdo, $cabang)
+function laporanPerCabang($pdo, $cabang, $id)
 {
-    $id = $_GET['id'];
+
     $stmt = $pdo->prepare('SELECT * FROM users WHERE id = ?  ');
     $stmt->execute([$id]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
