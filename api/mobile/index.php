@@ -34,7 +34,7 @@ if ($token == $secretKey) {
                 laporanPerStaff($pdo, $id);
             } else  if ($menu == 'laporan_cabang') {
                 $cabang = $_GET['cabang'];
-                $id = $_GET['id'];
+                $id = $_GET['id_staff'];
                 laporanPerCabang($pdo, $cabang, $id);
             }
 
