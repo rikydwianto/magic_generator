@@ -393,10 +393,10 @@ function laporanPerCabang($pdo, $cabang)
       ON cs.id_capaian_staff = dc.id_capaian_staff
     JOIN cabang c
       ON c.`nama_cabang` = cs.`cabang_staff`
-      WHERE (c.`id_cabang`=12 OR c.`nama_cabang`='PANGKEP') AND STATUS <>'approve'
+      WHERE (c.`id_cabang`=? OR c.`nama_cabang`=?) AND STATUS <>'approve'
         ORDER BY created_at DESC";
     $stmt = $pdo->prepare($query);
-    $stmt->execute([$cabang]);
+    $stmt->execute([$cabang, $cabang]);
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     if ($result) {
