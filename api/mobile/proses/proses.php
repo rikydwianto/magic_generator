@@ -113,7 +113,25 @@ function DetailSL($pdo, $id)
     }
     echo json_encode(['status' => $status, 'message' => $pesan, 'data' => $data]);
 }
+function laporanPerStaff($pdo, $nik)
+{
+    $query = "SELECT cs.*,dc.keterangan FROM capaian_staff cs join detail_capaian_staff dc on cs.id_capaian_staff=dc.id_capaian_staff where nik_staff='$nik' order by created_at desc";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    if ($result) {
+        $pesan = "Data berhasil diload";
+        $data = $result;
+        $status = 'success';
+    } else {
+        $status = 'error';
+        $pesan = "Tidak Ditemukan!";
+        $data = [];
+    }
+
+    echo json_encode(['status' => $status, 'message' => $pesan, 'data' => $data]);
+}
 function cekLaporan($pdo, $data)
 {
     $id = $data['id_staff'];
@@ -291,21 +309,21 @@ function updateCapaian($pdo, $data)
         // {"pmb":"1","psa":"2","ppd":"3","prr":"4","arta":"5","parTurun":"0","am":"0","ak":"0","parNaik":"0","keterangan":"aYO MAKAN","cuti":"0","tpk":"0"}
 
         $id_capaian_staff = $data['id'];
-        $anggota_masuk = removeNonNumeric($data['am']);
-        $anggota_keluar = removeNonNumeric($data['ak']);
+        $anggota_masuk = removeNonNumeric($data['am'] ? $data['am'] : 0);
+        $anggota_keluar = removeNonNumeric($data['ak'] ? $data['ak'] : 0);
         $nett_anggota = $anggota_masuk - $anggota_keluar;
-        $naik_par = removeNonNumeric($data['parTurun']);
-        $turun_par = removeNonNumeric($data['parNaik']);
+        $naik_par = removeNonNumeric($data['parTurun'] ? $data['parTurun'] : 0);
+        $turun_par = removeNonNumeric($data['parNaik'] ? $data['parNaik'] : 0);
         $nett_par = $naik_par - $turun_par;
 
         $keterangan = $data['keterangan'];
-        $agt_cuti = $data['cuti'];
-        $agt_tpk = $data['tpk'];
-        $pemb['PMB'] = $data['pmb'];
-        $pemb['PSA'] =  $data['psa'];
-        $pemb['PPD'] =  $data['ppd'];
-        $pemb['PRR'] =  $data['prr'];
-        $pemb['ARTA'] =  $data['arta'];
+        $agt_cuti = $data['cuti'] ? $data['cuti'] : 0;
+        $agt_tpk = $data['tpk'] ? $data['tpk'] : 0;
+        $pemb['PMB'] = $data['pmb'] ? $data['pmb'] : 0;
+        $pemb['PSA'] =  $data['psa'] ? $data['psa'] : 0;
+        $pemb['PPD'] =  $data['ppd'] ? $data['ppd'] : 0;
+        $pemb['PRR'] =  $data['prr'] ? $data['prr'] : 0;
+        $pemb['ARTA'] =  $data['arta'] ? $data['arta'] : 0;
         $pinjaman_ = json_encode($pemb);
         $pemb_lain = $pemb['PMB'] + $pemb['PSA'] + $pemb['PPD'] + $pemb['PRR'] + $pemb['ARTA'];
         // Ambil data dari input form atau permintaan HTTP
@@ -320,4 +338,141 @@ function updateCapaian($pdo, $data)
         // Gagal melakukan update
         echo json_encode(['status' => 'error', 'message' => 'Error :' . $e->getMessage()]);
     }
+}
+
+function hapusLaporan($pdo, $id)
+{  // Delete user from the database
+    $stmt = $pdo->prepare("DELETE FROM capaian_staff WHERE id_capaian_staff = :id;
+    DELETE FROM detail_capaian_staff WHERE id_capaian_staff = :id");
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $result = $stmt->execute();
+    if ($result) {
+        echo json_encode(['status' => 'success', 'message' => 'Berhasil dihapus']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Gagal dihapus']);
+    }
+}
+
+function detailAdmin($pdo, $id)
+{
+    // Mengecek keberadaan pengguna
+    $stmt = $pdo->prepare('SELECT s.id,s.nik,s.jabatan,s.nama,email,s.jenis_akun,c.* FROM users s JOIN cabang c ON c.id_cabang=s.id_cabang  
+     WHERE id =? ');
+    $stmt->execute([$id]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    $data = array();
+    if ($user) {
+        $pesan = 'Data ditemukan';
+        $status = 'success';
+        $data = $user;
+    } else {
+        $pesan = ' USER TIDAK DITEMUKAN!';
+        $status = 'error';
+    }
+    echo json_encode(['status' => $status, 'message' => $pesan, 'data' => $data]);
+}
+
+function laporanPerCabang($pdo, $cabang)
+{
+    $query = "SELECT
+   cs.id_capaian_staff,
+  cs.nik_staff,
+  cs.nama_staff,
+  cs.cabang_staff,
+  cs.regional,
+  cs.wilayah,
+  cs.minggu,
+  cs.bulan,
+  cs.tahun,
+  cs.created_at,
+  cs.status,
+  dc.keterangan
+  FROM
+    capaian_staff cs
+    JOIN detail_capaian_staff dc
+      ON cs.id_capaian_staff = dc.id_capaian_staff
+    JOIN cabang c
+      ON c.`nama_cabang` = cs.`cabang_staff`
+      WHERE (c.`id_cabang`=12 OR c.`nama_cabang`='PANGKEP') AND STATUS <>'approve'
+        ORDER BY created_at DESC";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([$cabang]);
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if ($result) {
+        $pesan = "Data berhasil diload";
+        $data = $result;
+        $status = 'success';
+    } else {
+        $status = 'error';
+        $pesan = "Data Tidak Ditemukan!";
+        $data = [];
+    }
+
+    echo json_encode(['status' => $status, 'message' => $pesan, 'data' => $data]);
+}
+
+
+function prosesApproval($pdo, $data)
+{
+    try {
+        $id_capaian_staff = $data['id'];
+        // Ambil data dari input form atau permintaan HTTP
+
+        $status = $data['status'];
+        // Query untuk melakukan update kolom ttd
+        $updateQuery = "UPDATE capaian_staff 
+                        SET status = :status
+                        WHERE id_capaian_staff = :id_capaian_staff";
+
+        // Persiapkan dan jalankan statement
+        $stmt = $pdo->prepare($updateQuery);
+        $stmt->bindParam(':id_capaian_staff', $id_capaian_staff, PDO::PARAM_INT);
+        $stmt->bindParam(':status', $status, PDO::PARAM_STR);
+
+        // Lakukan update
+        $stmt->execute();
+
+        // Berhasil melakukan update
+        echo json_encode(['status' => 'success', 'message' => 'Data berhasil disimpan']);
+    } catch (PDOException $e) {
+        // Gagal melakukan update
+        echo json_encode(['status' => 'error', 'message' => 'Error :' . $e->getMessage()]);
+    }
+}
+
+function updateFCMToken($pdo, $data)
+{
+    $nik = $data['nik'];
+    $id = $data['id'];
+    $token = $data['token'];
+    $tipe = $data['tipe'];
+
+    if ($tipe == 'admin') {
+        // Ambil data dari input form atau permintaan HTTP
+
+        // Query untuk melakukan update kolom ttd
+        $updateQuery = "UPDATE users SET fcm_token = :token WHERE nik = :nik and id=:id;
+        update staff set fcm_token=null where fcm_token=:token
+        ";
+
+        // Persiapkan dan jalankan statement
+        $stmt = $pdo->prepare($updateQuery);
+        $stmt->bindParam(':nik', $nik, PDO::PARAM_STR);
+        $stmt->bindParam(':token', $token, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_STR);
+    } else if ($tipe == 'staff') {
+        // Query untuk melakukan update kolom ttd
+        $updateQuery = "UPDATE staff SET fcm_token = :token WHERE nik_staff = :nik and id_staff=:id ;
+                update users set fcm_token=null where fcm_token=:token
+";
+
+        // Persiapkan dan jalankan statement
+        $stmt = $pdo->prepare($updateQuery);
+        $stmt->bindParam(':nik', $nik, PDO::PARAM_STR);
+        $stmt->bindParam(':token', $token, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_STR);
+    }
+    $stmt->execute();
+    echo json_encode(['status' => 'success', 'message' => 'Data berhasil disimpan']);
 }

@@ -29,9 +29,22 @@ if ($token == $secretKey) {
             if ($menu == 'detail_capaian') {
                 $id = $_GET['id'];
                 detailCapaian($pdo, $id);
+            } else  if ($menu == 'laporan_staff') {
+                $id = $_GET['nik'];
+                laporanPerStaff($pdo, $id);
+            } else  if ($menu == 'laporan_cabang') {
+                $cabang = $_GET['cabang'];
+                laporanPerCabang($pdo, $cabang);
             }
 
 
+
+            break;
+        case 'DELETE':
+            if ($menu == 'hapus_laporan') {
+                $id = $_GET['id'];
+                hapusLaporan($pdo, $id);
+            }
             break;
         case 'PUT':
             if ($menu == 'update_ttd') {
@@ -41,6 +54,14 @@ if ($token == $secretKey) {
                 $data = json_decode(file_get_contents('php://input'), true);
                 // echo json_encode($data);
                 updateCapaian($pdo, $data);
+            } else if ($menu == 'proses_approval') {
+                $data = json_decode(file_get_contents('php://input'), true);
+                // echo json_encode($data);
+                prosesApproval($pdo, $data);
+            } else if ($menu == 'updateFCM') {
+                $data = json_decode(file_get_contents('php://input'), true);
+                // echo json_encode($data);
+                updateFCMToken($pdo, $data);
             }
 
             break;
@@ -60,6 +81,11 @@ if ($token == $secretKey) {
                 $id = $data['id_staff'];
 
                 DetailSL($pdo, $id);
+            } else if ($menu == 'ambil_admin') {
+                $data = json_decode(file_get_contents('php://input'), true);
+                $id = $data['id_staff'];
+
+                DetailAdmin($pdo, $id);
             } else if ($menu == 'data_laporan') {
                 $data = json_decode(file_get_contents('php://input'), true);
                 cekLaporan($pdo, $data);
