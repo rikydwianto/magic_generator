@@ -166,7 +166,7 @@ if (isset($_GET['post-test'])) {
                                 <th>MASUK</th>
                             </tr>
                             <?php
-                                $query = "SELECT * FROM kuis where status='aktif'";
+                                $query = "SELECT * FROM kuis where status='aktif' order by id_kuis desc";
 
                                 // Persiapkan dan eksekusi statement
                                 $stmt = $pdo->prepare($query);

@@ -13,11 +13,22 @@ Authorization: Bearer {{token}}
   "password": "1sampai10"
 }
 ### ####
-GET {{base_url}}data_laporan
+POST {{base_url}}data_laporan
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
   "nik": "007288/2019",
-  "password": "1sampai10"
+  "cabang": "BARRU",
+  "minggu": "1",
+  "bulan": "2",
+  "tahun": "2024",
 }
+### ####
+GET {{base_url}}laporan_cabang?cabang=12&id_staff=13
+Content-Type: application/json
+Authorization: Bearer {{token}}
+### ####
+DELETE {{base_url}}hapus_laporan?id=20
+Content-Type: application/json
+Authorization: Bearer {{token}}

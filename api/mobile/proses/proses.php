@@ -485,3 +485,74 @@ function updateFCMToken($pdo, $data)
     $stmt->execute();
     echo json_encode(['status' => 'success', 'message' => 'Data berhasil disimpan']);
 }
+
+function cariCabang($pdo,  $id)
+{
+    $stmt = $pdo->prepare('SELECT * FROM users WHERE id = ?  ');
+    $stmt->execute([$id]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($user['jabatan'] == 'Regional') {
+        $cab = $pdo->prepare('SELECT * FROM cabang WHERE regional = ? and kode_cabang<=500 ');
+        $cab->execute([$user['regional']]);
+        $data = $cab->fetchAll(PDO::FETCH_ASSOC);
+
+        $pesan = "Data Berhasil diload";
+    } else {
+        $cab = $pdo->prepare('SELECT * FROM cabang WHERE id_cabang = ?  ');
+        $cab->execute([$user['id_cabang']]);
+        $data = $cab->fetchAll(PDO::FETCH_ASSOC);
+
+        $pesan = "Data Berhasil diload";
+    }
+    $status = 'success';
+
+    echo json_encode(['status' => $status, 'message' => $pesan, 'data' => $data]);
+}
+
+
+function cekProgresCabang($pdo, $data)
+{
+    $minggu = isset($data['minggu']) ? $data['minggu'] : '';
+    $bulan = isset($data['bulan']) ? $data['bulan'] : '';
+    $tahun = isset($data['tahun']) ? $data['tahun'] : '';
+    $cabang = isset($data['cabang']) ? $data['cabang'] : '';
+
+    $query = "
+        SELECT
+            cs.cabang_staff,
+            cs.status,
+            COUNT(cs.nik_staff) AS jumlah_staff,
+            SUM(dcs.anggota_masuk) AS total_anggota_masuk,
+            SUM(dcs.anggota_keluar) AS total_anggota_keluar,
+            SUM(dcs.nett_anggota) AS total_nett_anggota,
+            SUM(dcs.naik_par) AS total_naik_par,
+            SUM(dcs.turun_par) AS total_turun_par,
+            SUM(dcs.nett_par) AS total_nett_par,
+            SUM(dcs.pemb_lain) AS total_pemb_lain,
+            SUM(dcs.agt_tpk) AS total_agt_tpk,
+            SUM(dcs.agt_cuti) AS total_agt_cuti,
+            SUM(CAST(JSON_UNQUOTE(JSON_EXTRACT(dcs.json_pinjaman, '$.PMB')) AS INT)) AS total_PMB,
+            SUM(CAST(JSON_UNQUOTE(JSON_EXTRACT(dcs.json_pinjaman, '$.PSA')) AS INT)) AS total_PSA,
+            SUM(CAST(JSON_UNQUOTE(JSON_EXTRACT(dcs.json_pinjaman, '$.PPD')) AS INT)) AS total_PPD,
+            SUM(CAST(JSON_UNQUOTE(JSON_EXTRACT(dcs.json_pinjaman, '$.PRR')) AS INT)) AS total_PRR,
+            SUM(CAST(JSON_UNQUOTE(JSON_EXTRACT(dcs.json_pinjaman, '$.ARTA')) AS INT)) AS total_ARTA
+        FROM
+            capaian_staff cs
+        JOIN
+            detail_capaian_staff dcs ON cs.id_capaian_staff = dcs.id_capaian_staff
+        WHERE
+            cs.cabang_staff = :cabang AND cs.minggu = :minggu and cs.bulan=:bulan and cs.tahun=:tahun and cs.status='approve'
+        GROUP BY
+            cs.cabang_staff
+        ";
+
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(':cabang', $cabang, PDO::PARAM_STR);
+    $stmt->bindParam(':minggu', $minggu, PDO::PARAM_INT);
+    $stmt->bindParam(':bulan', $bulan, PDO::PARAM_INT);
+    $stmt->bindParam(':tahun', $tahun, PDO::PARAM_INT);
+    $stmt->execute();
+
+    echo json_encode($data);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+}

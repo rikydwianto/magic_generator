@@ -36,6 +36,9 @@ if ($token == $secretKey) {
                 $cabang = $_GET['cabang'];
                 $id = $_GET['id_staff'];
                 laporanPerCabang($pdo, $cabang, $id);
+            } else  if ($menu == 'cabang') {
+                $id = $_GET['id_staff'];
+                cariCabang($pdo, $id);
             }
 
 
@@ -90,6 +93,9 @@ if ($token == $secretKey) {
             } else if ($menu == 'data_laporan') {
                 $data = json_decode(file_get_contents('php://input'), true);
                 cekLaporan($pdo, $data);
+            } else if ($menu == 'cek_progress_cabang') {
+                $data = json_decode(file_get_contents('php://input'), true);
+                cekProgresCabang($pdo, $data);
             }
 
 
