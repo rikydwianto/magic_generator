@@ -3,8 +3,8 @@ require './../vendor/autoload.php'; // Impor library Dotenv
 require './../proses/global_fungsi.php';
 include_once "./../config/setting.php";
 include_once "./../config/koneksi.php";
-$id_kuis = isset($_SESSION['id_kuis']) ? intval($_SESSION['id_kuis']) : 0;
-$id_jawab = $_SESSION['id_kuis_jawab'];
+$id_kuis = isset($_SESSION['id_kuis']) ? ($_SESSION['id_kuis']) : $_GET['id_kuis'];
+$id_jawab = isset($_SESSION['id_kuis_jawab']) ? ($_SESSION['id_kuis_jawab']) : $_GET['id_jawab'];
 
 $url_api = $url . "api/";
 
@@ -22,8 +22,8 @@ $stmt->bindParam(':id_kuis', $id_kuis, PDO::PARAM_INT);
 $stmt->execute();
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 if ($stmt->rowCount() === 0 || $row['status'] == 'tidakaktif') {
-    pindah($url_quiz . "404.php"); // Gantilah 404.php dengan halaman 404 yang sesuai
-    exit();
+    // pindah($url_quiz . "404.php"); // Gantilah 404.php dengan halaman 404 yang sesuai
+    // exit();
 }
 $query = "SELECT * FROM kuis k JOIN kuis_jawab kj ON kj.`id_kuis`=k.`id_kuis` WHERE kj.`id_jawab`='$id_jawab' and k.id_kuis='$id_kuis'";
 $stmt = $pdo->query($query);
@@ -331,6 +331,9 @@ $hitung_tidak_jawab = $qqq->fetch()['tidak_jawab'];
 
 
     <script src='<?= $url_quiz . 'script_quiz.js' ?>'></script>
+    <script>
+    localStorage.setItem("mulai", 'tidak');
+    </script>
 
 </body>
 

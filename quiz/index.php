@@ -6,22 +6,13 @@ include_once "./../config/koneksi.php";
 
 // var_dump($_SESSION);
 $id_kuis = isset($_GET['id']) ? intval($_GET['id']) : 0;
-?>
-<?php
-// Query untuk mengecek apakah kuis dengan ID tertentu ada atau tidak
+
 $sql = "SELECT * FROM kuis WHERE id_kuis = :id_kuis";
 $stmt = $pdo->prepare($sql);
 $stmt->bindParam(':id_kuis', $id_kuis, PDO::PARAM_INT);
 $stmt->execute();
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
-// ... (tampilkan halaman kuis)
-// Jika kuis tidak ditemukan, redirect ke halaman 404
-if ($stmt->rowCount() === 0) {
-    pindah($url_quiz . "404.php"); // Gantilah 404.php dengan halaman 404 yang sesuai
-    exit();
-}
 
-// var_dump($_SESSION);
 
 $readonly = "";
 if (isset($_GET['post-test'])) {
@@ -46,15 +37,7 @@ if (isset($_GET['post-test'])) {
     $hasil['unique_id_2'] = null;
     $hasil['nik'] = null;
 }
-if (isset($_SESSION['mengerjakan']) && $_SESSION['mengerjakan'] == 'ya') {
-    pindah($url_quiz . "handle_soal.php");
-}
-$disabled = 'disabled';
-if ($row['status'] == 'aktif') {
-    $disabled = '';
-} else {
-    $readonly = 'readonly';
-}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,7 +45,7 @@ if ($row['status'] == 'aktif') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HALAMAN QUIZ | COMDEV | <?= $row['nama_kuis'] ?></title>
+    <title>HALAMAN QUIZ | COMDEV | <?= $row ? $row['nama_kuis'] :  "" ?></title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- SweetAlert CSS -->
@@ -71,13 +54,35 @@ if ($row['status'] == 'aktif') {
     let url_api = "<?php echo $url_api ?>";
     let url_quiz = "<?php echo $url_quiz ?>";
     let id_kuis = "<?= $id_kuis ?>";
+    let mulai = localStorage.getItem("mulai");
+    var dataLocalStorage = localStorage.getItem("unique_id");
+
+    console.log(localStorage);
+    if (mulai == 'ya') {
+        let id_kuis = localStorage.getItem("id_kuis");
+        let id_jawab = localStorage.getItem("id_kuis_jawab");
+        window.location.href = url_quiz + "handle_soal.php?id_kuis=" + id_kuis + "&id_jawab=" + id_jawab;
+
+    }
     </script>
-    <script src="<?= $url_quiz . 'index.js?v='.$timestamp ?>"></script>
+    <script src="<?= $url_quiz . 'index.js?v=' . $timestamp ?>"></script>
 
 </head>
 
 <body>
+    <?php
 
+
+
+    $disabled = 'disabled';
+
+    if ($stmt->rowCount() > 0) {
+        if ($row['status'] == 'aktif') {
+            $disabled = '';
+        } else {
+            $readonly = 'readonly';
+        }
+    ?>
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-9">
@@ -105,42 +110,100 @@ if ($row['status'] == 'aktif') {
                             <div class="form-group">
 
                                 <?php
-                                if ($row['anggota'] == 'ya') {
-                                ?>
+                                    if ($row['anggota'] == 'ya') {
+                                    ?>
                                 <label for="nik">CENTER:</label>
                                 <input type="text" class="form-control"
                                     value='<?= $hasil['nik'] ? $hasil['nik'] : "" ?>' <?= $readonly ?> id="nik"
                                     name="nik" placeholder="Masukkan CENTER" required>
                                 <?php
-                                } else {
-                                ?>
+                                    } else {
+                                    ?>
                                 <label for="nik">NIK:</label>
                                 <input type="text" class="form-control"
                                     value='<?= $hasil['nik'] ? $hasil['nik'] : "" ?>' <?= $readonly ?> id="nik"
                                     name="nik" placeholder="Masukkan NIK Anda" required>
                                 <?php
-                                }
-                                ?>
+                                    }
+                                    ?>
                             </div>
 
                             <?php
-                            if ($row['status'] != 'aktif') {
-                                pesan("Kuis Sedang Tidak Diaktifkan", 'danger');
-                            }
-                            ?>
+                                if ($row['status'] != 'aktif') {
+                                    pesan("Kuis Sedang Tidak Diaktifkan", 'danger');
+                                }
+                                ?>
                             <button type="button" <?= $disabled ?> class="btn btn-primary" name='input'
-                                id="submitBtn">KIRIM</button>
+                                id="submitBtn">LANJUTKAN</button>
                             <?php if (isset($_GET['post-test'])) {
-                            ?>
+                                ?>
                             <a href="<?= $url_quiz . 'reset.php?id=' . $id_kuis ?>" class="btn btn-danger">ISI BARU</a>
                             <?php
-                            } ?>
+                                } ?>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <?php
+    } else {
+    ?>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0 text-center">PILIH KUIS(AKTIF)</h3>
+                    </div>
+                    <div class="card-body">
+
+                        <table class='table'>
+                            <tr>
+                                <th>NO</th>
+                                <th>NAMA KUIS</th>
+                                <th>TIPE</th>
+                                <th>MASUK</th>
+                            </tr>
+                            <?php
+                                $query = "SELECT * FROM kuis where status='aktif'";
+
+                                // Persiapkan dan eksekusi statement
+                                $stmt = $pdo->prepare($query);
+                                $stmt->execute();
+
+                                // Fetch hasil query
+                                $no = 1;
+                                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                foreach ($result as $key => $row) {
+                                ?>
+                            <tr>
+
+                                <td><?= $no++ ?></td>
+                                <td><?= $row['nama_kuis'] ?></td>
+                                <td>
+                                    <?= $row['anggota'] == 'ya' ? "ANGGOTA" : "STAFF" ?>
+                                </td>
+                                <td>
+                                    <a href="<?= $url_quiz . "index.php?id=" . $row['id_kuis'] ?>"
+                                        class="btn btn-lg btn-primary">MASUK</a>
+                                </td>
+                            </tr>
+                            <?php
+                                }
+                                ?>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php
+    }
+    ?>
+
+
     <?php
     if (isset($_POST['nik']) && isset($_POST['nama'])) {
         $unique_id = uniqid() . uniqid(); // Membuat Unique ID secara acak

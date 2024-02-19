@@ -47,8 +47,8 @@ if ($kuis_jawab) {
     <!-- SweetAlert CSS -->
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@9"> -->
     <script>
-        let waktu = "<?= $row['waktu']; ?>";
-        localStorage.setItem('waktu', waktu)
+    let waktu = "<?= $row['waktu']; ?>";
+    localStorage.setItem('waktu', waktu)
     </script>
 </head>
 
@@ -96,7 +96,9 @@ if ($kuis_jawab) {
 
                         <form action="" id='startQuizForm' method="post">
                             <!-- Tambahkan input hidden untuk menyimpan data yang diperlukan -->
-                            <input type="hidden" name="id_kuis"> <!-- Gantilah dengan ID kuis yang sesuai -->
+                            <input type="hidden" name="id_kuis" id="id_kuis" value='<?= $row['id_kuis'] ?>'>
+                            <input type="hidden" name="id_kuis_jawab" id="id_kuis_jawab" value='<?= $id_kuis_jawab ?>'>
+                            <!-- Gantilah dengan ID kuis yang sesuai -->
 
                             <button type="button" id="startQuizBtn" class="btn btn-success">Mulai Kuis</button>
                         </form>

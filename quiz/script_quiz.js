@@ -54,6 +54,11 @@ document.addEventListener("DOMContentLoaded", function () {
       }).then((result) => {
         if (result.isConfirmed) {
           // Jika konfirmasi "Ya", kirim formulir
+          localStorage.setItem("mulai", "ya");
+          var id_kuis = $("#id_kuis").val();
+          var id_kuis_jawab = $("#id_kuis_jawab").val();
+          localStorage.setItem("id_kuis", id_kuis);
+          localStorage.setItem("id_kuis_jawab", id_kuis_jawab);
 
           localStorage.removeItem("countdown");
           localStorage.removeItem("waktu");

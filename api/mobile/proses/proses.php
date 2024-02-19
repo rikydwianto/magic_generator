@@ -474,8 +474,7 @@ function updateFCMToken($pdo, $data)
     } else if ($tipe == 'staff') {
         // Query untuk melakukan update kolom ttd
         $updateQuery = "UPDATE staff SET fcm_token = :token WHERE nik_staff = :nik and id_staff=:id ;
-                update users set fcm_token=null where fcm_token=:token
-";
+                update users set fcm_token=null where fcm_token=:token";
 
         // Persiapkan dan jalankan statement
         $stmt = $pdo->prepare($updateQuery);

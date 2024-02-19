@@ -26,7 +26,7 @@ async function getSoal() {
     if (response.result) {
       let data = response.result;
       if (data.total_soal == data.soal_dijawab) {
-        // window.location.href = url + "lihat_hasil.php?selesai";
+        // window.location.href = url + "lihat_hasil.php?id_kuis="+id_kuis+"&id_jawab="+id_jawab;
       }
 
       localStorage.setItem("waktu", data.data_kuis.waktu);
@@ -237,7 +237,8 @@ function jawabAndCek() {
   $(".loader").show();
   updateKuis(id_kuis, id_jawab);
   setTimeout(function () {
-    window.location.href = url + "lihat_hasil.php";
+    window.location.href =
+      url + "lihat_hasil.php?id_kuis=" + id_kuis + "&id_jawab=" + id_jawab;
   }, 2000);
 }
 var countdownDuration = parseInt(localStorage.getItem("waktu"));
@@ -278,7 +279,8 @@ function updateCountdown() {
       updateKuis(id_kuis, id_jawab);
 
       setTimeout(function () {
-        window.location.href = url + "lihat_hasil.php";
+        window.location.href =
+          url + "lihat_hasil.php?id_kuis=" + id_kuis + "&id_jawab=" + id_jawab;
       }, 2000);
     }
   }

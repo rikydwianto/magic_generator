@@ -3,8 +3,8 @@ require './../vendor/autoload.php'; // Impor library Dotenv
 require './../proses/global_fungsi.php';
 include_once "./../config/setting.php";
 include_once "./../config/koneksi.php";
-$id_kuis = isset($_SESSION['id_kuis']) ? intval($_SESSION['id_kuis']) : 0;
-$id_jawab = $_SESSION['id_kuis_jawab'];
+$id_kuis = isset($_SESSION['id_kuis']) ? intval($_SESSION['id_kuis']) : $_GET['id_kuis'];
+$id_jawab = isset($_SESSION['id_kuis_jawab']) ? $_SESSION['id_kuis_jawab'] : $_GET['id_jawab'];
 
 
 // Query untuk mengecek apakah kuis dengan ID tertentu ada atau tidak
@@ -13,11 +13,6 @@ $stmt = $pdo->prepare($sql);
 $stmt->bindParam(':id_kuis', $id_kuis, PDO::PARAM_INT);
 $stmt->execute();
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
-if ($stmt->rowCount() === 0 || $row['status'] == 'tidakaktif') {
-    pindah($url_quiz . "404.php"); // Gantilah 404.php dengan halaman 404 yang sesuai
-    exit();
-}
-
 
 
 ?>
@@ -38,15 +33,51 @@ if ($stmt->rowCount() === 0 || $row['status'] == 'tidakaktif') {
 
     <script>
     let url_api = "<?= $url . "api/" ?>";
+    let url_quiz = "<?= $url_quiz ?>";
     let url = "<?= $url_quiz ?>";
     let id_kuis = "<?= $id_kuis ?>";
     let id_jawab = "<?= $id_jawab ?>";
+    let mulai = localStorage.getItem("mulai");
+    var dataLocalStorage = localStorage.getItem("unique_id");
+
+    console.log(localStorage);
+    if (mulai == 'ya') {
+        var currentUrl = window.location.href;
+
+        // Membuat objek URLSearchParams dari URL
+        var urlParams = new URLSearchParams(currentUrl);
+
+        // Mengambil nilai dari parameter id_kuis
+        let id_kuis = urlParams.get('id_kuis');
+        let id_jawab = urlParams.get('id_jawab');
+
+        if (id_kuis == null && id_jawab == null) {
+            let id_kuis = localStorage.getItem("id_kuis");
+            let id_jawab = localStorage.getItem("id_kuis_jawab");
+            window.location.href = url_quiz + "handle_soal.php?id_kuis=" + id_kuis + "&id_jawab=" + id_jawab;
+
+        }
+
+
+
+
+    } else {
+        window.location.href = url_quiz + "index.php";
+
+    }
     </script>
 </head>
 
 <body>
 
+    <?php
+    // if ($stmt->rowCount() === 0 || $row['status'] == 'tidakaktif') {
+    //     pindah($url_quiz . "404.php");
+    //     exit();
+    // }
 
+
+    ?>
 
     <div class="container-fluid mt-5">
         <form id="quizForm">
