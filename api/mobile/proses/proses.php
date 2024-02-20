@@ -553,6 +553,36 @@ function cekProgresCabang($pdo, $data)
     $stmt->bindParam(':tahun', $tahun, PDO::PARAM_INT);
     $stmt->execute();
 
-    echo json_encode($data);
+    $stmtCheck = $pdo->prepare("SELECT id,status,keterangan FROM capaian_cabang WHERE minggu = ? AND bulan = ? AND tahun = ?  and nama_cabang=?");
+    $stmtCheck->execute([$minggu, $bulan, $tahun, $cabang]);
+    $existingData = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+    $query = "SELECT  COUNT(*) as jumlah_staff FROM staff where cabang='$cabang' and status='aktif'";
+
+    $hit_ = $pdo->prepare($query);
+    $hit_->execute();
+
+    // Mengambil hasil query
+    $jml_staff = $hit_->fetch()['jumlah_staff'];
+
+    $pesan = "Berhasil di Load";
+    $status = 'success';
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $q_belum = $pdo->prepare("select s.nik_staff,s.nama_staff,s.cabang,status,fcm_token from staff s where cabang='$cabang' 
+    and nik_staff not in(select nik_staff from capaian_staff where cabang_staff= :cabang and minggu= :minggu and bulan=:bulan and tahun=:tahun and status='approve' ) ");
+    $q_belum->bindParam(":cabang", $cabang);
+    $q_belum->bindParam(":tahun", $tahun);
+    $q_belum->bindParam(":bulan", $bulan);
+    $q_belum->bindParam(":minggu", $minggu);
+    $q_belum->execute();
+    $belum_laporan = $q_belum->fetchAll(PDO::FETCH_ASSOC);
+
+    $data = array(
+        'hasil' => $result,
+        'jml_staff' => ($jml_staff),
+        'progress' => ($existingData),
+        'belum_laporan' => ($belum_laporan)
+    );
+
+    echo json_encode(['status' => $status, 'message' => $pesan, 'data' => $data]);
 }

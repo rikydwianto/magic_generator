@@ -32,3 +32,15 @@ Authorization: Bearer {{token}}
 DELETE {{base_url}}hapus_laporan?id=20
 Content-Type: application/json
 Authorization: Bearer {{token}}
+
+####CEK PROGRES CABANG ###
+POST {{base_url}}cek_progress_cabang
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "cabang": "PANGKEP",
+  "minggu": "3",
+  "bulan": "1",
+  "tahun": "2024",
+}
