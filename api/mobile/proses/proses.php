@@ -578,7 +578,7 @@ function cekProgresCabang($pdo, $data)
     $belum_laporan = $q_belum->fetchAll(PDO::FETCH_ASSOC);
 
     $q_sudah = $pdo->prepare("select s.nik_staff,s.nama_staff,s.cabang,status,fcm_token from staff s where cabang='$cabang' 
-    and nik_staff in(select nik_staff from capaian_staff where cabang_staff= :cabang and minggu= :minggu and bulan=:bulan and tahun=:tahun and status='approve' ) ");
+    and nik_staff in(select nik_staff from capaian_staff where cabang_staff= :cabang and minggu= :minggu and bulan=:bulan and tahun=:tahun  ) ");
     $q_sudah->bindParam(":cabang", $cabang);
     $q_sudah->bindParam(":tahun", $tahun);
     $q_sudah->bindParam(":bulan", $bulan);
