@@ -48,6 +48,14 @@ if ($token == $secretKey) {
             if ($menu == 'hapus_laporan') {
                 $id = $_GET['id'];
                 hapusLaporan($pdo, $id);
+            } else if ($menu == 'hapus_laporan_cek') {
+                $id = $_GET['id'];
+                $cabang = $_GET['cabang'];
+                $minggu = $_GET['minggu'];
+                $bulan = $_GET['bulan'];
+                $tahun = $_GET['tahun'];
+
+                hapusLaporanCek($pdo, $id, $cabang, $minggu, $bulan, $tahun);
             }
             break;
         case 'PUT':

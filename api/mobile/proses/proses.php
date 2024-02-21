@@ -640,3 +640,24 @@ function cekProgresCabang($pdo, $data)
 
     echo json_encode(['status' => $status, 'message' => $pesan, 'data' => $data]);
 }
+
+function hapusLaporanCek($pdo, $id, $cabang, $minggu, $bulan, $tahun)
+{  // Delete user from the database
+    $stmtCheck = $pdo->prepare("SELECT id,status,keterangan FROM capaian_cabang WHERE minggu = ? AND bulan = ? AND tahun = ?  and nama_cabang=? and status='done'");
+    $stmtCheck->execute([$minggu, $bulan, $tahun, $cabang]);
+    $existingData = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+
+    if ($existingData) {
+        $status = 'error';
+        $pesan = "Tidak Bisa dihapus karna sudah disubmit ke regional";
+    } else {
+        $stmt = $pdo->prepare("DELETE FROM capaian_staff WHERE id_capaian_staff = :id;
+            DELETE FROM detail_capaian_staff WHERE id_capaian_staff = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $result = $stmt->execute();
+        $pesan = "Data Berhasil Dihapus";
+        $status = 'success';
+    }
+
+    echo json_encode(['status' => $status, 'message' => $pesan]);
+}
