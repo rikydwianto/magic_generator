@@ -577,21 +577,63 @@ function cekProgresCabang($pdo, $data)
     $q_belum->execute();
     $belum_laporan = $q_belum->fetchAll(PDO::FETCH_ASSOC);
 
-    $q_sudah = $pdo->prepare("select s.nik_staff,s.nama_staff,s.cabang,status,fcm_token from staff s where cabang='$cabang' 
-    and nik_staff in(select nik_staff from capaian_staff where cabang_staff= :cabang and minggu= :minggu and bulan=:bulan and tahun=:tahun  ) ");
-    $q_sudah->bindParam(":cabang", $cabang);
-    $q_sudah->bindParam(":tahun", $tahun);
-    $q_sudah->bindParam(":bulan", $bulan);
-    $q_sudah->bindParam(":minggu", $minggu);
-    $q_sudah->execute();
-    $sudah_laporan = $q_sudah->fetchAll(PDO::FETCH_ASSOC);
+    $status_laporan = $pdo->prepare("
+    SELECT
+        s.nik_staff,
+        s.nama_staff,
+        s.cabang,
+        'belum' AS STATUS,
+        NULL AS minggu,
+        NULL AS bulan,
+        NULL AS tahun,
+        s.fcm_token 
+    FROM   
+        staff s 
+    WHERE 
+        s.cabang = :cabang 
+        AND NOT EXISTS (
+            SELECT 1
+            FROM capaian_staff c
+            WHERE s.cabang = c.cabang_staff
+              AND s.nik_staff = c.nik_staff
+              AND c.minggu =:minggu
+              AND c.bulan = :bulan
+              AND c.tahun = :tahun
+        )
+    
+    UNION ALL
+    
+    SELECT
+        s.nik_staff,
+        s.nama_staff,
+        s.cabang,
+        c.`status`,
+        c.`minggu`,
+        c.`bulan`,
+        c.`tahun`,
+        s.fcm_token 
+    FROM   
+        staff s 
+    LEFT JOIN
+        capaian_staff c ON s.`cabang` = c.`cabang_staff` AND s.nik_staff = c.nik_staff
+    WHERE 
+        s.cabang = :cabang
+        AND c.minggu = :minggu
+        AND c.bulan = :bulan
+        AND c.tahun = :tahun
+        GROUP BY nik_staff ");
+    $status_laporan->bindParam(":cabang", $cabang);
+    $status_laporan->bindParam(":tahun", $tahun);
+    $status_laporan->bindParam(":bulan", $bulan);
+    $status_laporan->bindParam(":minggu", $minggu);
+    $status_laporan->execute();
+    $sudah_laporan = $status_laporan->fetchAll(PDO::FETCH_ASSOC);
 
     $data = array(
         'hasil' => $result,
         'jml_staff' => ($jml_staff),
         'progress' => ($existingData),
-        'belum_laporan' => ($belum_laporan),
-        'sudah_laporan' => $sudah_laporan
+        'data_staff' => ($sudah_laporan),
     );
 
     echo json_encode(['status' => $status, 'message' => $pesan, 'data' => $data]);
