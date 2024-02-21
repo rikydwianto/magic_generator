@@ -586,7 +586,8 @@ function cekProgresCabang($pdo, $data)
         NULL AS minggu,
         NULL AS bulan,
         NULL AS tahun,
-        s.fcm_token 
+        s.fcm_token ,
+        NULL AS id_capaian_staff
     FROM   
         staff s 
     WHERE 
@@ -611,7 +612,8 @@ function cekProgresCabang($pdo, $data)
         c.`minggu`,
         c.`bulan`,
         c.`tahun`,
-        s.fcm_token 
+        s.fcm_token ,
+        c.id_capaian_staff
     FROM   
         staff s 
     LEFT JOIN
