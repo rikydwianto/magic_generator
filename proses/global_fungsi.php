@@ -45,27 +45,27 @@ function angka($angka)
 function alert($isi)
 {
 ?>
-    <script>
-        alert('<?php echo $isi ?>')
-    </script>
+<script>
+alert('<?php echo $isi ?>')
+</script>
 
 <?php
 }
 function pindah($url)
 {
 ?>
-    <script>
-        window.location.href = "<?php echo $url ?>";
-    </script>
+<script>
+window.location.href = "<?php echo $url ?>";
+</script>
 <?php
 
 }
 function tutupWindow()
 {
 ?>
-    <script>
-        window.close()
-    </script>
+<script>
+window.close()
+</script>
 <?php
 
 }
@@ -165,15 +165,15 @@ function menu_sl($menu)
 function pesan($teks, $warna = 'success')
 {
 ?>
-    <div class="alert alert-<?= $warna ?>" role="alert">
-        <?= $teks ?>
-    </div>
+<div class="alert alert-<?= $warna ?>" role="alert">
+    <?= $teks ?>
+</div>
 <?php
 }
 function badge($teks, $warna = 'success')
 {
 ?>
-    <span class="badge text-bg-<?= $warna ?>"><?= $teks ?></span>
+<span class="badge text-bg-<?= $warna ?>"><?= $teks ?></span>
 
 <?php
 }
@@ -342,4 +342,57 @@ function cekGambarSoal($url_api, $id_soal, $ket)
     // Mengembalikan hasil dari API dalam bentuk array
     $hasil =  json_decode($result, true);
     return $hasil['hasil'];
+}
+function angka_mentah($angka)
+{
+    if ($angka == 0 || $angka == '') {
+        return 0;
+    } else {
+        $angka1 =  str_replace(",", "", $angka);
+        $angka1 = (int)$angka1;
+        return $angka1;
+    }
+}
+
+function sendMessageFCM($title, $body, $token, $customData = '')
+{
+    $serverKey = 'AAAA-hYTrAY:APA91bFWry4fUr-5Opw1dGfcpiWHohDeu-Op5K6xajn1DZL4XPNj1Te6IVNCDwlRJYWsKoq3FL_9qORWAMXzvL9GZiFOLt7A_BR597O61nwtgCxprHJflL7DZ-hb4iLElWX0w2SogLGo';
+    //106672304548785949555
+    $url = 'https://fcm.googleapis.com/fcm/send';
+
+    $notification = [
+        'title' => $title,
+        'body' => $body,
+    ];
+
+    $data = [
+        'notification' => $notification,
+        'to' => $token,
+        'data' => ($customData), // Data tambahan disertakan di sini
+    ];
+
+    $headers = [
+        'Authorization: Bearer ' . $serverKey,
+        'Content-Type: application/json',
+    ];
+
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Hanya gunakan di lingkungan pengembangan, jangan di produksi
+
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+    $response = curl_exec($ch);
+
+    if ($response === false) {
+        die('Error: ' . curl_error($ch));
+    }
+
+    curl_close($ch);
+
+    return $response;
 }

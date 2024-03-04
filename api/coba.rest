@@ -44,3 +44,10 @@ Authorization: Bearer {{token}}
   "bulan": "1",
   "tahun": "2024",
 }
+
+
+
+### ####
+GET {{base_url}}test_fcm?cabang=12&id_staff=13
+Content-Type: application/json
+Authorization: Bearer {{token}}
