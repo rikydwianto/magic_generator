@@ -12,13 +12,15 @@ $data = $result->fetch();
         <!-- Nama Kuis -->
         <div class="mb-3">
             <label for="nama_kuis" class="form-label">Nama Kuis</label>
-            <input type="text" class="form-control" id="nama_kuis" name="nama_kuis" placeholder="Masukkan Nama Kuis" required>
+            <input type="text" class="form-control" id="nama_kuis" name="nama_kuis" placeholder="Masukkan Nama Kuis"
+                required>
         </div>
 
         <!-- Nama Karyawan -->
         <div class="mb-3">
             <label for="nama_karyawan" class="form-label">Nama Karyawan</label>
-            <input type="text" readonly required class="form-control" value="<?= $data['nama']; ?>" id="nama_karyawan" name="nama_karyawan" placeholder="Masukkan Nama Karyawan">
+            <input type="text" readonly required class="form-control" value="<?= $data['nama']; ?>" id="nama_karyawan"
+                name="nama_karyawan" placeholder="Masukkan Nama Karyawan">
         </div>
 
         <!-- Tanggal Kuis -->
@@ -29,8 +31,8 @@ $data = $result->fetch();
 
         <!-- Waktu -->
         <div class="mb-3">
-            <label for="waktu" class="form-label">Waktu</label>
-            <input type="text" class="form-control" id="waktu" name="waktu" placeholder="Masukkan Waktu">
+            <label for="waktu" class="form-label">Waktu(menit)</label>
+            <input type="number" class="form-control" id="waktu" name="waktu" placeholder="Masukkan Waktu">
         </div>
 
         <!-- Status -->

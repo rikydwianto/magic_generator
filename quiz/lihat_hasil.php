@@ -235,7 +235,7 @@ $hitung_tidak_jawab = $qqq->fetch()['tidak_jawab'];
                                     soal_jawab sj
                                     RIGHT JOIN soal
                                     ON soal.`id_soal` = sj.`id_soal`
-                                WHERE id_jawab ='$id_jawab' order by sj.id_jawab asc";
+                                WHERE id_jawab ='$id_jawab' order by sj.id_soal asc";
                                         $no = 1;
                                         $stmt = $pdo->query($qsoal);
 
