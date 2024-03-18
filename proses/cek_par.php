@@ -3,8 +3,8 @@
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-echo "<h1>SEDANG PERBAIKAN</h1>";
-exit;
+// echo "<h1>SEDANG PERBAIKAN</h1>";
+// exit;
 ?>
 <h1>CEK PAR</h1>
 <h3>PENGECEKAN PAR NAIK ATAU TURUN DAN LAINNYA</h3>
