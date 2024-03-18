@@ -3,7 +3,8 @@
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-
+echo "<h1>SEDANG PERBAIKAN</h1>";
+exit;
 ?>
 <h1>CEK PAR</h1>
 <h3>PENGECEKAN PAR NAIK ATAU TURUN DAN LAINNYA</h3>
@@ -11,16 +12,17 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
     <div class="col-md-4">
         <label for="formFile" class="form-label">SILAHKAN PILIH FILE SEBELUM(MINGGU/HARI KEMARIN) <br></label>
         <input class="form-control" required type="file" name='file' accept=".xls,.xlsx" id="formFile">
-      <br/>
-      <br/>
-      <br/>
-      <br/>
+        <br />
+        <br />
+        <br />
+        <br />
         <label for="formFile" class="form-label">SILAHKAN PILIH FILE PEMBANDING(MINGGU/HARI INI) <br></label>
         <input class="form-control" required type="file" name='file1' accept=".xls,.xlsx" id="formFile">
 
 
 
-        <input type="submit" onclick="return confirm('yakin sudah benar?')" value="KONFIRMASI" class='btn btn-danger' name='preview'>
+        <input type="submit" onclick="return confirm('yakin sudah benar?')" value="KONFIRMASI" class='btn btn-danger'
+            name='preview'>
     </div>
 </form>
 
@@ -96,11 +98,11 @@ if (isset($_POST['preview'])) {
 
             $nama_nasabah = str_replace("'", " ", $nama_nasabah);
             $sql = "INSERT INTO deliquency (loan, no_center, id_detail_nasabah, nasabah, amount, sisa_saldo, tunggakan, minggu, tgl_input, id_cabang, tgl_disburse, cabang, wajib, sukarela, pensiun, hariraya, lainlain, cicilan, hari, staff, minggu_ke, minggu_rill, priode, kode_pemb, session,jenis_topup) VALUES ('$loan_no', '$no_center', '$client_id', '$nama_nasabah', $disburse, $balance, $arreas, $wpd, '$tgl_delin', '', '$tgl_dis', '$namaCabang', $s_wajib, $s_sukarela, $s_pensiun, $s_hariraya, 0, $angsuran, '$hari', '$staff', $ke, $rill, $jk, '$jenis_produk', '$sesi','$jenis_topup')";
-            
+
             if ($pdo->query($sql) == TRUE) {
-              //  echo "Data berhasil dimasukkan ke tabel deliquency.";
+                //  echo "Data berhasil dimasukkan ke tabel deliquency.";
             } else {
-            //    echo " $nama_nasabah : Error: ".$pdo->error;
+                //    echo " $nama_nasabah : Error: ".$pdo->error;
             }
         }
     }
@@ -179,7 +181,7 @@ if (isset($_POST['preview'])) {
             $sql = "INSERT INTO deliquency (loan, no_center, id_detail_nasabah, nasabah, amount, sisa_saldo, tunggakan, minggu, tgl_input, id_cabang, tgl_disburse, cabang, wajib, sukarela, pensiun, hariraya, lainlain, cicilan, hari, staff, minggu_ke, minggu_rill, priode, kode_pemb, session,jenis_topup) VALUES ('$loan_no', '$no_center', '$client_id', '$nama_nasabah', $disburse, $balance, $arreas, $wpd, '$tgl_delin1', '', '$tgl_dis', '$namaCabang', $s_wajib, $s_sukarela, $s_pensiun, $s_hariraya, 0, $angsuran, '$hari', '$staff', $ke, $rill, $jk, '$jenis_produk', '$sesi','$jenis_topup')";
 
             if ($pdo->query($sql) == TRUE) {
-              //  echo "Data berhasil dimasukkan ke tabel deliquency.";
+                //  echo "Data berhasil dimasukkan ke tabel deliquency.";
             } else {
                 // echo "$nama_nasabah :  Error: ".$pdo->error;
             }
@@ -188,5 +190,5 @@ if (isset($_POST['preview'])) {
 
 
     alert("KEDUA FILE BERHASIL DIUPLOAD, TUNGGU PROSES SELANJUTNYA UNTUK ANALISIS KEDUA FILE . . .");
-    pindah($url."index.php?menu=proses_delin&cabang=$namaCabang&tgl_delin=".$tgl_delin."&tgl_delin1=".$tgl_delin1);
+    pindah($url . "index.php?menu=proses_delin&cabang=$namaCabang&tgl_delin=" . $tgl_delin . "&tgl_delin1=" . $tgl_delin1);
 }

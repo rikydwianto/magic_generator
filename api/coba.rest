@@ -51,3 +51,22 @@ Authorization: Bearer {{token}}
 GET {{base_url}}test_fcm?cabang=12&id_staff=13
 Content-Type: application/json
 Authorization: Bearer {{token}}
+
+
+###SCAN###
+GET {{base_url}}scan?url=dsdsd
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+####CEK PROGRES CABANG ###
+GET {{base_url}}test_fcm
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "PANGKEP",
+  "body": "3",
+  "token": "d3UN6zazTEWT609CnApdQU:APA91bGpCrWbUCAklwSrqpKwD0s0wP3u9SAtMdDncftP1V8Z1e9O5JK9TYalyLi8CwXWJWHdP0Uqkwjv2r7M6Soqg_IBP0n5zpkJd1ccjz0U0oMixPnc7U6OY-4ynwckYn-ctoeeWhpF",
+  "data": "2024",
+}
