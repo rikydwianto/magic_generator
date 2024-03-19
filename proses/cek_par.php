@@ -6,25 +6,62 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 // echo "<h1>SEDANG PERBAIKAN</h1>";
 // exit;
 ?>
-<h1>CEK PAR</h1>
-<h3>PENGECEKAN PAR NAIK ATAU TURUN DAN LAINNYA</h3>
-<form method="post" enctype="multipart/form-data">
-    <div class="col-md-4">
-        <label for="formFile" class="form-label">SILAHKAN PILIH FILE SEBELUM(MINGGU/HARI KEMARIN) <br></label>
-        <input class="form-control" required type="file" name='file' accept=".xls,.xlsx" id="formFile">
-        <br />
-        <br />
-        <br />
-        <br />
-        <label for="formFile" class="form-label">SILAHKAN PILIH FILE PEMBANDING(MINGGU/HARI INI) <br></label>
-        <input class="form-control" required type="file" name='file1' accept=".xls,.xlsx" id="formFile">
+<div class="container-fluid">
+    <h1>CEK PAR</h1>
+    <div class="row">
+
+        <div class="col-6">
+
+            <h3>PENGECEKAN PAR NAIK ATAU TURUN DAN LAINNYA</h3>
+            <form method="post" enctype="multipart/form-data">
+                <label for="formFile" class="form-label">SILAHKAN PILIH FILE SEBELUM(MINGGU/HARI KEMARIN) <br></label>
+                <input class="form-control" required type="file" name='file' accept=".xls,.xlsx" id="formFile">
+                <br />
+                <br />
+                <label for="formFile" class="form-label">SILAHKAN PILIH FILE PEMBANDING(MINGGU/HARI INI) <br></label>
+                <input class="form-control" required type="file" name='file1' accept=".xls,.xlsx" id="formFile">
 
 
+                <br>
+                <input type="submit" onclick="return confirm('yakin sudah benar?')" value="KONFIRMASI"
+                    class='btn btn-danger' name='preview'>
+            </form>
+        </div>
+        <div class="col-6">
+            <h3>ANTRIAN</h3>
+            <table border='1' class='table table-bordered table-hovered'>
+                <tr>
+                    <th>NO</th>
+                    <th>Cabang</th>
+                    <th>Mulai</th>
+                    <th>Keterangan</th>
+                    <th>Dibuat Pada</th>
+                </tr>
 
-        <input type="submit" onclick="return confirm('yakin sudah benar?')" value="KONFIRMASI" class='btn btn-danger'
-            name='preview'>
+                <?php
+                $sql = "SELECT * FROM log_cek_par where keterangan='proses'";
+                $stmt = $pdo->query($sql);
+
+                $no = 1;
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                ?>
+                <tr>
+                    <td><?= $no++ ?></td>
+                    <td><?= $row['cabang'] ?></td>
+                    <td><?= $row['mulai'] ?></td>
+                    <td><?= $row['keterangan'] ?></td>
+                    <td><?= $row['created_at'] ?></td>
+                </tr>
+
+                <?php
+                }
+
+
+                ?>
+            </table>
+        </div>
     </div>
-</form>
+</div>
 
 <?php
 if (isset($_POST['preview'])) {
@@ -49,6 +86,29 @@ if (isset($_POST['preview'])) {
     $namaCabang = isset($matches[1]) ? $matches[1] : '';
     $namaCabang = preg_replace('/As$/', '', $namaCabang);
 
+
+    try {
+        $sql = "INSERT INTO log_cek_par (cabang, mulai, selesai, keterangan, created_at, edited_at)
+            VALUES (:cabang, :mulai, :selesai, :keterangan, NOW(), NOW())";
+
+        // Menyiapkan statement PDO
+        $stmt = $pdo->prepare($sql);
+        $mulai = date("h:i:s");
+        $selesai = "";
+        $keterangan = "proses";
+
+        // Binding parameter ke statement PDO
+        $stmt->bindParam(':cabang', $namaCabang);
+        $stmt->bindParam(':mulai', $mulai);
+        $stmt->bindParam(':selesai', $selesai);
+        $stmt->bindParam(':keterangan', $keterangan);
+
+        // Mengeksekusi statement PDO
+        $stmt->execute();
+        $id_log = $pdo->lastInsertId();
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
 
 
     $pattern = '/\b\d{4}-\d{2}-\d{2}\b/';
@@ -188,6 +248,28 @@ if (isset($_POST['preview'])) {
         }
     }
 
+    try {
+        $sql = "UPDATE log_cek_par 
+        SET selesai = :selesai, keterangan = :keterangan, edited_at = NOW() 
+        WHERE id = :id";
+
+        // Menyiapkan statement PDO
+        $stmt = $pdo->prepare($sql);
+
+        // Mengatur nilai parameter
+        $selesai = date("h:i:s"); // Mengambil waktu saat ini
+        $keterangan = "selesai"; // Mengubah keterangan menjadi "selesai"
+
+        // Binding parameter ke statement PDO
+        $stmt->bindParam(':selesai', $selesai);
+        $stmt->bindParam(':keterangan', $keterangan);
+        $stmt->bindParam(':id', $id_log);
+
+        // Mengeksekusi statement PDO
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
 
     alert("KEDUA FILE BERHASIL DIUPLOAD, TUNGGU PROSES SELANJUTNYA UNTUK ANALISIS KEDUA FILE . . .");
     pindah($url . "index.php?menu=proses_delin&cabang=$namaCabang&tgl_delin=" . $tgl_delin . "&tgl_delin1=" . $tgl_delin1);
