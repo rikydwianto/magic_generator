@@ -6,16 +6,62 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
 ?>
-<h1>ANALISIS DELIQUENCY</h1>
 
-<form method="post" enctype="multipart/form-data">
-    <div class="col-md-4">
-        <label for="formFile" class="form-label">SILAHKAN PILIH FILE <br></label>
-        <input class="form-control" required type="file" name='file' accept=".xls,.xlsx" id="formFile">
-        <!-- <input type="date" required name="tgl" class='form-control' id=""> -->
-        <input type="submit" onclick="return confirm('yakin sudah benar?')" value="KONFIRMASI" class='btn btn-danger' name='preview'>
+<div class="col-md-4">
+
+</div>
+
+<div class="container-fluid">
+    <h1>ANALISA DELIQUENCY</h1>
+    <div class="row">
+
+        <div class="col-6">
+
+            <h3>Analisa Pinjaman PAR </h3>
+            <form method="post" enctype="multipart/form-data">
+                <label for="formFile" class="form-label">SILAHKAN PILIH FILE <br></label>
+                <input class="form-control" required type="file" name='file' accept=".xls,.xlsx" id="formFile">
+                <br>
+                <input type="submit" onclick="return confirm('yakin sudah benar?')" value="KONFIRMASI"
+                    class='btn btn-danger' name='preview'>
+            </form>
+        </div>
+        <div class="col-6">
+            <h3>ANTRIAN</h3>
+            <table border='1' class='table table-bordered table-hovered'>
+                <tr>
+                    <th>NO</th>
+                    <th>Cabang</th>
+                    <th>Mulai</th>
+                    <th>Keterangan</th>
+                    <th>Dibuat Pada</th>
+                </tr>
+
+                <?php
+                $sql = "SELECT * FROM log_cek_par where keterangan='proses-analisa'";
+                $stmt = $pdo->query($sql);
+
+                $no = 1;
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                ?>
+                <tr>
+                    <td><?= $no++ ?></td>
+                    <td><?= $row['cabang'] ?></td>
+                    <td><?= $row['mulai'] ?></td>
+                    <td><?= $row['keterangan'] ?></td>
+                    <td><?= $row['created_at'] ?></td>
+                </tr>
+
+                <?php
+                }
+
+
+                ?>
+            </table>
+        </div>
     </div>
-</form>
+</div>
+
 <?php
 
 if (isset($_POST['preview'])) {
@@ -39,6 +85,34 @@ if (isset($_POST['preview'])) {
     $namaCabang = isset($matches[1]) ? $matches[1] : '';
     $namaCabang = preg_replace('/As$/', '', $namaCabang);
 
+    if ($namaCabang != "") {
+
+        try {
+            $sql = "INSERT INTO log_cek_par (cabang, mulai, selesai, keterangan, created_at, edited_at)
+                VALUES (:cabang, :mulai, :selesai, :keterangan, NOW(), NOW())";
+
+            // Menyiapkan statement PDO
+            $stmt = $pdo->prepare($sql);
+            $mulai = date("h:i:s");
+            $selesai = "";
+            $keterangan = "proses-analisa";
+
+            // Binding parameter ke statement PDO
+            $stmt->bindParam(':cabang', $namaCabang);
+            $stmt->bindParam(':mulai', $mulai);
+            $stmt->bindParam(':selesai', $selesai);
+            $stmt->bindParam(':keterangan', $keterangan);
+
+            // Mengeksekusi statement PDO
+            $stmt->execute();
+            $id_log = $pdo->lastInsertId();
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    } else {
+        alert("Ditolak, Bukan File Delin atau belum di save/save as");
+        pindah("index.php?menu=anal");
+    }
 
 
     $pattern = '/\b\d{4}-\d{2}-\d{2}\b/';
@@ -642,6 +716,29 @@ if (isset($_POST['preview'])) {
 
     $sql_delete = "DELETE FROM deliquency WHERE tgl_input='$tgl_delin' and cabang='$namaCabang'";
     $stmt = $pdo->query($sql_delete);
+
+    try {
+        $sql = "UPDATE log_cek_par 
+        SET selesai = :selesai, keterangan = :keterangan, edited_at = NOW() 
+        WHERE id = :id";
+
+        // Menyiapkan statement PDO
+        $stmt = $pdo->prepare($sql);
+
+        // Mengatur nilai parameter
+        $selesai = date("h:i:s"); // Mengambil waktu saat ini
+        $keterangan = "selesai"; // Mengubah keterangan menjadi "selesai"
+
+        // Binding parameter ke statement PDO
+        $stmt->bindParam(':selesai', $selesai);
+        $stmt->bindParam(':keterangan', $keterangan);
+        $stmt->bindParam(':id', $id_log);
+
+        // Mengeksekusi statement PDO
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
 
     // Simpan sebagai file Excel
     $writer = new Xlsx($spreadsheet);

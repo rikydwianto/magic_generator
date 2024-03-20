@@ -87,27 +87,33 @@ if (isset($_POST['preview'])) {
     $namaCabang = preg_replace('/As$/', '', $namaCabang);
 
 
-    try {
-        $sql = "INSERT INTO log_cek_par (cabang, mulai, selesai, keterangan, created_at, edited_at)
-            VALUES (:cabang, :mulai, :selesai, :keterangan, NOW(), NOW())";
+    if ($namaCabang != "") {
 
-        // Menyiapkan statement PDO
-        $stmt = $pdo->prepare($sql);
-        $mulai = date("h:i:s");
-        $selesai = "";
-        $keterangan = "proses";
+        try {
+            $sql = "INSERT INTO log_cek_par (cabang, mulai, selesai, keterangan, created_at, edited_at)
+                VALUES (:cabang, :mulai, :selesai, :keterangan, NOW(), NOW())";
 
-        // Binding parameter ke statement PDO
-        $stmt->bindParam(':cabang', $namaCabang);
-        $stmt->bindParam(':mulai', $mulai);
-        $stmt->bindParam(':selesai', $selesai);
-        $stmt->bindParam(':keterangan', $keterangan);
+            // Menyiapkan statement PDO
+            $stmt = $pdo->prepare($sql);
+            $mulai = date("h:i:s");
+            $selesai = "";
+            $keterangan = "proses";
 
-        // Mengeksekusi statement PDO
-        $stmt->execute();
-        $id_log = $pdo->lastInsertId();
-    } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
+            // Binding parameter ke statement PDO
+            $stmt->bindParam(':cabang', $namaCabang);
+            $stmt->bindParam(':mulai', $mulai);
+            $stmt->bindParam(':selesai', $selesai);
+            $stmt->bindParam(':keterangan', $keterangan);
+
+            // Mengeksekusi statement PDO
+            $stmt->execute();
+            $id_log = $pdo->lastInsertId();
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    } else {
+        alert("Ditolak, Bukan File Delin atau belum di save/save as");
+        pindah("index.php?menu=cek_par");
     }
 
 
