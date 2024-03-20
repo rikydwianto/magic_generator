@@ -143,7 +143,7 @@ if (isset($_GET['post-test'])) {
                                 } ?>
                             <br>
                             <br>
-                            <a href="<?= $url_quiz . "lihat_hasil.php?id=" . $id_kuis ?>" class="btn btn-primary">Lihat
+                            <a href="<?= $url_quiz ?>lihat_hasil.php" class="btn btn-primary">Lihat
                                 Hasil
                                 Sebelumnya</a>
                         </form>
