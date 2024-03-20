@@ -135,11 +135,17 @@ if (isset($_GET['post-test'])) {
                                 ?>
                             <button type="button" <?= $disabled ?> class="btn btn-primary" name='input'
                                 id="submitBtn">LANJUTKAN</button>
+
                             <?php if (isset($_GET['post-test'])) {
                                 ?>
                             <a href="<?= $url_quiz . 'reset.php?id=' . $id_kuis ?>" class="btn btn-danger">ISI BARU</a>
                             <?php
                                 } ?>
+                            <br>
+                            <br>
+                            <a href="<?= $url_quiz . "lihat_hasil.php?id=" . $row['id_kuis'] ?>"
+                                class="btn btn-primary">Lihat Hasil
+                                Sebelumnya</a>
                         </form>
                     </div>
                 </div>
@@ -201,7 +207,13 @@ if (isset($_GET['post-test'])) {
     </div>
     <?php
     }
+    if ($hasil['nama'] != null) {
     ?>
+
+    <?php
+    }
+    ?>
+
 
 
     <?php
