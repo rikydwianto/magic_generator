@@ -22,8 +22,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
                 <label for="formFile" class="form-label">SILAHKAN PILIH FILE <br></label>
                 <input class="form-control" required type="file" name='file' accept=".xls,.xlsx" id="formFile">
                 <br>
-                <input type="submit" onclick="return confirm('yakin sudah benar?')" value="KONFIRMASI"
-                    class='btn btn-danger' name='preview'>
+                <input type="submit" onclick="return confirm('yakin sudah benar?')" value="KONFIRMASI" class='btn btn-danger' name='preview'>
             </form>
         </div>
         <div class="col-6">
@@ -44,13 +43,13 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
                 $no = 1;
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 ?>
-                <tr>
-                    <td><?= $no++ ?></td>
-                    <td><?= $row['cabang'] ?></td>
-                    <td><?= $row['mulai'] ?></td>
-                    <td><?= $row['keterangan'] ?></td>
-                    <td><?= $row['created_at'] ?></td>
-                </tr>
+                    <tr>
+                        <td><?= $no++ ?></td>
+                        <td><?= $row['cabang'] ?></td>
+                        <td><?= $row['mulai'] ?></td>
+                        <td><?= $row['keterangan'] ?></td>
+                        <td><?= $row['created_at'] ?></td>
+                    </tr>
 
                 <?php
                 }
@@ -93,7 +92,7 @@ if (isset($_POST['preview'])) {
 
             // Menyiapkan statement PDO
             $stmt = $pdo->prepare($sql);
-            $mulai = date("h:i:s");
+            $mulai = date("H:i:s");
             $selesai = "";
             $keterangan = "proses-analisa";
 
@@ -726,7 +725,7 @@ if (isset($_POST['preview'])) {
         $stmt = $pdo->prepare($sql);
 
         // Mengatur nilai parameter
-        $selesai = date("h:i:s"); // Mengambil waktu saat ini
+        $selesai = date("H:i:s"); // Mengambil waktu saat ini
         $keterangan = "selesai"; // Mengubah keterangan menjadi "selesai"
 
         // Binding parameter ke statement PDO

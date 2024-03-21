@@ -667,7 +667,7 @@ function hapusLaporanCek($pdo, $id, $cabang, $minggu, $bulan, $tahun)
 function scrappingBarcode($pdo, $url)
 {
 
-    $url_parser = "https://google.co.id"; //$url;
+    $url_parser = $url;
     //'https://www.komida.co.id/mdismo/verifile.php?kode=038yfhszhywxhamnzywmrfbnzwtcrzypafbxzbmhngwwgrwnmcbwx';
     $data = [];
     $html = file_get_contents($url_parser);
@@ -687,8 +687,8 @@ function scrappingBarcode($pdo, $url)
         $pattern = '/location:\s*{url:\s*"([^"]+)"/';
         preg_match($pattern, $javascriptString, $matches);
 
-        // $url_pdf = isset($matches[1]) ? $matches[1] : '';
-        $url_pdf = "C:/Users/USER/Documents/MDISMO DTC/SGH/transaksi_038_010246_2023_2024-02-05.pdf";
+        $url_pdf = isset($matches[1]) ? $matches[1] : '';
+        // $url_pdf = "C:/Users/USER/Documents/MDISMO DTC/SGH/transaksi_038_010246_2023_2024-02-05.pdf";
 
         if ($url_pdf == "") {
             $pesan = "FILE tidak ditemukan!";
