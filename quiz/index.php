@@ -57,19 +57,19 @@ if (isset($_GET['post-test'])) {
     <!-- SweetAlert CSS -->
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@9"> -->
     <script>
-    let url_api = "<?php echo $url_api ?>";
-    let url_quiz = "<?php echo $url_quiz ?>";
-    let id_kuis = "<?= $id_kuis ?>";
-    let mulai = localStorage.getItem("mulai");
-    var dataLocalStorage = localStorage.getItem("unique_id");
+        let url_api = "<?php echo $url_api ?>";
+        let url_quiz = "<?php echo $url_quiz ?>";
+        let id_kuis = "<?= $id_kuis ?>";
+        let mulai = localStorage.getItem("mulai");
+        var dataLocalStorage = localStorage.getItem("unique_id");
 
-    console.log(localStorage);
-    if (mulai == 'ya') {
-        let id_kuis = localStorage.getItem("id_kuis");
-        let id_jawab = localStorage.getItem("id_kuis_jawab");
-        window.location.href = url_quiz + "handle_soal.php?id_kuis=" + id_kuis + "&id_jawab=" + id_jawab;
+        console.log(localStorage);
+        if (mulai == 'ya') {
+            let id_kuis = localStorage.getItem("id_kuis");
+            let id_jawab = localStorage.getItem("id_kuis_jawab");
+            window.location.href = url_quiz + "handle_soal.php?id_kuis=" + id_kuis + "&id_jawab=" + id_jawab;
 
-    }
+        }
     </script>
     <script src="<?= $url_quiz . 'index.js?v=' . $timestamp ?>"></script>
 
@@ -89,95 +89,84 @@ if (isset($_GET['post-test'])) {
             $readonly = 'readonly';
         }
     ?>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-9">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h3 class="mb-0 text-center"><?= $row['nama_kuis'] ?></h3>
-                    </div>
-                    <div class="card-body">
-                        <form id="karyawanForm" method="post">
-                            <div class="form-group">
-                                <label for="cabang">Cabang:</label>
-                                <input type="text" class="form-control"
-                                    value='<?= $hasil['cabang'] ? $hasil['cabang'] : "" ?>' <?= $readonly ?> id="cabang"
-                                    name="cabang" placeholder="Masukkan Nama Cabang" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="nama">Nama:</label>
-                                <input type="text" class="form-control"
-                                    value='<?= $hasil['nama'] ? $hasil['nama'] : "" ?>' <?= $readonly ?> id="nama"
-                                    name="nama" placeholder="Masukkan Nama Anda" required>
-                                <input type="hidden" class="form-control"
-                                    value='<?= $hasil['unique_id_2'] ? $hasil['unique_id_2'] : "" ?>' <?= $readonly ?>
-                                    id="unique_2" name="unique_2">
-                            </div>
-                            <div class="form-group">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-9">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="mb-0 text-center"><?= $row['nama_kuis'] ?></h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="karyawanForm" method="post">
+                                <div class="form-group">
+                                    <label for="cabang">Cabang:</label>
+                                    <input type="text" class="form-control" value='<?= $hasil['cabang'] ? $hasil['cabang'] : "" ?>' <?= $readonly ?> id="cabang" name="cabang" placeholder="Masukkan Nama Cabang" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="nama">Nama:</label>
+                                    <input type="text" class="form-control" value='<?= $hasil['nama'] ? $hasil['nama'] : "" ?>' <?= $readonly ?> id="nama" name="nama" placeholder="Masukkan Nama Anda" required>
+                                    <input type="hidden" class="form-control" value='<?= $hasil['unique_id_2'] ? $hasil['unique_id_2'] : "" ?>' <?= $readonly ?> id="unique_2" name="unique_2">
+                                </div>
+                                <div class="form-group">
 
-                                <?php
+                                    <?php
                                     if ($row['anggota'] == 'ya') {
                                     ?>
-                                <label for="nik">CENTER:</label>
-                                <input type="text" class="form-control"
-                                    value='<?= $hasil['nik'] ? $hasil['nik'] : "" ?>' <?= $readonly ?> id="nik"
-                                    name="nik" placeholder="Masukkan CENTER" required>
-                                <?php
+                                        <label for="nik">CENTER:</label>
+                                        <input type="text" class="form-control" value='<?= $hasil['nik'] ? $hasil['nik'] : "" ?>' <?= $readonly ?> id="nik" name="nik" placeholder="Masukkan CENTER" required>
+                                    <?php
                                     } else {
                                     ?>
-                                <label for="nik">NIK:</label>
-                                <input type="text" class="form-control"
-                                    value='<?= $hasil['nik'] ? $hasil['nik'] : "" ?>' <?= $readonly ?> id="nik"
-                                    name="nik" placeholder="Masukkan NIK Anda" required>
-                                <?php
+                                        <label for="nik">NIK:</label>
+                                        <input type="text" class="form-control" value='<?= $hasil['nik'] ? $hasil['nik'] : "" ?>' <?= $readonly ?> id="nik" name="nik" placeholder="Masukkan NIK Anda" required>
+                                    <?php
                                     }
                                     ?>
-                            </div>
+                                </div>
 
-                            <?php
+                                <?php
                                 if ($row['status'] != 'aktif') {
                                     pesan("Kuis Sedang Tidak Diaktifkan", 'danger');
                                 }
                                 ?>
-                            <button type="button" <?= $disabled ?> class="btn btn-primary" name='input'
-                                id="submitBtn">LANJUTKAN</button>
+                                <button type="button" <?= $disabled ?> class="btn btn-primary" name='input' id="submitBtn">LANJUTKAN</button>
 
-                            <?php if (isset($_GET['post-test'])) {
+                                <?php if (isset($_GET['post-test'])) {
                                 ?>
-                            <a href="<?= $url_quiz . 'reset.php?id=' . $id_kuis ?>" class="btn btn-danger">ISI BARU</a>
-                            <?php
+                                    <a href="<?= $url_quiz . 'reset.php?id=' . $id_kuis ?>" class="btn btn-danger">RESET</a>
+                                <?php
                                 } ?>
-                            <br>
-                            <br>
-                            <a href="<?= $url_quiz ?>lihat_hasil.php" class="btn btn-primary">Lihat
-                                Hasil
-                                Sebelumnya</a>
-                        </form>
+                                <br>
+                                <br>
+                                <a href="<?= $url_quiz ?>lihat_hasil.php" class="btn btn-primary">Lihat
+                                    Hasil
+                                    Sebelumnya</a>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     <?php
     } else {
     ?>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-9">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h3 class="mb-0 text-center">PILIH KUIS(AKTIF)</h3>
-                    </div>
-                    <div class="card-body">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-9">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="mb-0 text-center">PILIH KUIS(AKTIF)</h3>
+                        </div>
+                        <div class="card-body">
 
-                        <table class='table'>
-                            <tr>
-                                <th>NO</th>
-                                <th>NAMA KUIS</th>
-                                <th>TIPE</th>
-                                <th>MASUK</th>
-                            </tr>
-                            <?php
+                            <table class='table'>
+                                <tr>
+                                    <th>NO</th>
+                                    <th>NAMA KUIS</th>
+                                    <th>TIPE</th>
+                                    <th>MASUK</th>
+                                </tr>
+                                <?php
                                 $query = "SELECT * FROM kuis where status='aktif' order by id_kuis desc";
 
                                 // Persiapkan dan eksekusi statement
@@ -189,28 +178,27 @@ if (isset($_GET['post-test'])) {
                                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 foreach ($result as $key => $row) {
                                 ?>
-                            <tr>
+                                    <tr>
 
-                                <td><?= $no++ ?></td>
-                                <td><?= $row['nama_kuis'] ?></td>
-                                <td>
-                                    <?= $row['anggota'] == 'ya' ? "ANGGOTA" : "STAFF" ?>
-                                </td>
-                                <td>
-                                    <a href="<?= $url_quiz . "index.php?id=" . $row['id_kuis']."&nama=".$hasil['nama']."&nik=".$hasil['nik']."&cabang=".$hasil['cabang'] ?>"
-                                        class="btn btn-lg btn-primary">MASUK</a>
-                                </td>
-                            </tr>
-                            <?php
+                                        <td><?= $no++ ?></td>
+                                        <td><?= $row['nama_kuis'] ?></td>
+                                        <td>
+                                            <?= $row['anggota'] == 'ya' ? "ANGGOTA" : "STAFF" ?>
+                                        </td>
+                                        <td>
+                                            <a href="<?= $url_quiz . "index.php?id=" . $row['id_kuis'] . "&nama=" . $hasil['nama'] . "&nik=" . $hasil['nik'] . "&cabang=" . $hasil['cabang'] ?>" class="btn btn-lg btn-primary">MASUK</a>
+                                        </td>
+                                    </tr>
+                                <?php
                                 }
                                 ?>
 
-                        </table>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     <?php
     }
     if ($hasil['nama'] != null) {
@@ -261,10 +249,10 @@ if (isset($_GET['post-test'])) {
 
 
     ?>
-    <script>
-    let unik = "<?= $unique_id ?>";
-    localStorage.setItem('unique_id', unik);
-    </script>
+            <script>
+                let unik = "<?= $unique_id ?>";
+                localStorage.setItem('unique_id', unik);
+            </script>
     <?php
 
             pindah($url_quiz . "mulai_quiz.php");
@@ -289,7 +277,7 @@ if (isset($_GET['post-test'])) {
 
     <script src='<?= $url_quiz . 'script_quiz.js?v=' . $timestamp ?>'></script>
     <script>
-    // console.log(localStorage)
+        // console.log(localStorage)
     </script>
 </body>
 
