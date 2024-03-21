@@ -36,7 +36,6 @@ if (isset($_GET['post-test'])) {
         $hasil['cabang'] = $_GET['cabang'];
         $hasil['nik'] = $_GET['nik'];
         $hasil['unique_id_2'] = null;
-        $hasil['nik'] = null;
     } else {
         $hasil['nama'] = null;
         $hasil['cabang'] = null;
