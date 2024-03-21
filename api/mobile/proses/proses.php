@@ -764,7 +764,6 @@ function scrappingBarcode($pdo, $url)
                         $dtc['jumlah_pengambil_simpanan'] = angka_mentah($pecah[12]);
                         $dtc['jumlah_anggota_keluar'] = angka_mentah($pecah[13]);
                         $dtc['total_pendapatan'] = angka_mentah($pecah[14]);
-                        echo "TOtal pencairan : " . ($pecah[5]);
                         array_push($data_dtc, $dtc);
                     }
                 }
