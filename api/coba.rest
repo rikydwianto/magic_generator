@@ -1,5 +1,5 @@
 # @base_url = https://tool.comdev.my.id/api/
-@base_url = http://localhost/tool/api/mobile/
+@base_url = https://localhost/tool/api/mobile/
 @token = satuduatiga
 
 

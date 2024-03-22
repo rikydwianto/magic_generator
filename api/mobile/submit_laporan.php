@@ -196,7 +196,7 @@ terlebih dahulu lalu approve!");
                                         <tbody>
                                             <tr>
                                                 <th scope="row" style="width: 30%;">Total Staff Laporan </th>
-                                                <td><?= $result['jumlah_staff'] ?> Staff Laporan/<?= $jml_staff ?> Total Staff</td>
+                                                <td><?= $result['jumlah_staff'] ?> Staff Laporan</td>
                                             </tr>
                                             <tr>
                                                 <th scope="row" style="width: 30%;">Total Anggota </th>
@@ -307,11 +307,7 @@ terlebih dahulu lalu approve!");
 
 
                                 </div>
-                                <?php
-                                $disabled = $result['jumlah_staff'] == $jml_staff ? "" : "disabled";
-                                ?>
-                                <button type="submit" name='kirim' class="btn btn-success mt-3">Submit
-                                    Laporan</button>
+                                <input type="submit" name='kirim' class="btn btn-success mt-3" value='SubmitLaporan'>
                             </div>
                         <?php
                     }
