@@ -318,7 +318,8 @@ terlebih dahulu lalu approve!");
 
             <?php
                         if (isset($_POST['kirim'])) {
-                            echo "menerima post dari form";
+                            echo var_dump($_POST);
+                            exit;
                             // Tangkap data dari formulir
                             $manager_cabang = $_POST['manager_cabang'];
                             $nama_cabang = $_POST['nama_cabang'];
