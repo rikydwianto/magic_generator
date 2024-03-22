@@ -132,23 +132,23 @@ terlebih dahulu lalu approve!");
                     ?>
             <form action="" method="post">
                 <div class="row">
-                    <input type="text" name="manager_cabang" value="<?= $detailAkun['nama'] ?>">
-                    <input type="text" name="nama_cabang" value="<?= $detailAkun['nama_cabang'] ?>">
-                    <input type="text" name="regional" value="<?= $detailAkun['regional'] ?>">
-                    <input type="text" name="wilayah" value="<?= $detailAkun['wilayah'] ?>">
-                    <input type="text" name="minggu" value="<?= $minggu ?>">
-                    <input type="text" name="bulan" value="<?= $bulan ?>">
-                    <input type="text" name="tahun" value="<?= $tahun ?>">
-                    <input type="text" name="total_staff_laporan" value="<?= $result['jumlah_staff'] ?>">
-                    <input type="text" name="total_am" value="<?= $result['total_anggota_masuk'] ?>">
-                    <input type="text" name="total_ak" value="<?= $result['total_anggota_keluar'] ?>">
-                    <input type="text" name="total_nett_agt" value="<?= $result['total_nett_anggota'] ?>">
-                    <input type="text" name="total_naik_par" value="<?= ($result['total_naik_par']) ?>">
-                    <input type="text" name="total_turun_par" value="<?= ($result['total_turun_par']) ?>">
-                    <input type="text" name="total_nett_par" value="<?= ($result['total_nett_par']) ?>">
-                    <input type="text" name="total_pembiayaan_lain" value="<?= $result['total_pemb_lain'] ?>">
-                    <input type="text" name="total_anggota_cuti" value="<?= $result['total_agt_cuti'] ?>">
-                    <input type="text" name="total_pengajuan_tpk" value="<?= $result['total_agt_tpk'] ?>">
+
+                    <input type="hidden" name="nama_cabang" value="<?= $detailAkun['nama_cabang'] ?>">
+                    <input type="hidden" name="regional" value="<?= $detailAkun['regional'] ?>">
+                    <input type="hidden" name="wilayah" value="<?= $detailAkun['wilayah'] ?>">
+                    <input type="hidden" name="minggu" value="<?= $minggu ?>">
+                    <input type="hidden" name="bulan" value="<?= $bulan ?>">
+                    <input type="hidden" name="tahun" value="<?= $tahun ?>">
+                    <input type="hidden" name="total_staff_laporan" value="<?= $result['jumlah_staff'] ?>">
+                    <input type="hidden" name="total_am" value="<?= $result['total_anggota_masuk'] ?>">
+                    <input type="hidden" name="total_ak" value="<?= $result['total_anggota_keluar'] ?>">
+                    <input type="hidden" name="total_nett_agt" value="<?= $result['total_nett_anggota'] ?>">
+                    <input type="hidden" name="total_naik_par" value="<?= ($result['total_naik_par']) ?>">
+                    <input type="hidden" name="total_turun_par" value="<?= ($result['total_turun_par']) ?>">
+                    <input type="hidden" name="total_nett_par" value="<?= ($result['total_nett_par']) ?>">
+                    <input type="hidden" name="total_pembiayaan_lain" value="<?= $result['total_pemb_lain'] ?>">
+                    <input type="hidden" name="total_anggota_cuti" value="<?= $result['total_agt_cuti'] ?>">
+                    <input type="hidden" name="total_pengajuan_tpk" value="<?= $result['total_agt_tpk'] ?>">
 
 
                     <div class="col-lg-4 col-sm-12">
@@ -158,7 +158,10 @@ terlebih dahulu lalu approve!");
 
                                 <tr>
                                     <th scope="row" style="width: 40%;">Manager Cabang</th>
-                                    <td><?= $detailAkun['nama'] ?></td>
+                                    <td><?= $detailAkun['nama'] ?>
+                                        <input type="text" class='form-control' name="manager_cabang"
+                                            value="<?= $detailAkun['nama'] ?>">
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th scope="row" style="width: 30%;">Nama Cabang</th>
@@ -318,8 +321,7 @@ terlebih dahulu lalu approve!");
 
             <?php
                         if (isset($_POST['kirim'])) {
-                            echo var_dump($_POST);
-                            exit;
+                           
                             // Tangkap data dari formulir
                             $manager_cabang = $_POST['manager_cabang'];
                             $nama_cabang = $_POST['nama_cabang'];
@@ -342,6 +344,7 @@ terlebih dahulu lalu approve!");
 
                             try {
                                 if ($edit == 'ya') {
+                                    echo "masuk edit";
                                     $stmt = $pdo->prepare("
                                     UPDATE capaian_cabang 
                                     SET manager_cabang = ?, total_staff_laporan = ?, total_am = ?, total_ak = ?, 
@@ -356,6 +359,7 @@ terlebih dahulu lalu approve!");
                                         $total_pengajuan_tpk, $keterangan, $id_laporan_cabang
                                     ]);
                                 } else {
+                                    echo "masuk insert";
                                     // Persiapkan dan eksekusi kueri SQL untuk menyimpan data
                                     $stmt = $pdo->prepare("INSERT INTO capaian_cabang 
                                 (manager_cabang, nama_cabang, regional, wilayah, minggu, bulan, tahun, total_staff_laporan, 
