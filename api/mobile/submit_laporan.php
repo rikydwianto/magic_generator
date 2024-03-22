@@ -11,6 +11,14 @@ if (isset($_GET['akses']) && $_GET['akses'] == 'android') {
         $bulan = isset($_GET['bulan']) ? $_GET['bulan'] : '';
         $tahun = isset($_GET['tahun']) ? $_GET['tahun'] : '';
         $cabang = isset($_GET['cabang']) ? $_GET['cabang'] : '';
+        $id_login = isset($_GET['id_log']) ? $_GET['id_log'] : '';
+        $stmt = $pdo->prepare("SELECT users.*, cabang.*
+        FROM users
+        JOIN cabang ON users.id_cabang = cabang.id_cabang
+        WHERE users.id = ?;
+        ");
+        $stmt->execute([$id_login]);
+        $detailAkun = $stmt->fetch(PDO::FETCH_ASSOC);
 
 ?>
 <!DOCTYPE html>
@@ -20,17 +28,10 @@ if (isset($_GET['akses']) && $_GET['akses'] == 'android') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SUBMIT LAPORAN</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom styles -->
-    <style>
-    /* Add your custom styles here */
-    </style>
 </head>
 
 <body>
-
-
 
     <div class="container-fluid">
         <h1>Submit Laporan</h1>
@@ -39,30 +40,12 @@ if (isset($_GET['akses']) && $_GET['akses'] == 'android') {
         <div class="col">
 
             <?php
-
-
                     $stmtCheck = $pdo->prepare("SELECT id,status,keterangan FROM capaian_cabang WHERE minggu = ? AND bulan = ? AND tahun = ?  and nama_cabang=?");
                     $stmtCheck->execute([$minggu, $bulan, $tahun, $cabang]);
                     $existingData = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+                    $id_laporan_cabang = $existingData['id'];
                     $edit = '';
-                    if ($existingData) {
-                        if ($existingData['status'] == 'done') {
-                            $pesan = urlencode("Laporan Cabang $cabang <strong>minggu-$minggu Bulan-$bulanArray[$bulan] tahun $tahun </strong>
-        Sudah dibuat!, Terima Kasih ");
-                            // pindah(menu_progress("laporan/submit&error&minggu=$minggu&bulan=$bulan&tahun=$tahun&pesan=$pesan"));
-                        } else {
-                            $edit = 'ya';
-                            $id_laporan_cabang = $existingData['id'];
-                        }
-                    }
-                    $query = "SELECT  COUNT(*) as jumlah_staff FROM staff where cabang='$cabang' and status='aktif'";
-
-                    $hit_ = $pdo->prepare($query);
-                    $hit_->execute();
-
-                    // Mengambil hasil query
-                    $jml_staff = $hit_->fetch()['jumlah_staff'];
-
+                   
 
                     $query = "
                             SELECT
@@ -112,26 +95,26 @@ terlebih dahulu lalu approve!");
                     } else {
                         // Query untuk mengambil data dari kedua tabel
                         $query = "
-SELECT
-dcs.*,
-cs.nik_staff,
-cs.nama_staff,
-cs.cabang_staff,
-cs.regional,
-cs.wilayah,
-cs.tahun,
-cs.bulan,
-cs.minggu,
-cs.created_at,
-cs.status,
-cs.priode_dari,
-cs.priode_sampai
-FROM
-detail_capaian_staff dcs
-JOIN
-capaian_staff cs ON dcs.id_capaian_staff = cs.id_capaian_staff
-where cabang_staff= :cabang and minggu= :minggu and bulan=:bulan and tahun=:tahun and status='approve'
-";
+                        SELECT
+                        dcs.*,
+                        cs.nik_staff,
+                        cs.nama_staff,
+                        cs.cabang_staff,
+                        cs.regional,
+                        cs.wilayah,
+                        cs.tahun,
+                        cs.bulan,
+                        cs.minggu,
+                        cs.created_at,
+                        cs.status,
+                        cs.priode_dari,
+                        cs.priode_sampai
+                        FROM
+                        detail_capaian_staff dcs
+                        JOIN
+                        capaian_staff cs ON dcs.id_capaian_staff = cs.id_capaian_staff
+                        where cabang_staff= :cabang and minggu= :minggu and bulan=:bulan and tahun=:tahun and status='approve'
+                        ";
                         $stmt = $pdo->prepare($query);
                         $stmt->bindParam(":cabang", $cabang);
                         $stmt->bindParam(":tahun", $tahun);
@@ -306,58 +289,15 @@ where cabang_staff= :cabang and minggu= :minggu and bulan=:bulan and tahun=:tahu
                         </div>
 
                     </div>
-                    <div class="col-lg-12 mt-2">
 
-                        <?php
-
-                                    $q_belum = $pdo->prepare("select * from staff where cabang='$cabang' 
-                and nik_staff not in(select nik_staff from capaian_staff where cabang_staff= :cabang and minggu= :minggu and bulan=:bulan and tahun=:tahun and status='approve' ) ");
-                                    $q_belum->bindParam(":cabang", $cabang);
-                                    $q_belum->bindParam(":tahun", $tahun);
-                                    $q_belum->bindParam(":bulan", $bulan);
-                                    $q_belum->bindParam(":minggu", $minggu);
-                                    $q_belum->execute();
-                                    $data = $q_belum->fetchAll(PDO::FETCH_ASSOC);
-
-                                    if ($data) {
-                                    ?>
-                        <h3>BELUM LAPORAN</h3>
-                        <div class="scroll-box">
-                            <table class='table table-bordered table-responsive'>
-                                <tr>
-                                    <th>NO</th>
-                                    <th>NIK</th>
-                                    <th>NAMA</th>
-                                    <th>KETERANGAN</th>
-                                </tr>
-
-                                <?php
-                                                $no = 1;
-                                                foreach ($data as $row) : ?>
-                                <tr>
-                                    <td><?= $no++ ?></td>
-                                    <td><?= $row['nik_staff'] ?></td>
-                                    <td><?= $row['nama_staff'] ?></td>
-                                    <td>belum</td>
-                                </tr>
-
-                                <?php endforeach; ?>
-                            </table>
-                        </div>
-                        <?php
-                                    }
-                                    ?>
-
-
-                    </div>
                     <div class="col">
                         <h2>Submit Laporan</h2>
 
                         <div class="form-floating">
-                            <textarea class="form-control" name="keterangan" style="height: 100px"
+                            <textarea class="form-control" name="keterangan" required style="height: 100px"
                                 placeholder="Isi Keterangan"
                                 id="floatingTextarea"><?= @$existingData['keterangan'] ?></textarea>
-                            <label for="floatingTextarea">Keterangan</label>
+                            <label for="floatingTextarea">Berikan Keterangan</label>
                         </div>
 
 
@@ -366,24 +306,14 @@ where cabang_staff= :cabang and minggu= :minggu and bulan=:bulan and tahun=:tahu
                     <?php
                                 $disabled = $result['jumlah_staff'] == $jml_staff ? "" : "disabled";
                                 ?>
-                    <button type="submit" <?= $disabled ?> name='kirim' class="btn btn-success mt-3">Submit
+                    <button type="submit" name='kirim' class="btn btn-success mt-3">Submit
                         Laporan</button>
-                    <a href="<?= menu_progress("laporan/submit") ?>" class="btn btn-danger mt-3"><i
-                            class="fa fa-arrow-left"></i>
-                        Kembali</a>
                 </div>
                 <?php
                     }
                         ?>
             </form>
-            <style>
-            .scroll-box {
-                max-height: 300px;
-                overflow-y: scroll;
-                border: 1px solid #ccc;
-                padding: 10px;
-            }
-            </style>
+
             <?php
                         if (isset($_POST['kirim'])) {
                             // Tangkap data dari formulir
@@ -434,19 +364,14 @@ where cabang_staff= :cabang and minggu= :minggu and bulan=:bulan and tahun=:tahu
                                     $total_nett_par, $total_pembiayaan_lain, $total_anggota_cuti, $total_pengajuan_tpk, $keterangan
                                 ]);
 
-                                // Persiapkan dan eksekusi kueri SQL untuk menyimpan data
                             }
 
 
                             alert("Berhasil disimpan!");
-                            // $pesan = urlencode("Laporan <strong>minggu-$minggu Bulan-$bulanArray[$bulan] tahun $tahun </strong>
-                            // Sudah dibuat!, Terima Kasih ");
-                            // pindah(menu_progress("laporan/submit"));
                         } ?>
         </div>
     </div>
 
-    <!-- Bootstrap JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
