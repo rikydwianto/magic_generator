@@ -41,7 +41,7 @@ if ($token == $secretKey) {
                 cariCabang($pdo, $id);
             } else if ($menu == 'scan') {
                 $url = $_GET['url'];
-                scrappingBarcode($pdo, $url);
+                echo scrappingBarcode($pdo, $url);
             } else if ($menu == 'test_fcm') {
                 echo kirimPesan("INI PESAN", "HALLO INI ADALAH PESAN BODY YA", "dEmKq1h0TTaahjKH46JLho:APA91bFhgsfhWOFoc3UZYCJk4rEinFYKfbcUKI29ksPmnPOF2V7jXo6s7c_wovB4IF7WZSQ51qFkRX1U2mcKjyoo3wkqy_164uUXenFStEg93ZVorOOZUJGH8EsngLfW1laIDJfUo45v");
             }

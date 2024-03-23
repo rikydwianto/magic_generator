@@ -6,7 +6,8 @@ include_once "./config/koneksi.php";
 require("vendor/PHPExcel/Classes/PHPExcel.php");
 if (isset($_GET['akses']) && $_GET['akses'] == 'android') {
     if (isset($_GET['key']) && $_GET['key'] == $secretKey) {
-        $id_login = $_GET['id_login'];
+        $id_login = base64_decode($_GET['id_login']);
+
         $stmt = $pdo->prepare("SELECT users.*, cabang.*
                                         FROM users
                                         JOIN cabang ON users.id_cabang = cabang.id_cabang
