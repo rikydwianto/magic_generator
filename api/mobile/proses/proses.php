@@ -810,3 +810,131 @@ function kirimPesan($pdo, $data)
 
     echo sendMessageFCM($title, $body, $token, $customData);
 }
+
+function prosesUpload($pdo, $data)
+{
+    if (!empty($data)) {
+        // Pastikan semua nilai yang dibutuhkan ada dalam data
+        if (isset($data['nik']) && isset($data['tanggal']) && isset($data['cabang']) && isset($data['center'])) {
+
+            $sql = "SELECT * FROM kunjungan 
+            WHERE nama_cabang = :nama_cabang 
+            AND nik = :nik 
+            AND nomor_center = :nomor_center 
+            AND tanggal = :tanggal";
+            $cek = $pdo->prepare($sql);
+
+            // Bind parameter
+            $cek->bindParam(':nama_cabang', $data['cabang']);
+            $cek->bindParam(':nik', $data['nik']);
+            $cek->bindParam(':tanggal', $data['tanggal']);
+            $cek->bindParam(':nomor_center', $data['center']);
+
+            // Eksekusi statement SQL
+            $cek->execute();
+
+
+            // Ambil hasil query
+            $result = $cek->rowCount();
+            if ($result > 0) {
+                $sudah_ada = $cek->fetch(PDO::FETCH_ASSOC);
+                $id_kun = $sudah_ada['id'];
+                // Data sudah ada, lakukan operasi UPDATE
+                $sql = "UPDATE kunjungan 
+                SET nama_anggota = :nama_anggota, 
+                    no_hp = :no_hp, 
+                    lat = :lat, 
+                    lng = :lng, 
+                    lokasi = :lokasi, 
+                    tingkat_akurasi = :tingkat_akurasi, 
+                    tipe_kunjungan = :tipe_kunjungan, 
+                    status = :status, 
+                    jenis_usaha = :jenis_usaha
+                WHERE nama_cabang = :nama_cabang 
+                AND nik = :nik 
+                AND tanggal = :tanggal 
+                AND nomor_center = :nomor_center";
+
+                // Persiapkan statement SQL
+                $stmtUpdate = $pdo->prepare($sql);
+
+                // Bind parameter
+                $stmtUpdate->bindParam(':nik', $data['nik']);
+                $stmtUpdate->bindParam(':tanggal', $data['tanggal']);
+                $stmtUpdate->bindParam(':nama_cabang', $data['cabang']);
+                $stmtUpdate->bindParam(':nomor_center', $data['center']);
+                $stmtUpdate->bindParam(':nama_anggota', $data['nama']);
+                $stmtUpdate->bindParam(':no_hp', $data['hp']);
+                $stmtUpdate->bindParam(':lat', $data['lat']);
+                $stmtUpdate->bindParam(':lng', $data['lng']);
+                $stmtUpdate->bindParam(':lokasi', $data['lokasi']);
+                $stmtUpdate->bindParam(':tingkat_akurasi', $data['akurasi']);
+                $stmtUpdate->bindParam(':tipe_kunjungan', $data['tipe']);
+                $stmtUpdate->bindValue(':status', 'pending');
+                $stmtUpdate->bindParam(':jenis_usaha', $data['jenis_usaha']);
+
+                // Eksekusi statement SQL
+                if ($stmtUpdate->execute()) {
+                    $status = 'success';
+                    $pesan = "Data berhasil diupdate";
+                } else {
+                    $status = 'error';
+                    $pesan = "Gagal mengupdate data";
+                }
+            } else {
+                $sql = "INSERT INTO kunjungan (nik, tanggal, nama_cabang, nomor_center, nama_anggota, no_hp, lat, lng, lokasi, tingkat_akurasi, tipe_kunjungan, status, jenis_usaha) 
+                    VALUES (:nik, :tanggal, :nama_cabang, :nomor_center, :nama_anggota, :no_hp, :lat, :lng, :lokasi, :tingkat_akurasi, :tipe_kunjungan, :status, :jenis_usaha)";
+
+                $simpan = $pdo->prepare($sql);
+
+
+                // Bind parameter
+                $simpan->bindParam(':nik', $data['nik']);
+                $simpan->bindParam(':tanggal', $data['tanggal']);
+                $simpan->bindParam(':nama_cabang', $data['cabang']);
+                $simpan->bindParam(':nomor_center', $data['center']);
+                $simpan->bindParam(':nama_anggota', $data['nama']);
+                $simpan->bindParam(':no_hp', $data['hp']);
+                $simpan->bindParam(':lat', $data['lat']);
+                $simpan->bindParam(':lng', $data['lng']);
+                $simpan->bindParam(':lokasi', $data['lokasi']);
+                $simpan->bindParam(':tingkat_akurasi', $data['akurasi']);
+                $simpan->bindParam(':tipe_kunjungan', $data['tipe']);
+                $simpan->bindParam(':status', 'pending');
+                $simpan->bindParam(':jenis_usaha', $data['jenis_usaha']);
+
+                // Eksekusi statement SQL
+                if ($simpan->execute()) {
+                    $status = 'success'; // Data berhasil disimpan
+                    $pesan = "Berhasil disimpan";
+                } else {
+                    $status = 'error'; // Gagal menyimpan data
+                    $pesan = "Gagal disimpan";
+                }
+                $id_kun = $pdo->lastInsertId();
+            }
+
+            if ($status == 'success') {
+                $photoUrls = json_decode($data['photo'], true)['photoUrls'];
+
+                $q_del = $pdo->prepare("delete from photo_kunjungan where id_kunjungan=?");
+                $q_del->execute([$id_kun]);
+                foreach ($photoUrls as $photoUrl) {
+                    $query = 'INSERT INTO photo_kunjungan (id_kunjungan, url_photo) VALUES (:id_kunjungan, :url_photo)';
+                    $insert = $pdo->prepare($query);
+                    $insert->bindParam(':id_kunjungan', $id_kun);
+                    $insert->bindParam(':url_photo', $photoUrl);
+                    $insert->execute();
+                }
+            }
+        } else {
+            $status = 'error'; // Data tidak lengkap, gagal menyimpan data
+            $pesan = "Data tidak lengkap";
+        }
+    } else {
+        $status = 'error'; // Data kosong, gagal menyimpan data
+        $pesan = "Tidak ada data!";
+    }
+
+    echo json_encode(array('status' => $status, 'message' => $pesan, 'data' => $data));
+}

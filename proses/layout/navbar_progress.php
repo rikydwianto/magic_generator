@@ -8,6 +8,7 @@ $jabatanMenu = array(
     'MIS' => array(
         'Dashboard' => array('link' => 'index', 'icon' => 'fa-home'),
         'Submit Laporan' => array('link' => 'laporan/submit', 'icon' => 'fa-paper-plane'),
+        'Kunjungan' => array('link' => 'kunjungan/index', 'icon' => 'fa-handshake'),
         'Laporan' => array('link' => 'laporan/index', 'icon' => 'fa-chart-bar'),
         'Staff' => array('link' => 'staff/index', 'icon' => 'fa-users'),
     ),
@@ -15,6 +16,7 @@ $jabatanMenu = array(
         'Dashboard' => array('link' => 'index', 'icon' => 'fa-home'),
         'Approve Laporan' => array('link' => 'laporan/approve', 'icon' => 'fa-check'),
         'Submit Laporan' => array('link' => 'laporan/submit', 'icon' => 'fa-paper-plane'),
+        'Kunjungan' => array('link' => 'kunjungan/index', 'icon' => 'fa-handshake'),
         'Laporan' => array('link' => 'laporan/index', 'icon' => 'fa-chart-bar'),
         'Laporan per Staff' => array('link' => 'laporan/staff', 'icon' => 'fa-list'),
         'Staff' => array('link' => 'staff/index', 'icon' => 'fa-users'),
@@ -22,6 +24,7 @@ $jabatanMenu = array(
     'Regional' => array(
         'Dashboard' => array('link' => 'index', 'icon' => 'fa-home'),
         'Cabang' => array('link' => 'cabang/index', 'icon' => 'fa-store'),
+        'Kunjungan' => array('link' => 'kunjungan/index', 'icon' => 'fa-handshake'),
         'Cek Laporan' => array('link' => 'laporan_regional/cek_laporan', 'icon' => 'fa-solid fa-calendar-days'),
         'Un Approve Laporan Manager' => array('link' => 'laporan_regional/unupprove', 'icon' => 'fa-solid fa-gears'),
         'Semua Laporan' => array('link' => 'laporan_regional/laporan_mingguan', 'icon' => 'fa-solid fa-calendar-days'),
@@ -71,28 +74,28 @@ $jabatanPengguna = $jabatan;
 </nav>
 
 <style>
-    .sidebar {
-        background-color: #2c3e50;
-        /* Sidebar background color */
-        color: #ecf0f1;
-        /* Text color */
-    }
+.sidebar {
+    background-color: #2c3e50;
+    /* Sidebar background color */
+    color: #ecf0f1;
+    /* Text color */
+}
 
-    .nav-link {
-        color: #ecf0f1 !important;
-        /* Text color for links */
-        transition: background-color 0.3s;
-    }
+.nav-link {
+    color: #ecf0f1 !important;
+    /* Text color for links */
+    transition: background-color 0.3s;
+}
 
-    .nav-link:hover {
-        background-color: #34495e;
-        /* Hover background color for links */
-    }
+.nav-link:hover {
+    background-color: #34495e;
+    /* Hover background color for links */
+}
 
-    .nav-link.active {
-        background-color: #2980b9;
-        /* Active background color for the selected link */
-        color: #ecf0f1 !important;
-        /* Text color for the selected link */
-    }
+.nav-link.active {
+    background-color: #2980b9;
+    /* Active background color for the selected link */
+    color: #ecf0f1 !important;
+    /* Text color for the selected link */
+}
 </style>

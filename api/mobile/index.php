@@ -111,6 +111,9 @@ if ($token == $secretKey) {
             } else if ($menu == 'push_notif') {
                 $data = json_decode(file_get_contents('php://input'), true);
                 kirimPesan($pdo, $data);
+            } else if ($menu == 'upload_kunjungan') {
+                $data = json_decode(file_get_contents('php://input'), true);
+                prosesUpload($pdo, $data);
             }
 
 
