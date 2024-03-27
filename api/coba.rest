@@ -70,3 +70,25 @@ Authorization: Bearer {{token}}
   "token": "d3UN6zazTEWT609CnApdQU:APA91bGpCrWbUCAklwSrqpKwD0s0wP3u9SAtMdDncftP1V8Z1e9O5JK9TYalyLi8CwXWJWHdP0Uqkwjv2r7M6Soqg_IBP0n5zpkJd1ccjz0U0oMixPnc7U6OY-4ynwckYn-ctoeeWhpF",
   "data": "2024",
 }
+
+####CEK PROGRES CABANG ###
+POST {{base_url}}upload_kunjungan
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "tanggal": "2024-03-26",
+  "cabang": "Gowa",
+  "lat": "-5.26251",
+  "lng": "119.416",
+  "center": "263",
+  "tipe": "Kunjungan Usaha",
+  "lokasi": "PCP8+W5M, Tinggimae, Kec. Barombong, Kabupaten Gowa, Sulawesi Selatan, Indonesia",
+  "akurasi": "699",
+  "hp": "085294699513",
+  "nama": "Ferawati",
+  "jenis_usaha": "jual bensin",
+  "nik": "3729/2017",
+  "id": "7",
+  "photo": "{\"photoUrls\":[\"https:\\/\\/firebasestorage.googleapis.com\\/v0\\/b\\/comdev-tool.appspot.com\\/o\\/images%2Fimage_1711424902865.jpg?alt=media&token=87f91b1c-e516-4d48-b366-40ed951cff13\"]}"
+}

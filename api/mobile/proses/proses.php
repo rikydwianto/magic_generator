@@ -836,6 +836,7 @@ function prosesUpload($pdo, $data)
 
             // Ambil hasil query
             $result = $cek->rowCount();
+            $status = 'pending';
             if ($result > 0) {
                 $sudah_ada = $cek->fetch(PDO::FETCH_ASSOC);
                 $id_kun = $sudah_ada['id'];
@@ -870,7 +871,7 @@ function prosesUpload($pdo, $data)
                 $stmtUpdate->bindParam(':lokasi', $data['lokasi']);
                 $stmtUpdate->bindParam(':tingkat_akurasi', $data['akurasi']);
                 $stmtUpdate->bindParam(':tipe_kunjungan', $data['tipe']);
-                $stmtUpdate->bindValue(':status', 'pending');
+                $stmtUpdate->bindValue(':status', $status);
                 $stmtUpdate->bindParam(':jenis_usaha', $data['jenis_usaha']);
 
                 // Eksekusi statement SQL
@@ -888,6 +889,7 @@ function prosesUpload($pdo, $data)
                 $simpan = $pdo->prepare($sql);
 
 
+
                 // Bind parameter
                 $simpan->bindParam(':nik', $data['nik']);
                 $simpan->bindParam(':tanggal', $data['tanggal']);
@@ -900,7 +902,7 @@ function prosesUpload($pdo, $data)
                 $simpan->bindParam(':lokasi', $data['lokasi']);
                 $simpan->bindParam(':tingkat_akurasi', $data['akurasi']);
                 $simpan->bindParam(':tipe_kunjungan', $data['tipe']);
-                $simpan->bindParam(':status', 'pending');
+                $simpan->bindParam(':status', $status);
                 $simpan->bindParam(':jenis_usaha', $data['jenis_usaha']);
 
                 // Eksekusi statement SQL
@@ -935,6 +937,7 @@ function prosesUpload($pdo, $data)
         $status = 'error'; // Data kosong, gagal menyimpan data
         $pesan = "Tidak ada data!";
     }
+    $data = '';
 
     echo json_encode(array('status' => $status, 'message' => $pesan, 'data' => $data));
 }
