@@ -314,8 +314,8 @@ function updateCapaian($pdo, $data)
         $anggota_masuk = removeNonNumeric($data['am'] ? $data['am'] : 0);
         $anggota_keluar = removeNonNumeric($data['ak'] ? $data['ak'] : 0);
         $nett_anggota = $anggota_masuk - $anggota_keluar;
-        $naik_par = removeNonNumeric($data['parTurun'] ? $data['parTurun'] : 0);
-        $turun_par = removeNonNumeric($data['parNaik'] ? $data['parNaik'] : 0);
+        $turun_par = removeNonNumeric($data['parTurun'] ? $data['parTurun'] : 0);
+        $naik_par = removeNonNumeric($data['parNaik'] ? $data['parNaik'] : 0);
         $nett_par = $naik_par - $turun_par;
 
         $keterangan = $data['keterangan'];
