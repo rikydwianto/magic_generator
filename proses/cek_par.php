@@ -23,7 +23,8 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
                 <br>
-                <input type="submit" onclick="return confirm('yakin sudah benar?')" value="KONFIRMASI" class='btn btn-danger' name='preview'>
+                <input type="submit" onclick="return confirm('yakin sudah benar?')" value="KONFIRMASI"
+                    class='btn btn-danger' name='preview'>
             </form>
         </div>
         <div class="col-6">
@@ -44,13 +45,13 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
                 $no = 1;
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 ?>
-                    <tr>
-                        <td><?= $no++ ?></td>
-                        <td><?= $row['cabang'] ?></td>
-                        <td><?= $row['mulai'] ?></td>
-                        <td><?= $row['keterangan'] ?></td>
-                        <td><?= $row['created_at'] ?></td>
-                    </tr>
+                <tr>
+                    <td><?= $no++ ?></td>
+                    <td><?= $row['cabang'] ?></td>
+                    <td><?= $row['mulai'] ?></td>
+                    <td><?= $row['keterangan'] ?></td>
+                    <td><?= $row['created_at'] ?></td>
+                </tr>
 
                 <?php
                 }
@@ -77,14 +78,16 @@ if (isset($_POST['preview'])) {
     $text = ganti_karakter($ws->getCell("D2")->getValue());
 
     $regex = '/Cabang\s([^\s]+)/';
+    $regex = '/Cabang\s+([A-Z\s]+?)As/';
+
 
     // Pencocokan regex
     preg_match($regex, $text, $matches);
 
+
     // Ambil hasil pencocokan (nama cabang)
     $namaCabang = isset($matches[1]) ? $matches[1] : '';
     $namaCabang = preg_replace('/As$/', '', $namaCabang);
-
 
     if ($namaCabang != "") {
 
@@ -184,6 +187,8 @@ if (isset($_POST['preview'])) {
     $text = ganti_karakter($ws->getCell("D2")->getValue());
 
     $regex = '/Cabang\s([^\s]+)/';
+    $regex = '/Cabang\s+([A-Z\s]+?)As/';
+
 
     // Pencocokan regex
     preg_match($regex, $text, $matches);
@@ -191,6 +196,7 @@ if (isset($_POST['preview'])) {
     // Ambil hasil pencocokan (nama cabang)
     $namaCabang = isset($matches[1]) ? $matches[1] : '';
     $namaCabang = preg_replace('/As$/', '', $namaCabang);
+
 
 
 
