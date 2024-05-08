@@ -319,7 +319,7 @@ if (isset($_POST['preview'])) {
     //SHEET 5 ANALISA TPK
     $sheet5 = $spreadsheet->createSheet();
     $sheet5->setTitle('ANALISA_TPK');
-    $sheet5->mergeCells('A1:P1');
+    $sheet5->mergeCells('A1:Q1');
     $mergedCell = $sheet5->getCell('A1');
     $mergedCell->getStyle()->getFont()->setBold(true)->setSize(15);
     // Set teks di tengah
@@ -328,10 +328,10 @@ if (isset($_POST['preview'])) {
     $barisPertama = $sheet5->getRowDimension(1);
     $barisPertama->setRowHeight(40);
     $mergedCell->getStyle()->getAlignment()->setWrapText(true);
-    $sheet5->getStyle('A2:P2')->getFont()->setBold(true);
+    $sheet5->getStyle('A2:Q2')->getFont()->setBold(true);
     $judul = "ANALISA TPK UMUM DAN MIKRO BISNIS per TANGGAL $tgl_delin\nCABANG $namaCabang";
     $sheet5->setCellValue('A1', $judul);
-    $sheet5->setAutoFilter('A2:P2');
+    $sheet5->setAutoFilter('A2:Q2');
 
     // NO	LOAN	CENTER	ID AGT	ANGGOTA	RIll	DISBURSE	BALANCE	TOPUP	ANGSURAN	ANGSURAN	ANGSURAN	ANGSURAN	HARI	STAFF
     // 								BAL + 1%	25 + margin	50 + margin	75 + margin	100 + margin		
@@ -353,6 +353,7 @@ if (isset($_POST['preview'])) {
         '100 minggu',
         'HARI',
         'STAFF',
+        'JENISTOPUP SEBELUMNYA',
     ];
     $column = 'A';
     foreach ($headerData as $header) {
@@ -693,6 +694,7 @@ if (isset($_POST['preview'])) {
             "$seratus",
             "$row[hari]",
             "$row[staff]",
+            "$row[jenis_topup]",
         ];
         $column = 'A';
         foreach ($bodyData as $header) {
@@ -712,7 +714,7 @@ if (isset($_POST['preview'])) {
     $batas_sh5 = $baris_5;
     $sheet5->getStyle('G3:N' . $batas_sh5)->getNumberFormat()->setFormatCode('#,##0');
     $sheet5->getStyle("A2:Z" . $batas_sh5)->getFont()->setSize(8);
-    $sheet5->getStyle('A2:P' . $batas_sh5)->applyFromArray($styleArray); //INI UNTUK BORDER
+    $sheet5->getStyle('A2:Q' . $batas_sh5)->applyFromArray($styleArray); //INI UNTUK BORDER
 
 
     $sql_delete = "DELETE FROM deliquency WHERE tgl_input='$tgl_delin' and cabang='$namaCabang'";
