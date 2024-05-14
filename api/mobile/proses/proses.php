@@ -941,3 +941,43 @@ function prosesUpload($pdo, $data)
 
     echo json_encode(array('status' => $status, 'message' => $pesan, 'data' => $data));
 }
+
+function loanPerpose($pdo, $pinjaman, $key)
+{
+    try {
+        // Persiapkan statement SQL
+        if (!empty($key)) {
+            $key = '%' . $key . '%';
+            $stmt = $pdo->prepare('SELECT * FROM tujuan_pinjaman WHERE jenis_pinjaman = :pinjaman AND (kelompok_usaha like :key OR keterangan_usaha like :key)');
+        } else {
+            $stmt = $pdo->prepare('SELECT * FROM tujuan_pinjaman WHERE jenis_pinjaman = :pinjaman');
+        }
+
+        // Bind parameter
+        $stmt->bindParam(':pinjaman', $pinjaman);
+        if (!empty($key)) {
+            $stmt->bindParam(':key', $key);
+        }
+
+        // Eksekusi statement
+        $stmt->execute();
+
+        // Ambil hasil
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if ($result) {
+            $data = $result;
+            $pesan = "berhasil diload";
+            $status = 'success';
+        } else {
+            $data = [];
+            $pesan = "tujuan pinjaman tidak ditemukan!";
+            $status = 'gagal';
+        }
+
+        echo json_encode(['status' => $status, 'message' => $pesan, 'data' => $data]);
+    } catch (PDOException $e) {
+        // Tangani kesalahan jika terjadi
+        echo "Error: " . $e->getMessage();
+        return false;
+    }
+}
