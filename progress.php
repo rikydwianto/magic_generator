@@ -30,7 +30,7 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css"
         href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
-
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/img/logo.png" />
 
     <style>
     html,
@@ -82,7 +82,8 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-center m-3">
-        <a class="navbar-brand" href="#"> &nbsp; Comdev Tool</a>
+        <a class="navbar-brand" href="#"> <img src="./assets/img/logo.png" style="width: 50px;" class="img p-1" alt="">
+            Comdev Tool</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
