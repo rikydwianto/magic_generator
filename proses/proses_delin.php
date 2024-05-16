@@ -9,8 +9,14 @@ $tgl_delin_awal = $_GET['tgl_delin'];
 $tgl_delin_akhir = $_GET['tgl_delin1'];
 $by_staff = array();
 ?>
-<h1>SEDANG PROSES DELIN CABANG <?= $nama_cabang ?></h1>
-<h2>Harap tunggu . . .</h2>
+<div class="container-fluid">
+    <div class="row">
+        <h1>SEDANG PROSES DELIN CABANG <?= $nama_cabang ?></h1>
+        <h2>Harap tunggu . . .</h2>
+    </div>
+</div>
+
+
 <?php
 $spreadsheet = new Spreadsheet();
 

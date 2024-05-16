@@ -261,7 +261,7 @@ if (isset($_POST['preview'])) {
 
     try {
         $sql = "UPDATE log_cek_par 
-        SET selesai = :selesai, keterangan = :keterangan, edited_at = NOW() 
+        SET priode_dari=:tgl_satu,priode_sampai=:tgl_dua, selesai = :selesai, keterangan = :keterangan, edited_at = NOW() 
         WHERE id = :id";
 
         // Menyiapkan statement PDO
@@ -274,6 +274,8 @@ if (isset($_POST['preview'])) {
         // Binding parameter ke statement PDO
         $stmt->bindParam(':selesai', $selesai);
         $stmt->bindParam(':keterangan', $keterangan);
+        $stmt->bindParam(':tgl_satu', $tgl_delin);
+        $stmt->bindParam(':tgl_dua', $tgl_delin1);
         $stmt->bindParam(':id', $id_log);
 
         // Mengeksekusi statement PDO
