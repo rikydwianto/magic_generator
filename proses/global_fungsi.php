@@ -85,6 +85,22 @@ function jumlah_staff($pdo, $ket, $tgl, $staff, $namacabang)
     }
 }
 
+function jumlah_staff_cab($pdo, $ket, $tgl, $staff, $namacabang)
+{
+    $sql  = "SELECT SUM(sisa_saldo) AS balance,sum(perubahan) as turunos FROM deliquency_regional WHERE keterangan='$ket' AND cabang='$namacabang' and staff='$staff' and tgl_input='$tgl' GROUP BY staff";
+    $stmt = $pdo->query($sql);
+    if ($stmt->rowCount() > 0) {
+        $total = $stmt->fetch();
+        if ($ket == 'turunos') {
+            return $total['turunos'];
+        } else {
+            return $total['balance'];
+        }
+    } else {
+        return 0;
+    }
+}
+
 function encodeId($sessionId)
 {
 
