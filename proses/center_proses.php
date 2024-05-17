@@ -175,6 +175,14 @@ $pdo->query($query);
         max-width: 100%;
         height: auto;
     }
+
+    table,
+    tr,
+    th,
+    td {
+        border: 1px solid #6b6c6e;
+    }
+
 }
 </style>
 <script>
