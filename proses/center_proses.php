@@ -26,8 +26,8 @@ table {
                 <tr>
                     <th class="text-center p-1">
                         <small style="font-weight: lighter;text-align: left;">&nbsp;</small> <br>
-                        <img src="./assets/img/logo.png" style="width:50px;" alt="Logo Comdev" class=""> <br>
-                        Community Development
+                        <img src="./assets/img/logo.png" style="width:40px;" alt="Logo Comdev" class=""> <br>
+                        Community <br> Development
                     </th>
                     <th style="text-align: center;" colspan="30"> <br />
                         JADWAL CENTER MEETING <br /> CABANG <?= strtoupper($namaCabang) ?> <br /><br />
