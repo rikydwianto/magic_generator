@@ -119,6 +119,10 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
                 <li class="nav-item">
                     <a class="nav-link" href="<?= $url ?>index.php?menu=anal">ANALISA PAR</a>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= $url ?>index.php?menu=center_meeting">CENTER</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<?= $url ?>index.php?menu=delin_reg">REGIONAL</a>
                 </li>
@@ -170,11 +174,15 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
                     include("./proses/proses_delin_reg.php");
                 } else if ($menu == 'index') {
                     include("./proses/index.php");
+                } else if ($menu == 'center_meeting') {
+                    include("./proses/center_input.php");
+                } else if ($menu == 'center_proses') {
+                    include("./proses/center_proses.php");
                 } else {
             ?>
             <div class="container-fluid">
                 <div class="row">
-                    <h1>Halaman Awal</h1>
+                    <h1>Halaman tidak ditemukan!</h1>
                 </div>
             </div>
 
