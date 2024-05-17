@@ -182,7 +182,7 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
             ?>
             <div class="container-fluid">
                 <div class="row">
-                    <h1>Halaman tidak ditemukan!</h1>
+                    <h1>Halaman Awal!</h1>
                 </div>
             </div>
 
