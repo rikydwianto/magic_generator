@@ -39,7 +39,8 @@ table {
                 foreach ($hari->fetchAll() as $hari) {
                 ?>
                 <tr>
-                    <td rowspan="2" style="padding: 5px;font-weight: bold;"><?= strtoupper($hari['hari']) ?></td>
+                    <td rowspan="2" style="padding: 0px;font-weight: bold;vertical-align: middle;text-align:center;">
+                        <?= strtoupper($hari['hari']) ?></td>
                     <?php
                         $qkar = "SELECT distinct c.staff from center c  where c.id_cabang='$id_cabang' order by c.staff asc ";
                         $kar =  $pdo->query($qkar);
@@ -91,10 +92,10 @@ table {
 
                 </tr>
                 <tr>
-                    <th>TOTAL</th>
+                    <th>TOTAL CENTER</th>
                     <?php $qkar = $pdo->query("SELECT distinct c.staff,c.id_karyawan from center c  where c.id_cabang='$id_cabang' order by c.staff asc ");
                         foreach ($qkar->fetchAll() as $kar) {
-                            $qcenter = $pdo->query("SELECT count(no_center) as hitung_center from center where id_cabang='$id_cabang' and hari='$hari[hari]' and id_karyawan='$kar[id_karyawan]' order by jam_center asc");
+                            $qcenter = $pdo->query("SELECT count(no_center) as hitung_center from center where id_cabang='$id_cabang' and hari='$hari[hari]' and staff='$kar[staff]' order by jam_center asc");
                             $hitung = $qcenter->fetch();
                         ?>
                     <td style="vertical-align: top;text-align:center;font-weight: bold;background-color: #dcdedc;">
