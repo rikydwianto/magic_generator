@@ -21,7 +21,7 @@ if (isset($_GET['akses']) && $_GET['akses'] == 'android') {
             $_SESSION["id_cabang"] = ($detailAkun["id_cabang"]);
             $_SESSION["jabatan"] = ($detailAkun["jabatan"]);
             $_SESSION["regional"] = ($detailAkun["regional"]);
-            pindah($url . "progress.php?menu=index");
+            pindah($url . "index.php?menu=index");
         } else {
             echo "<h1>DATA TIDAK DITEMUKAN!</h1>";
         }
