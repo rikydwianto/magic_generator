@@ -150,7 +150,7 @@ table {
 </div>
 <?php
 $query = "delete from center where nama_cabang='$namaCabang'";
-// $pdo->query($query);
+$pdo->query($query);
 ?>
 <style>
 @media print {
