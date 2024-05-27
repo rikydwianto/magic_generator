@@ -192,6 +192,8 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
             ?>
         </div>
     </div>
+
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
@@ -204,7 +206,10 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script src="<?= $url ?>assets/js/script_index.js"></script>
     <script>
-
+    document.addEventListener("DOMContentLoaded", function() {
+        var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+        // myModal.show();
+    });
     </script>
 
 

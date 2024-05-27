@@ -25,7 +25,12 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
                 <br>
                 <input type="submit" onclick="return confirm('yakin sudah benar?')" value="KONFIRMASI"
                     class='btn btn-danger' name='preview'>
+
             </form>
+            <h4>Sekiranya bersedia untuk mengisi survey
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSc15fGnUlQ_zmt7UVVbSYsx2D19MGRv2ehhmgeyl_8c99eT0A/viewform"
+                    target="_blank" class="btn">KLIK DISINI</a>
+            </h4>
         </div>
         <div class="col-6">
             <h3>ANTRIAN</h3>
