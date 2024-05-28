@@ -329,9 +329,9 @@ if (isset($_POST['preview'])) {
     $barisPertama->setRowHeight(40);
     $mergedCell->getStyle()->getAlignment()->setWrapText(true);
     $sheet5->getStyle('A2:Q2')->getFont()->setBold(true);
-    $judul = "ANALISA TPK UMUM DAN MIKRO BISNIS per TANGGAL $tgl_delin\nCABANG $namaCabang";
+    $judul = "ANALISA TPK UMUM DAN MIKROBISNIS CABANG $namaCabang\nper TANGGAL $tgl_delin";
     $sheet5->setCellValue('A1', $judul);
-    $sheet5->setAutoFilter('A2:Q2');
+    $sheet5->setAutoFilter('A2:S2');
 
     // NO	LOAN	CENTER	ID AGT	ANGGOTA	RIll	DISBURSE	BALANCE	TOPUP	ANGSURAN	ANGSURAN	ANGSURAN	ANGSURAN	HARI	STAFF
     // 								BAL + 1%	25 + margin	50 + margin	75 + margin	100 + margin		
@@ -343,6 +343,7 @@ if (isset($_POST['preview'])) {
         'ID',
         'NAMA ANGGOTA',
         'PRODUK',
+        'JK WAKTU',
         'RILL',
         'DISBURSE',
         'BALANCE',
@@ -353,7 +354,8 @@ if (isset($_POST['preview'])) {
         '100 minggu',
         'HARI',
         'STAFF',
-        'JENISTOPUP SEBELUMNYA',
+        'JENISTOPUP',
+        'Keterangan',
     ];
     $column = 'A';
     foreach ($headerData as $header) {
@@ -660,7 +662,7 @@ if (isset($_POST['preview'])) {
 
 
     // PROSES SHEET 5
-
+    // 
     $sql_delin = "SELECT * FROM deliquency WHERE kode_pemb in('PINJAMAN UMUM','PINJAMAN MIKROBISNIS') and tgl_input = '$tgl_delin' AND cabang = '$namaCabang' order by staff,sisa_saldo asc";
     // echo $sql_delin;
     $stmt = $pdo->query($sql_delin);
@@ -669,52 +671,65 @@ if (isset($_POST['preview'])) {
     foreach ($stmt->fetchAll() as $row) {
 
         $sisa_saldo = $row['sisa_saldo'];
-        $satu_persen = $sisa_saldo * 0.01;
+        $satu_persen = $sisa_saldo * 0;
         $tpk = round(($sisa_saldo + $satu_persen) / 10000, PHP_ROUND_HALF_UP);
         $tpk = $tpk * 10000;
-        $dualima = ($tpk + ($tpk * 0.12)) / 25;
-        $limapuluh = ($tpk + ($tpk * 0.24)) / 50;
-        $tujuhlima = ($tpk + ($tpk * 0.36)) / 75;
-        $seratus = ($tpk + ($tpk * 0.48)) / 100;
-
-        $bodyData = [
-            $no,
-            "$row[loan]",
-            "$row[no_center]",
-            "$row[id_detail_nasabah]",
-            "$row[nasabah]",
-            "$row[kode_pemb]",
-            "$row[minggu_rill]",
-            "$row[amount]",
-            "$sisa_saldo",
-            "$tpk",
-            "$dualima",
-            "$limapuluh",
-            "$tujuhlima",
-            "$seratus",
-            "$row[hari]",
-            "$row[staff]",
-            "$row[jenis_topup]",
-        ];
-        $column = 'A';
-        foreach ($bodyData as $header) {
-            $sheet5->setCellValue($column . $baris_5, $header);
-            $column++;
+        $setengah  = ($row['minggu_rill'] / $row['priode']) * 100;
+        if ($setengah >= 50) {
+            $margin = 0.06;
+            $ket_setengah = 'Lewat Setengah Jk. Waktu';
+        } else {
+            $margin = 0.12;
+            $ket_setengah = 'Belum Lewat Setengah Jk. Waktu';
         }
+        $dualima   = round((($tpk + ($tpk * $margin)) / 25) / 1000, PHP_ROUND_HALF_UP) * 1000;
+        $limapuluh = round((($tpk + ($tpk * $margin)) / 50) / 1000, PHP_ROUND_HALF_UP) * 1000;
+        $tujuhlima = round((($tpk + ($tpk * $margin)) / 75) / 1000, PHP_ROUND_HALF_UP) * 1000;
+        $seratus   = round((($tpk + ($tpk * $margin)) / 100) / 1000, PHP_ROUND_HALF_UP) * 1000;
 
-        $no++;
-        $baris_5++;
+        if ($row['jenis_topup'] == 'KHUSUS' && $setengah < 50) {
+        } else {
+            $bodyData = [
+                $no,
+                "$row[loan]",
+                "$row[no_center]",
+                "$row[id_detail_nasabah]",
+                "$row[nasabah]",
+                "$row[kode_pemb]",
+                "$row[minggu_rill]",
+                "$row[priode]",
+                "$row[amount]",
+                "$sisa_saldo",
+                "$tpk",
+                "$dualima",
+                "$limapuluh",
+                "$tujuhlima",
+                "$seratus",
+                "$row[hari]",
+                "$row[staff]",
+                "$row[jenis_topup]",
+                $ket_setengah
+            ];
+            $column = 'A';
+            foreach ($bodyData as $header) {
+                $sheet5->setCellValue($column . $baris_5, $header);
+                $column++;
+            }
+
+            $no++;
+            $baris_5++;
+        }
     }
 
     //STYLE SHEET 5
-    foreach (range('A', 'P') as $col) {
+    foreach (range('A', 'S') as $col) {
         $sheet5->getColumnDimension($col)->setAutoSize(true);
     }
 
     $batas_sh5 = $baris_5;
-    $sheet5->getStyle('G3:N' . $batas_sh5)->getNumberFormat()->setFormatCode('#,##0');
+    $sheet5->getStyle('G3:O' . $batas_sh5)->getNumberFormat()->setFormatCode('#,##0');
     $sheet5->getStyle("A2:Z" . $batas_sh5)->getFont()->setSize(8);
-    $sheet5->getStyle('A2:Q' . $batas_sh5)->applyFromArray($styleArray); //INI UNTUK BORDER
+    $sheet5->getStyle('A2:S' . $batas_sh5)->applyFromArray($styleArray); //INI UNTUK BORDER
 
 
     $sql_delete = "DELETE FROM deliquency WHERE tgl_input='$tgl_delin' and cabang='$namaCabang'";
