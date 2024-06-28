@@ -27,10 +27,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
                     class='btn btn-danger' name='preview'>
 
             </form>
-            <h4>Sekiranya bersedia untuk mengisi survey
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSc15fGnUlQ_zmt7UVVbSYsx2D19MGRv2ehhmgeyl_8c99eT0A/viewform"
-                    target="_blank" class="btn">KLIK DISINI</a>
-            </h4>
+
         </div>
         <div class="col-6">
             <h3>ANTRIAN</h3>
@@ -265,6 +262,46 @@ if (isset($_POST['preview'])) {
     }
 
     try {
+
+        $cek_center = "SELECT DISTINCT staff FROM deliquency WHERE tgl_input=:tgl_awal and cabang=:cabang and session=:sesi";
+        $cek_center = $pdo->prepare($cek_center);
+        $cek_center->bindParam("tgl_awal", $tgl_delin1);
+        $cek_center->bindParam("cabang", $namaCabang);
+        $cek_center->bindParam("sesi", $sesi);
+        $cek_center->execute();
+        $hitung_staff = $cek_center->rowCount();
+        if ($hitung_staff > 1) {
+            //staff ada, tidak melakukan update
+        } else {
+            $center_awal = "SELECT DISTINCT no_center, staff FROM deliquency WHERE tgl_input=:tgl_awal and cabang=:cabang and session=:sesi";
+            $center_awal = $pdo->prepare($center_awal);
+            $center_awal->bindParam("tgl_awal", $tgl_delin);
+            $center_awal->bindParam("cabang", $namaCabang);
+            $center_awal->bindParam("sesi", $sesi);
+            $center_awal->execute();
+            $center_awal = $center_awal->fetchAll();
+            foreach ($center_awal as $center_awal) {
+
+                $center_no = $center_awal['no_center'];
+                $nama_staff = $center_awal['staff'];
+                $update_staff = "UPDATE deliquency set staff=:nama_staff WHERE no_center=:no_center and tgl_input=:tgl_akhir and cabang=:cabang and session=:sesi";
+                $update_staff = $pdo->prepare($update_staff);
+                $update_staff->bindParam("nama_staff", $nama_staff);
+                $update_staff->bindParam("no_center", $center_no);
+                $update_staff->bindParam("tgl_akhir", $tgl_delin1);
+                $update_staff->bindParam("cabang", $namaCabang);
+                $update_staff->bindParam("sesi", $sesi);
+                $update_staff->execute();
+                // if ($update_staff) {
+                //     echo "Berhasil mengupdate nama staff";
+                // } else {
+                //     echo "gagal mengupdate nama staff";
+                // }
+            }
+        }
+
+
+
         $sql = "UPDATE log_cek_par 
         SET priode_dari=:tgl_satu,priode_sampai=:tgl_dua, selesai = :selesai, keterangan = :keterangan, edited_at = NOW() 
         WHERE id = :id";

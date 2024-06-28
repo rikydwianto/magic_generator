@@ -335,6 +335,7 @@ $stmt = $pdo->query($sql_rekap);
 $baris_4 = 3;
 foreach ($stmt->fetchAll() as $row) {
     $keyToSum = $row['staff'];
+
     $par_naik = jumlah_staff_cab($pdo, 'naik', $tgl_delin_akhir, $keyToSum, $nama_cabang);
     $par_turun = jumlah_staff_cab($pdo, 'turun', $tgl_delin_awal, $keyToSum, $nama_cabang);;
     $turun_os = jumlah_staff_cab($pdo, 'turunos', $tgl_delin_akhir, $keyToSum, $nama_cabang);;
