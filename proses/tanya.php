@@ -16,7 +16,9 @@ $angkaAcak = generateRandomNumbers();
         <form method="post">
             <div class="col-md-3">
 
-                <label for="jawaban">Berapa <?php echo $angkaAcak[0]; ?> + <?php echo $angkaAcak[1]; ?>?</label>
+                <label for="jawaban">Berapa <?php echo $angkaAcak[0]; ?> <b>DIBAGI</b> (1/2)
+                    <!-- <?php echo $angkaAcak[1]; ?> --> ?
+                </label>
                 <input type="text" class='form-control' id="jawaban" name="jawaban" required>
                 <input type="hidden" name="angka1" value="<?php echo $angkaAcak[0]; ?>">
                 <input type="hidden" name="angka2" value="<?php echo $angkaAcak[1]; ?>">
@@ -33,7 +35,7 @@ $angkaAcak = generateRandomNumbers();
             $angka2 = $_POST["angka2"];
 
             // Hitung jawaban yang seharusnya
-            $jawabanSeharusnya = $angka1 + $angka2;
+            $jawabanSeharusnya = $angka1 / (0.5);
 
             // Periksa apakah jawaban benar
             if ($jawaban == $jawabanSeharusnya) {

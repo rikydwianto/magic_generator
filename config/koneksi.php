@@ -12,6 +12,7 @@ $dbName = $_ENV['DB_NAME'];
 $dbUser = $_ENV['DB_USER'];
 $dbPass = $_ENV['DB_PASS'];
 $apiKey = $_ENV['API_KEY'];
+$port = $_ENV['PORT'];
 
 // Sekarang Anda dapat menggunakan variabel-variabel ini dalam pengaturan Anda
 
@@ -21,5 +22,5 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     // echo "Koneksi berhasil!";
 } catch (PDOException $e) {
-    die("Koneksi gagal: " . $e->getMessage());
+    die("Koneksi gagal: " . $e);
 }

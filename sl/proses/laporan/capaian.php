@@ -179,8 +179,8 @@ error_reporting(0);
                     <div id="signature"></div>
 
 
-                    <div>Dengan penuh tanggung jawab, saya menandatangani ini sebagai tanda bahwa saya telah mengisi
-                        data dengan teliti dan benar.</div>
+                    <small>* Dengan penuh tanggung jawab, saya menandatangani ini sebagai tanda bahwa saya telah mengisi
+                        data dengan teliti dan benar.</small>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
