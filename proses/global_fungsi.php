@@ -17,6 +17,11 @@ function haritanggal($tanggal)
     return "$hariIndonesia, $tanggalIndonesia $bulanIndonesia $tahunIndonesia";
 }
 
+function aman($teks)
+{
+    return preg_replace("/'/", "-", $teks);
+}
+
 function ganti_karakter($text)
 {
     return   preg_replace('/[^a-zA-Z0-9()_ .,"\'\\-;]/', '', $text);
