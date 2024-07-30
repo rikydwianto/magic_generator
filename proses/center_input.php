@@ -57,9 +57,9 @@ if (isset($_POST['xml-preview'])) {
                         $jam = $detail_center['MeetingTime'];
                         $agt = $detail_center['Textbox128'];
                         $client = $detail_center['JumlahClient'];
-                        $desa = $detail_center['DusunName'];
-                        $kecamatan = $detail_center['KecamatanName'];
-                        $kab = $detail_center['KabupatenName'];
+                        $desa = htmlspecialchars($detail_center['DusunName']);
+                        $kecamatan = htmlspecialchars($detail_center['KecamatanName']);
+                        $kab = htmlspecialchars($detail_center['KabupatenName']);
 
                         $qtxt = "INSERT INTO 
                         `center` (`id_center`, `no_center`, `doa_center`, `hari`, `status_center`, `member_center`, `anggota_center`, `center_bayar`, `id_cabang`, `id_karyawan`, `id_laporan`, `jam_center`, `latitude`, `longitude`, `doortodoor`, `blacklist`, `konfirmasi`, `staff`,desa,kecamatan,kabupaten,anggota_hadir,nama_cabang) 
