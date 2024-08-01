@@ -7,7 +7,16 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 $nama_cabang = $_GET['cabang'];
 $tgl_delin_awal = $_GET['tgl_delin'];
 $tgl_delin_akhir = $_GET['tgl_delin1'];
+$cek_center = $pdo->query("SELECT no_center, staff from deliquency where  tgl_input = '$tgl_delin_awal' AND cabang = '$nama_cabang' ");
+$cek_center->execute();
+$cek_center = $cek_center->fetchAll(PDO::FETCH_ASSOC);
+foreach ($cek_center as $center) {
+    $no_center =  $center['no_center'];
+    $update = $pdo->query("UPDATE deliquency set staff='$center[staff]' where  tgl_input = '$tgl_delin_akhir' AND cabang = '$nama_cabang'  ");
+    $update->execute();
+}
 $by_staff = array();
+
 ?>
 <div class="container-fluid">
     <div class="row">
