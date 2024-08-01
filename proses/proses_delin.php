@@ -12,7 +12,7 @@ $cek_center->execute();
 $cek_center = $cek_center->fetchAll(PDO::FETCH_ASSOC);
 foreach ($cek_center as $center) {
     $no_center =  $center['no_center'];
-    $update = $pdo->query("UPDATE deliquency set staff='$center[staff]' where  tgl_input = '$tgl_delin_akhir' AND cabang = '$nama_cabang'  ");
+    $update = $pdo->query("UPDATE deliquency set staff='$center[staff]' where  tgl_input = '$tgl_delin_akhir' AND cabang = '$nama_cabang' and no_center='$center[no_center]  ");
     $update->execute();
 }
 $by_staff = array();
