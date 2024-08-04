@@ -113,7 +113,7 @@ if (isset($_GET['akses']) && $_GET['akses'] == 'android') {
                                 $anggota = $detail['anggota'];
                                 $hadir = $detail['hadir'];
                                 $bayar = $detail['bayar'];
-                                $tidak_hadir = $hadir - $anggota;
+                                $tidak_hadir =   $anggota - $hadir;
                                 $tidak_bayar = $detail['tidak_bayar'];
                                 $pencairan = $detail['pencairan'];
 
@@ -211,6 +211,9 @@ if (isset($_GET['akses']) && $_GET['akses'] == 'android') {
                 </tr>
 
             </table>
+            <form action="" method="post">
+                <button type="submit" name='simpan' class='btn btn-success'>SIMPAN LAPORAN</button>
+            </form>
         </div>
     </div>
 
@@ -218,6 +221,53 @@ if (isset($_GET['akses']) && $_GET['akses'] == 'android') {
 </body>
 
 </html>
+<?php
+if(isset($_POST['simpan'])){
+    $nama = $data['nama'];
+    $cabang = $data['cabang'];
+    $tanggal = $data['tanggal'];
+    $nik = $data['nik'];
+    $detail =json_encode($data['detail']);
+   $q = $pdo_lap->prepare("SELECT * from temp_laporan_dtc where nik=? and cabang=? and tanggal=?");
+   $q->execute([$nik,$cabang,$tanggal]);
+   if($q->rowCount()){
+    try{
+        $input = $pdo_lap->prepare("UPDATE temp_laporan_dtc set json_laporan=:detail where nik=:nik and cabang=:cabang and tanggal=:tanggal ");
+        $input->bindParam("nik",$nik);
+        $input->bindParam("tanggal",$tanggal);
+        $input->bindParam("cabang",$cabang);
+        $input->bindParam("detail",$detail);
+        if($input->execute()){
+            alert(  "berhasil disimpan");
+        }
+       
+
+    }
+    catch(PDOExeption $e){
+        echo  $e->getMessage();
+    }
+   }
+   else{
+    try{
+        $input = $pdo_lap->prepare("INSERT INTO temp_laporan_dtc (nik,nama_staff,cabang,tanggal,json_laporan) values(:nik,:nama,:cabang,:tanggal,:json)");
+        $input->bindParam("nik",$nik);
+        $input->bindParam("nama",$nama);
+        $input->bindParam("tanggal",$tanggal);
+        $input->bindParam("cabang",$cabang);
+        $input->bindParam("json",$detail);
+        if($input->execute()){
+            alert(  "berhasil disimpan");
+        }
+       
+
+    }
+    catch(PDOExeption $e){
+        echo  $e->getMessage();
+    }
+   
+   }
+}
+?>
 <?php
     } else {
         exit;

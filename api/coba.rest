@@ -1,5 +1,5 @@
 # @base_url = https://tool.comdev.my.id/api/
-@base_url = https://localhost/tool/api/mobile/
+@base_url = http://localhost/tool/api/mobile/
 @token = satuduatiga
 
 
@@ -54,9 +54,9 @@ Authorization: Bearer {{token}}
 
 
 ###SCAN###
-GET {{base_url}}scan?url=dsdsd
+GET {{base_url}}scraping_hasil.php?url=dsdsd
 Content-Type: application/json
-Authorization: Bearer {{token}}
+Authorization: Bearer {{token}} 
 
 
 ####CEK PROGRES CABANG ###

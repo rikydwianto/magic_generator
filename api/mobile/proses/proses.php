@@ -690,7 +690,7 @@ function scrappingBarcode($pdo, $url)
         $url_pdf = isset($matches[1]) ? $matches[1] : '';
         // $url_pdf = "C:/Users/USER/Downloads/137_010797_2023_2024-03-21.pdf";
         // $url_pdf = "C:/Users/USER/Documents/KUMPULAN CABANG/SGH/038_009366_2022_2024-02-05.pdf";
-        // $url_pdf = "C:/Users/USER/Documents/MDISMO DTC/SGH/transaksi_038_007111_2019_2024-02-05.pdf";
+        // $url_pdf = "C:/Users/MRahsyaSauqi/Documents/082_008311_2020_2024-08-02.pdf";
 
         if ($url_pdf == "") {
             $pesan = "FILE tidak ditemukan!";
@@ -750,6 +750,7 @@ function scrappingBarcode($pdo, $url)
                 $pecah = explode(' ', $baris);
                 if (count($pecah) > 11) {
                     $center = (int) $pecah[0] + 0;
+                    // var_dump($pecah);
                     if ($center > 0) {
                         $dtc['center'] = "$center";
                         $dtc['anggota'] = $pecah[1];
