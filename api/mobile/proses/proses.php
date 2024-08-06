@@ -668,7 +668,7 @@ function scrappingBarcode($pdo, $url)
 {
 
     $url_parser = $url;
-    //'https://www.komida.co.id/mdismo/verifile.php?kode=038yfhszhywxhamnzywmrfbnzwtcrzypafbxzbmhngwwgrwnmcbwx';
+    // $url_parser = 'https://www.komida.co.id/mdismo/verifile.php?kode=038yfhszhywxhamnzywmrfbnzwtcrzypafbxzbmhngwwgrwnmcbwx';
     $data = [];
     $html = file_get_contents($url_parser);
     if ($html || true) {
@@ -689,7 +689,7 @@ function scrappingBarcode($pdo, $url)
 
         $url_pdf = isset($matches[1]) ? $matches[1] : '';
         // $url_pdf = "C:/Users/USER/Downloads/137_010797_2023_2024-03-21.pdf";
-        // $url_pdf = "C:/Users/USER/Documents/KUMPULAN CABANG/SGH/038_009366_2022_2024-02-05.pdf";
+        // $url_pdf = "038_009366_2022_2024-02-05.pdf";
         // $url_pdf = "C:/Users/MRahsyaSauqi/Documents/082_008311_2020_2024-08-02.pdf";
 
         if ($url_pdf == "") {

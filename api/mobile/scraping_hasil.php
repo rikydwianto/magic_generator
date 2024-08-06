@@ -30,6 +30,21 @@ if (isset($_GET['akses']) && $_GET['akses'] == 'android') {
             }
             return $warna;
         }
+
+        try {
+
+            $nama_cabang = strtoupper($data['cabang']);
+            $cek_cabang = $pdo_lap->prepare("select * from cabang where UPPER(nama_cabang)=? ");
+            $cek_cabang->execute([$nama_cabang]);
+            $data_cabang = $cek_cabang->fetch(PDO::FETCH_ASSOC);
+            if ($cek_cabang->rowCount() > 0) {
+                $set_center = 'ya';
+            } else {
+                $set_center = 'tidak';
+            }
+        } catch (PDOException $e) {
+            echo $e;
+        }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,7 +66,77 @@ if (isset($_GET['akses']) && $_GET['akses'] == 'android') {
 
 <body>
 
-    <div class="container-fluid mt-3 ">
+    <div class="container-fluid mt-3 mb-3 ">
+        <?php
+
+                if (isset($_POST['update_center'])) {
+                    $id_cabang = $_POST['cabang'];
+                    $ctr = $_POST['center'];
+                    $bg_asli = $_POST['warna'];
+                    $hadir = $_POST['hadir'];
+                    $anggota = $_POST['anggota'];
+                    $bayar = $_POST['bayar'];
+                    for ($i = 0; $i < count($ctr); $i++) {
+                        $center = $ctr[$i];
+                        if ($bg_asli[$i] == 'bg-success') $bga = 'hijau';
+                        else if ($bg_asli[$i] == 'bg-danger') $bga = 'merah';
+                        else if ($bg_asli[$i] == 'bg-warning') $bga = 'kuning';
+                        else $bga = 'hitam';
+                        $q = "UPDATE center SET status_center='$bga', member_center='$anggota[$i]', center_bayar='$bayar[$i]',anggota_hadir='$hadir[$i]' 
+                            WHERE id_cabang='$id_cabang' AND no_center='$center'";
+                        $update_center = $pdo_lap->query($q);
+                        if ($update_center->execute()) {
+                            // echo "berhasil";
+                        } else {
+                            echo "gagal";
+                        }
+                    }
+                    pesan("Berhasil diupdate");
+                }
+                if (isset($_POST['simpan'])) {
+                    $nama = $data['nama'];
+                    $cabang = $data['cabang'];
+                    $tanggal = $data['tanggal'];
+                    $nik = $data['nik'];
+                    $detail = json_encode($data['detail']);
+                    $q = $pdo_lap->prepare("SELECT * from temp_laporan_dtc where nik=? and cabang=? and tanggal=?");
+                    $q->execute([$nik, $cabang, $tanggal]);
+                    if ($q->rowCount()) {
+                        try {
+                            $input = $pdo_lap->prepare("UPDATE temp_laporan_dtc set json_laporan=:detail where nik=:nik and cabang=:cabang and tanggal=:tanggal ");
+                            $input->bindParam("nik", $nik);
+                            $input->bindParam("tanggal", $tanggal);
+                            $input->bindParam("cabang", $cabang);
+                            $input->bindParam("detail", $detail);
+                            if ($input->execute()) {
+                                pesan("Berhasil Disimpan");
+                            }
+                        } catch (PDOException $e) {
+                            echo  $e->getMessage();
+                        }
+                    } else {
+                        try {
+                            $input = $pdo_lap->prepare("INSERT INTO temp_laporan_dtc (nik,nama_staff,cabang,tanggal,json_laporan) values(:nik,:nama,:cabang,:tanggal,:json)");
+                            $input->bindParam("nik", $nik);
+                            $input->bindParam("nama", $nama);
+                            $input->bindParam("tanggal", $tanggal);
+                            $input->bindParam("cabang", $cabang);
+                            $input->bindParam("json", $detail);
+                            if ($input->execute()) {
+                                pesan("Berhasil Disimpan");
+                            }
+                        } catch (PDOException $e) {
+                            echo  $e->getMessage();
+                        }
+                    }
+                }
+                ?>
+        <?php
+    } else {
+        exit;
+    }
+}
+        ?>
         <h1 class='text-center'>DATA TRANSAKSI CENTER</h1>
         <p></p>
         <hr>
@@ -76,111 +161,120 @@ if (isset($_GET['akses']) && $_GET['akses'] == 'android') {
 
             </table>
             <div class="scroll-box">
-                <table class="table table-hovered table-bordered">
-                    <tr>
-                        <th>NO</th>
-                        <th>CTR</th>
-                        <th>AGT</th>
-                        <th>BAYAR</th>
-                        <th>TIDAK BAYAR</th>
-                        <th>HADIR</th>
-                        <th>TIDAK HADIR</th>
-                        <th>KETERANGAN</th>
-                    </tr>
-                    <?php
-                            $no = 1;
-                            $total_bayar = 0;
-                            $total_center = 0;
-                            $total_anggota = 0;
-                            $total_hadir = 0;
-                            $total_bayar = 0;
-                            $total_tidak_bayar = 0;
-                            $total_pencairan = 0;
-                            $total_dnr = 0;
-                            $total_drop_masuk = 0;
-                            $total_drop_keluar = 0;
-                            $total_angsuran = 0;
-                            $total_simpanan_masuk = 0;
-                            $total_simpanan_keluar = 0;
-                            $total_jumlah_pengambil_simpanan = 0;
-                            $total_jumlah_anggota_keluar = 0;
-                            $total_total_pendapatan = 0;
 
-                            $total_center_lancar = 0;
-                            for ($i = 0; $i < count($data['detail']); $i++) {
-                                $detail = $data['detail'][$i];
-                                $ctr = $detail['center'];
-                                $anggota = $detail['anggota'];
-                                $hadir = $detail['hadir'];
-                                $bayar = $detail['bayar'];
-                                $tidak_hadir =   $anggota - $hadir;
-                                $tidak_bayar = $detail['tidak_bayar'];
-                                $pencairan = $detail['pencairan'];
+                <form action="" method="post">
+                    <input type="hidden" name="cabang" value='<?= $data_cabang['id_cabang'] ?>' id="">
+                    <table class="table table-hovered table-bordered">
+                        <tr>
+                            <th>NO</th>
+                            <th>CTR</th>
+                            <th>AGT</th>
+                            <th>BAYAR</th>
+                            <th>TIDAK BAYAR</th>
+                            <th>HADIR</th>
+                            <th>TIDAK HADIR</th>
+                            <th>KETERANGAN</th>
+                        </tr>
+                        <?php
+                        $no = 1;
+                        $total_bayar = 0;
+                        $total_center = 0;
+                        $total_anggota = 0;
+                        $total_hadir = 0;
+                        $total_bayar = 0;
+                        $total_tidak_bayar = 0;
+                        $total_pencairan = 0;
+                        $total_dnr = 0;
+                        $total_drop_masuk = 0;
+                        $total_drop_keluar = 0;
+                        $total_angsuran = 0;
+                        $total_simpanan_masuk = 0;
+                        $total_simpanan_keluar = 0;
+                        $total_jumlah_pengambil_simpanan = 0;
+                        $total_jumlah_anggota_keluar = 0;
+                        $total_total_pendapatan = 0;
 
-
-                                //init
-                                $total_center += $detail['center'];
-                                $total_anggota += $detail['anggota'];
-                                $total_hadir += $detail['hadir'];
-                                $total_bayar += $detail['bayar'];
-                                $total_tidak_bayar += $detail['tidak_bayar'];
+                        $total_center_lancar = 0;
+                        for ($i = 0; $i < count($data['detail']); $i++) {
+                            $detail = $data['detail'][$i];
+                            $ctr = $detail['center'];
+                            $anggota = $detail['anggota'];
+                            $hadir = $detail['hadir'];
+                            $bayar = $detail['bayar'];
+                            $tidak_hadir =   $anggota - $hadir;
+                            $tidak_bayar = $detail['tidak_bayar'];
+                            $pencairan = $detail['pencairan'];
 
 
-                                //end init
-
-                                $persen_bayar = ($bayar / $anggota) * 100;
-                                $persen_hadir = ($hadir / $anggota) * 100;
-
-                                $ket = '';
-                                $bg = '';
-                                if ($anggota == $bayar && $anggota == $hadir) {
-                                    $ket = "100% Lancar";
-                                    $bg = 'bg-success';
-                                    $total_center_lancar++;
-                                } else {
+                            //init
+                            $total_center += $detail['center'];
+                            $total_anggota += $detail['anggota'];
+                            $total_hadir += $detail['hadir'];
+                            $total_bayar += $detail['bayar'];
+                            $total_tidak_bayar += $detail['tidak_bayar'];
 
 
+                            //end init
 
-                                    $warna_bayar = warna($persen_bayar);
+                            $persen_bayar = ($bayar / $anggota) * 100;
+                            $persen_hadir = ($hadir / $anggota) * 100;
 
-                                    $warna_hadir = warna($persen_hadir);
+                            $ket = '';
+                            $bg = '';
+                            if ($anggota == $bayar && $anggota == $hadir) {
+                                $ket = "100% Lancar";
+                                $bg = 'bg-success';
+                                $total_center_lancar++;
+                            } else {
 
-                                    // $ket = "$persen_bayar% $persen_hadir%";
-                                    if ($bayar == 0) {
-                                        $ket = "tidak ada angsuran masuk";
-                                        if ($persen_hadir > 50 && $pencairan > 0) {
-                                            $ket = "  Kemungkinan Ctr Baru";
-                                        } else {
-                                            $ket .= " namun ada absen";
-                                        }
+
+
+                                $warna_bayar = warna($persen_bayar);
+
+                                $warna_hadir = warna($persen_hadir);
+
+                                // $ket = "$persen_bayar% $persen_hadir%";
+                                if ($bayar == 0) {
+                                    $ket = "tidak ada angsuran masuk";
+                                    if ($persen_hadir > 50 && $pencairan > 0) {
+                                        $ket = "  Kemungkinan Ctr Baru";
+                                    } else {
+                                        $ket .= " namun ada absen";
                                     }
                                 }
-
-                            ?>
-                    <tr class='<?= $bg ?>'>
-                        <td><?= $no++ ?></td>
-                        <td><?= $ctr ?></td>
-                        <td class='text-center'><?= $anggota ?></td>
-                        <td class='text-center <?= $warna_bayar ?>'><?= $bayar ?></td>
-                        <td class='text-center <?= $warna_bayar ?>'><?= $tidak_bayar ?></td>
-                        <td class='text-center <?= $warna_hadir ?>'><?= $hadir ?></td>
-                        <td class='text-center <?= $warna_hadir ?>'><?= $tidak_hadir ?></td>
-                        <td class=''><?= $ket ?></td>
-                    </tr>
-                    <?php
                             }
-                            ?>
-                    <tr class=''>
-                        <td colspan="2">TOTAL</td>
 
-                        <td class='text-center'><?= $total_anggota ?></td>
-                        <td class='text-center '><?= $total_bayar ?></td>
-                        <td class='text-center '><?= $total_tidak_bayar ?></td>
-                        <td class='text-center '><?= $total_hadir ?></td>
-                        <td class='text-center '><?= $total_anggota - $total_hadir ?></td>
-                        <td class=''></td>
-                    </tr>
-                </table>
+                        ?>
+                        <tr class='<?= $bg ?>'>
+                            <td><?= $no++ ?></td>
+                            <td><?= $ctr ?></td>
+                            <td class='text-center'><?= $anggota ?></td>
+                            <td class='text-center <?= $warna_bayar ?>'><?= $bayar ?></td>
+                            <td class='text-center <?= $warna_bayar ?>'><?= $tidak_bayar ?></td>
+                            <td class='text-center <?= $warna_hadir ?>'><?= $hadir ?></td>
+                            <td class='text-center <?= $warna_hadir ?>'><?= $tidak_hadir ?></td>
+                            <td class=''><?= $ket ?>
+                                <input type="hidden" name="center[]" value='<?= $ctr ?>' id="">
+                                <input type="hidden" name="anggota[]" value='<?= $anggota ?>' id="">
+                                <input type="hidden" name="hadir[]" value='<?= $hadir ?>' id="">
+                                <input type="hidden" name="bayar[]" value='<?= $bayar ?>' id=""> <br>
+                                <input type="hidden" name="warna[]" value='<?= $warna_bayar ?>' id="">
+                            </td>
+                        </tr>
+                        <?php
+                        }
+                        ?>
+                        <tr class=''>
+                            <td colspan="2">TOTAL</td>
+
+                            <td class='text-center'><?= $total_anggota ?></td>
+                            <td class='text-center '><?= $total_bayar ?></td>
+                            <td class='text-center '><?= $total_tidak_bayar ?></td>
+                            <td class='text-center '><?= $total_hadir ?></td>
+                            <td class='text-center '><?= $total_anggota - $total_hadir ?></td>
+                            <td class=''></td>
+                        </tr>
+                    </table>
             </div>
             kesimpulan
             <table class="table">
@@ -211,8 +305,15 @@ if (isset($_GET['akses']) && $_GET['akses'] == 'android') {
                 </tr>
 
             </table>
-            <form action="" method="post">
-                <button type="submit" name='simpan' class='btn btn-success'>SIMPAN LAPORAN</button>
+
+            <?php
+            if ($set_center == 'ya') {
+            ?>
+            <button type="submit" name='simpan' class='btn btn-success'>SIMPAN LAPORAN</button>
+            <button type="submit" name='update_center' class='btn btn-success'>UPDATE CENTER SAJA</button>
+            <?php
+            }
+            ?>
             </form>
         </div>
     </div>
@@ -221,56 +322,3 @@ if (isset($_GET['akses']) && $_GET['akses'] == 'android') {
 </body>
 
 </html>
-<?php
-if(isset($_POST['simpan'])){
-    $nama = $data['nama'];
-    $cabang = $data['cabang'];
-    $tanggal = $data['tanggal'];
-    $nik = $data['nik'];
-    $detail =json_encode($data['detail']);
-   $q = $pdo_lap->prepare("SELECT * from temp_laporan_dtc where nik=? and cabang=? and tanggal=?");
-   $q->execute([$nik,$cabang,$tanggal]);
-   if($q->rowCount()){
-    try{
-        $input = $pdo_lap->prepare("UPDATE temp_laporan_dtc set json_laporan=:detail where nik=:nik and cabang=:cabang and tanggal=:tanggal ");
-        $input->bindParam("nik",$nik);
-        $input->bindParam("tanggal",$tanggal);
-        $input->bindParam("cabang",$cabang);
-        $input->bindParam("detail",$detail);
-        if($input->execute()){
-            alert(  "berhasil disimpan");
-        }
-       
-
-    }
-    catch(PDOExeption $e){
-        echo  $e->getMessage();
-    }
-   }
-   else{
-    try{
-        $input = $pdo_lap->prepare("INSERT INTO temp_laporan_dtc (nik,nama_staff,cabang,tanggal,json_laporan) values(:nik,:nama,:cabang,:tanggal,:json)");
-        $input->bindParam("nik",$nik);
-        $input->bindParam("nama",$nama);
-        $input->bindParam("tanggal",$tanggal);
-        $input->bindParam("cabang",$cabang);
-        $input->bindParam("json",$detail);
-        if($input->execute()){
-            alert(  "berhasil disimpan");
-        }
-       
-
-    }
-    catch(PDOExeption $e){
-        echo  $e->getMessage();
-    }
-   
-   }
-}
-?>
-<?php
-    } else {
-        exit;
-    }
-}
-?>
