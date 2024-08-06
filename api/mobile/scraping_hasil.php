@@ -19,15 +19,17 @@ if (isset($_GET['akses']) && $_GET['akses'] == 'android') {
 
         function warna($persen)
         {
-            if ($persen > 0 && $persen < 30) {
-                $warna = 'bg-danger';
-            } elseif ($persen >= 30 && $persen < 80) {
-                $warna = 'bg-warning';
+
+            if ($persen < 1) {
+                $warna = 'bg-dark text-light'; // Hitam untuk 0
+            } elseif ($persen >= 1 && $persen <= 30) {
+                $warna = 'bg-danger'; // Merah untuk di atas 0 dan kurang atau sama dengan 30
+            } elseif ($persen > 30 && $persen < 80) {
+                $warna = 'bg-warning'; // Kuning untuk di atas 30 dan kurang dari 80
             } elseif ($persen >= 80) {
-                $warna = 'bg-success';
-            } else {
-                $warna = 'bg-dark text-light'; // Ganti 'warna-default' dengan warna default yang Anda inginkan
+                $warna = 'bg-success'; // Hijau untuk 80 atau lebih
             }
+
             return $warna;
         }
 
@@ -196,53 +198,55 @@ if (isset($_GET['akses']) && $_GET['akses'] == 'android') {
 
                         $total_center_lancar = 0;
                         for ($i = 0; $i < count($data['detail']); $i++) {
-                            $detail = $data['detail'][$i];
-                            $ctr = $detail['center'];
-                            $anggota = $detail['anggota'];
-                            $hadir = $detail['hadir'];
-                            $bayar = $detail['bayar'];
-                            $tidak_hadir =   $anggota - $hadir;
-                            $tidak_bayar = $detail['tidak_bayar'];
-                            $pencairan = $detail['pencairan'];
+                            if (is_numeric($data['detail'][$i]['bayar'])) {
+                                $detail = $data['detail'][$i];
+                                $ctr = $detail['center'];
+                                $anggota = $detail['anggota'];
+                                $hadir = $detail['hadir'];
+                                $bayar = $detail['bayar'];
+                                $tidak_hadir =   $anggota - $hadir;
+                                $tidak_bayar = $detail['tidak_bayar'];
+                                $pencairan = $detail['pencairan'];
 
 
-                            //init
-                            $total_center += $detail['center'];
-                            $total_anggota += $detail['anggota'];
-                            $total_hadir += $detail['hadir'];
-                            $total_bayar += $detail['bayar'];
-                            $total_tidak_bayar += $detail['tidak_bayar'];
+                                //init
+                                $total_center += $detail['center'];
+                                $total_anggota += $detail['anggota'];
+                                $total_hadir += $detail['hadir'];
+                                $total_bayar += $detail['bayar'];
+                                $total_tidak_bayar += $detail['tidak_bayar'];
 
 
-                            //end init
+                                //end init
 
-                            $persen_bayar = ($bayar / $anggota) * 100;
-                            $persen_hadir = ($hadir / $anggota) * 100;
+                                $persen_bayar = ($bayar / $anggota) * 100;
+                                $persen_hadir = ($hadir / $anggota) * 100;
 
-                            $ket = '';
-                            $bg = '';
-                            if ($anggota == $bayar && $anggota == $hadir) {
-                                $ket = "100% Lancar";
-                                $bg = 'bg-success';
-                                $total_center_lancar++;
-                            } else {
+                                $ket = '';
+                                $bg = '';
+                                if ($anggota == $bayar && $anggota == $hadir) {
+                                    $ket = "100% Lancar";
+                                    $bg = 'bg-success';
+                                    $total_center_lancar++;
+                                    $warna_bayar = 'bg-success';
+                                } else {
 
 
 
-                                $warna_bayar = warna($persen_bayar);
+                                    $warna_bayar = warna($persen_bayar);
 
-                                $warna_hadir = warna($persen_hadir);
+                                    $warna_hadir = warna($persen_hadir);
 
-                                // $ket = "$persen_bayar% $persen_hadir%";
-                                if ($bayar == 0) {
-                                    $ket = "tidak ada angsuran masuk";
-                                    if ($persen_hadir > 50 && $pencairan > 0) {
-                                        $ket = "  Kemungkinan Ctr Baru";
-                                    } else {
-                                        $ket .= " namun ada absen";
+                                    // $ket = "$persen_bayar% $persen_hadir%";
+                                    if ($bayar == 0) {
+                                        $ket = "tidak ada angsuran masuk";
+                                        if ($persen_hadir > 50 && $pencairan > 0) {
+                                            $ket = "  Kemungkinan Ctr Baru";
+                                        } else {
+                                            $ket .= " namun ada absen";
+                                        }
                                     }
                                 }
-                            }
 
                         ?>
                         <tr class='<?= $bg ?>'>
@@ -262,6 +266,7 @@ if (isset($_GET['akses']) && $_GET['akses'] == 'android') {
                             </td>
                         </tr>
                         <?php
+                            }
                         }
                         ?>
                         <tr class=''>
