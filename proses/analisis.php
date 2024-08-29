@@ -44,13 +44,13 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
                 $no = 1;
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 ?>
-                    <tr>
-                        <td><?= $no++ ?></td>
-                        <td><?= $row['cabang'] ?></td>
-                        <td><?= $row['mulai'] ?></td>
-                        <td><?= $row['keterangan'] ?></td>
-                        <td><?= $row['created_at'] ?></td>
-                    </tr>
+                <tr>
+                    <td><?= $no++ ?></td>
+                    <td><?= $row['cabang'] ?></td>
+                    <td><?= $row['mulai'] ?></td>
+                    <td><?= $row['keterangan'] ?></td>
+                    <td><?= $row['created_at'] ?></td>
+                </tr>
 
                 <?php
                 }
@@ -672,8 +672,9 @@ if (isset($_POST['preview'])) {
 
         $sisa_saldo = $row['sisa_saldo'];
         $satu_persen = $sisa_saldo * 0;
-        $tpk = round(($sisa_saldo + $satu_persen) / 10000, PHP_ROUND_HALF_UP);
-        $tpk = $tpk * 10000;
+        $tpk = ceil($sisa_saldo / 50000) * 50000;
+        // $tpk = $tpk * 10000;
+        // echo angka($sisa_saldo) . ' - ' . $row['nasabah'] . ' - ' . angka($tpk) . '<br/>';
         $setengah  = ($row['minggu_rill'] / $row['priode']) * 100;
         if ($setengah >= 50) {
             $margin = 0.06;
@@ -686,39 +687,35 @@ if (isset($_POST['preview'])) {
         $limapuluh = round((($tpk + ($tpk * $margin)) / 50) / 1000, PHP_ROUND_HALF_UP) * 1000;
         $tujuhlima = round((($tpk + ($tpk * $margin)) / 75) / 1000, PHP_ROUND_HALF_UP) * 1000;
         $seratus   = round((($tpk + ($tpk * $margin)) / 100) / 1000, PHP_ROUND_HALF_UP) * 1000;
-
-        if ($row['jenis_topup'] == 'KHUSUS' && $setengah < 50) {
-        } else {
-            $bodyData = [
-                $no,
-                "$row[loan]",
-                "$row[no_center]",
-                "$row[id_detail_nasabah]",
-                "$row[nasabah]",
-                "$row[kode_pemb]",
-                "$row[priode]",
-                "$row[minggu_rill]",
-                "$row[amount]",
-                "$sisa_saldo",
-                "$tpk",
-                "$dualima",
-                "$limapuluh",
-                "$tujuhlima",
-                "$seratus",
-                "$row[hari]",
-                "$row[staff]",
-                "$row[jenis_topup]",
-                $ket_setengah
-            ];
-            $column = 'A';
-            foreach ($bodyData as $header) {
-                $sheet5->setCellValue($column . $baris_5, $header);
-                $column++;
-            }
-
-            $no++;
-            $baris_5++;
+        $bodyData = [
+            $no,
+            "$row[loan]",
+            "$row[no_center]",
+            "$row[id_detail_nasabah]",
+            "$row[nasabah]",
+            "$row[kode_pemb]",
+            "$row[priode]",
+            "$row[minggu_rill]",
+            "$row[amount]",
+            "$sisa_saldo",
+            "$tpk",
+            "$dualima",
+            "$limapuluh",
+            "$tujuhlima",
+            "$seratus",
+            "$row[hari]",
+            "$row[staff]",
+            "$row[jenis_topup]",
+            $ket_setengah
+        ];
+        $column = 'A';
+        foreach ($bodyData as $header) {
+            $sheet5->setCellValue($column . $baris_5, $header);
+            $column++;
         }
+
+        $no++;
+        $baris_5++;
     }
 
     //STYLE SHEET 5
