@@ -44,13 +44,13 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
                 $no = 1;
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 ?>
-                <tr>
-                    <td><?= $no++ ?></td>
-                    <td><?= $row['cabang'] ?></td>
-                    <td><?= $row['mulai'] ?></td>
-                    <td><?= $row['keterangan'] ?></td>
-                    <td><?= $row['created_at'] ?></td>
-                </tr>
+                    <tr>
+                        <td><?= $no++ ?></td>
+                        <td><?= $row['cabang'] ?></td>
+                        <td><?= $row['mulai'] ?></td>
+                        <td><?= $row['keterangan'] ?></td>
+                        <td><?= $row['created_at'] ?></td>
+                    </tr>
 
                 <?php
                 }
@@ -426,7 +426,7 @@ if (isset($_POST['preview'])) {
                 // echo "$nama_nasabah :  Error: ".$pdo->error;
             }
             $total_os_par = $balance + $total_os_par;
-            if ($jenis_topup == "") {
+            if ($jenis_topup == "NON TOP-UP") {
                 $jenis_topup = "TIDAKTOPUP";
                 $total_bukan_topup++;
             } else {
