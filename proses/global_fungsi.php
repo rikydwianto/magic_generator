@@ -2,8 +2,18 @@
 function haritanggal($tanggal)
 {
     $bulan = [
-        'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+        'Januari',
+        'Februari',
+        'Maret',
+        'April',
+        'Mei',
+        'Juni',
+        'Juli',
+        'Agustus',
+        'September',
+        'Oktober',
+        'November',
+        'Desember'
     ];
 
 
@@ -50,27 +60,27 @@ function angka($angka)
 function alert($isi)
 {
 ?>
-<script>
-alert('<?php echo $isi ?>')
-</script>
+    <script>
+        alert('<?php echo $isi ?>')
+    </script>
 
 <?php
 }
 function pindah($url)
 {
 ?>
-<script>
-window.location.href = "<?php echo $url ?>";
-</script>
+    <script>
+        window.location.href = "<?php echo $url ?>";
+    </script>
 <?php
 
 }
 function tutupWindow()
 {
 ?>
-<script>
-window.close()
-</script>
+    <script>
+        window.close()
+    </script>
 <?php
 
 }
@@ -186,15 +196,15 @@ function menu_sl($menu)
 function pesan($teks, $warna = 'success')
 {
 ?>
-<div class="alert alert-<?= $warna ?>" role="alert">
-    <?= $teks ?>
-</div>
+    <div class="alert alert-<?= $warna ?>" role="alert">
+        <?= $teks ?>
+    </div>
 <?php
 }
 function badge($teks, $warna = 'success')
 {
 ?>
-<span class="badge text-bg-<?= $warna ?>"><?= $teks ?></span>
+    <span class="badge text-bg-<?= $warna ?>"><?= $teks ?></span>
 
 <?php
 }

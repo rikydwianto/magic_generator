@@ -709,6 +709,8 @@ function scrappingBarcode($pdo, $url)
                 $allLines = array_merge($allLines, $lines);
             }
 
+
+
             $bulanArray = array(
                 'Januari' => '01',
                 'Februari' => '02',
@@ -732,12 +734,7 @@ function scrappingBarcode($pdo, $url)
                     break; // Hentikan iterasi setelah menemukan tanggal
                 }
             }
-            $tanggal = explode(" ", $tanggal);
-            $bulan = sprintf('%02d', $bulanArray[$tanggal[1]][1]);
-            $tahun = $tanggal[2];
-            $tgl = $tanggal[0];
 
-            $tanggal = $tahun . '-' . $bulan . '-' . $tgl;
             // echo $tanggal;
             $niknamacabang = explode(' - ', $allLines[1]);
             $nik = $niknamacabang[0];
@@ -770,6 +767,21 @@ function scrappingBarcode($pdo, $url)
                         array_push($data_dtc, $dtc);
                     }
                 }
+            }
+
+            $pattern = '/\d{4}-\d{2}-\d{2}/';
+
+            if (preg_match($pattern, $url_pdf, $matches)) {
+                // Tanggal ditemukan
+                $tanggal = $matches[0];
+                echo "Tanggal ditemukan: " . $tanggal;
+            } else {
+                $tanggal = explode(" ", $tanggal);
+                $bulan = sprintf('%02d', $bulanArray[$tanggal[1]][1]);
+                $tahun = $tanggal[2];
+                $tgl = $tanggal[0];
+
+                $tanggal = $tahun . '-' . $bulan . '-' . $tgl;
             }
 
             $pesan = "Data berhasil diload";
