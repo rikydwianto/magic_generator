@@ -774,7 +774,6 @@ function scrappingBarcode($pdo, $url)
             if (preg_match($pattern, $url_pdf, $matches)) {
                 // Tanggal ditemukan
                 $tanggal = $matches[0];
-                echo "Tanggal ditemukan: " . $tanggal;
             } else {
                 $tanggal = explode(" ", $tanggal);
                 $bulan = sprintf('%02d', $bulanArray[$tanggal[1]][1]);

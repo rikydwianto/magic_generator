@@ -2,6 +2,7 @@
 function haritanggal($tanggal)
 {
     $bulan = [
+        '',
         'Januari',
         'Februari',
         'Maret',
