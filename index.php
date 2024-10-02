@@ -4,7 +4,7 @@ require 'proses/global_fungsi.php';
 include_once "./config/setting.php";
 include_once "./config/koneksi.php";
 require("vendor/PHPExcel/Classes/PHPExcel.php");
-
+exit;
 
 @$sesi = $_SESSION['sesi'];
 ?>
@@ -29,71 +29,71 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
 
     <link rel="icon" type="image/png" sizes="32x32" href="./assets/img/logo.png" />
     <style>
-    html,
-    body {
-        overflow-x: hidden;
-    }
-
-    body {
-        background-color: #f8f9fa;
-    }
-
-    #sidebar {
-        background-color: #343a40;
-        color: #ced4da;
-    }
-
-    #sidebar .nav-link {
-        color: #adb5bd;
-    }
-
-    #sidebar .nav-link.active {
-        color: #fff;
-    }
-
-    #content {
-        background-color: #ffffff;
-        padding: 20px;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    /* HTML: <div class="loader"></div> */
-    .loader {
-        margin: auto;
-        width: 100px;
-        aspect-ratio: 1;
-        display: grid;
-        border: 4px solid #0000;
-        border-radius: 50%;
-        border-right-color: #25b09b;
-        animation: l15 1s infinite linear;
-    }
-
-    .loader::before,
-    .loader::after {
-        content: "";
-        grid-area: 1/1;
-        margin: 2px;
-        border: inherit;
-        border-radius: 50%;
-        animation: l15 2s infinite;
-    }
-
-    .loader::after {
-        margin: 8px;
-        animation-duration: 3s;
-    }
-
-    @keyframes l15 {
-        100% {
-            transform: rotate(1turn)
+        html,
+        body {
+            overflow-x: hidden;
         }
-    }
+
+        body {
+            background-color: #f8f9fa;
+        }
+
+        #sidebar {
+            background-color: #343a40;
+            color: #ced4da;
+        }
+
+        #sidebar .nav-link {
+            color: #adb5bd;
+        }
+
+        #sidebar .nav-link.active {
+            color: #fff;
+        }
+
+        #content {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* HTML: <div class="loader"></div> */
+        .loader {
+            margin: auto;
+            width: 100px;
+            aspect-ratio: 1;
+            display: grid;
+            border: 4px solid #0000;
+            border-radius: 50%;
+            border-right-color: #25b09b;
+            animation: l15 1s infinite linear;
+        }
+
+        .loader::before,
+        .loader::after {
+            content: "";
+            grid-area: 1/1;
+            margin: 2px;
+            border: inherit;
+            border-radius: 50%;
+            animation: l15 2s infinite;
+        }
+
+        .loader::after {
+            margin: 8px;
+            animation-duration: 3s;
+        }
+
+        @keyframes l15 {
+            100% {
+                transform: rotate(1turn)
+            }
+        }
     </style>
     <script>
-    let url = "<?= $url ?>";
-    let url_api = url + "api/";
+        let url = "<?= $url ?>";
+        let url_api = url + "api/";
     </script>
     <title>COMDEV TOOL</title>
 </head>
@@ -136,9 +136,9 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
                 if ($sesi != '' || $sesi != null) {
                 ?>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= $url ?>logout.php?menu=logout">LOGOUT</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= $url ?>logout.php?menu=logout">LOGOUT</a>
+                    </li>
                 <?php
                 }
                 ?>
@@ -180,11 +180,11 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
                     include("./proses/center_proses.php");
                 } else {
             ?>
-            <div class="container-fluid">
-                <div class="row">
-                    <h1>Halaman Awal!</h1>
-                </div>
-            </div>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <h1>Halaman Awal!</h1>
+                        </div>
+                    </div>
 
             <?php
                 }
@@ -206,10 +206,10 @@ require("vendor/PHPExcel/Classes/PHPExcel.php");
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script src="<?= $url ?>assets/js/script_index.js"></script>
     <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
-        // myModal.show();
-    });
+        document.addEventListener("DOMContentLoaded", function() {
+            var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+            // myModal.show();
+        });
     </script>
 
 
