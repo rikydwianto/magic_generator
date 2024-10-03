@@ -1,4 +1,4 @@
-<a href="https://wa.me/6281214657370?text=Yuk%20berkenalan%20dengan%20orang%20ini">WhatsApp Me</a>
+<!--  -->
 <?php
 require 'vendor/autoload.php'; // Impor library Dotenv
 require 'proses/global_fungsi.php';
@@ -6,8 +6,7 @@ include_once "./config/setting.php";
 include_once "./config/koneksi.php";
 require("vendor/PHPExcel/Classes/PHPExcel.php");
 
-exit;
-
+echo '<a href="https://wa.me/6281214657370?text=Yuk%20berkenalan%20dengan%20orang%20ini">WhatsApp Me</a>';
 @$sesi = $_SESSION['sesi'];
 ?>
 <!doctype html>
