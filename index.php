@@ -5,7 +5,9 @@ include_once "./config/setting.php";
 include_once "./config/koneksi.php";
 require("vendor/PHPExcel/Classes/PHPExcel.php");
 
-// echo '<a href="https://wa.me/6281214657370?text=Yuk%20berkenalan%20dengan%20orang%20ini">WhatsApp Me</a>';
+echo '<a href="https://wa.me/6281214657370?text=Hallo%20pak%2C%20saya%20..%20dari%20cabang%20...%0A%0Aterimakasih%20ya" class="btn btn-success m-3">Send Greater to Creator :)</a>';
+echo "<h1>Terima kasih semua</h1>";
+exit;
 @$sesi = $_SESSION['sesi'];
 ?>
 <!doctype html>
