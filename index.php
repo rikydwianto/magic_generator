@@ -32,71 +32,71 @@ set_time_limit(3000);
 
     <link rel="icon" type="image/png" sizes="32x32" href="./assets/img/logo.png" />
     <style>
-        html,
-        body {
-            overflow-x: hidden;
-        }
+    html,
+    body {
+        overflow-x: hidden;
+    }
 
-        body {
-            background-color: #f8f9fa;
-        }
+    body {
+        background-color: #f8f9fa;
+    }
 
-        #sidebar {
-            background-color: #343a40;
-            color: #ced4da;
-        }
+    #sidebar {
+        background-color: #343a40;
+        color: #ced4da;
+    }
 
-        #sidebar .nav-link {
-            color: #adb5bd;
-        }
+    #sidebar .nav-link {
+        color: #adb5bd;
+    }
 
-        #sidebar .nav-link.active {
-            color: #fff;
-        }
+    #sidebar .nav-link.active {
+        color: #fff;
+    }
 
-        #content {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+    #content {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
 
-        /* HTML: <div class="loader"></div> */
-        .loader {
-            margin: auto;
-            width: 100px;
-            aspect-ratio: 1;
-            display: grid;
-            border: 4px solid #0000;
-            border-radius: 50%;
-            border-right-color: #25b09b;
-            animation: l15 1s infinite linear;
-        }
+    /* HTML: <div class="loader"></div> */
+    .loader {
+        margin: auto;
+        width: 100px;
+        aspect-ratio: 1;
+        display: grid;
+        border: 4px solid #0000;
+        border-radius: 50%;
+        border-right-color: #25b09b;
+        animation: l15 1s infinite linear;
+    }
 
-        .loader::before,
-        .loader::after {
-            content: "";
-            grid-area: 1/1;
-            margin: 2px;
-            border: inherit;
-            border-radius: 50%;
-            animation: l15 2s infinite;
-        }
+    .loader::before,
+    .loader::after {
+        content: "";
+        grid-area: 1/1;
+        margin: 2px;
+        border: inherit;
+        border-radius: 50%;
+        animation: l15 2s infinite;
+    }
 
-        .loader::after {
-            margin: 8px;
-            animation-duration: 3s;
-        }
+    .loader::after {
+        margin: 8px;
+        animation-duration: 3s;
+    }
 
-        @keyframes l15 {
-            100% {
-                transform: rotate(1turn)
-            }
+    @keyframes l15 {
+        100% {
+            transform: rotate(1turn)
         }
+    }
     </style>
     <script>
-        let url = "<?= $url ?>";
-        let url_api = url + "api/";
+    let url = "<?= $url ?>";
+    let url_api = url + "api/";
     </script>
     <title>COMDEV TOOL</title>
 </head>
@@ -139,9 +139,9 @@ set_time_limit(3000);
                 if ($sesi != '' || $sesi != null) {
                 ?>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= $url ?>logout.php?menu=logout">LOGOUT</a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= $url ?>logout.php?menu=logout">LOGOUT</a>
+                </li>
                 <?php
                 }
                 ?>
@@ -168,6 +168,35 @@ set_time_limit(3000);
                 if ($menu) {
                     echo '<a href="https://wa.me/6281214657370?text=Hallo%20pak%2C%20saya%20..%20dari%20cabang%20...%0A%0Aterimakasih%20ya" class="btn btn-success m-3">Send Greater to Creator :)</a>';
                 }
+                if($menu=='cek_par' || $menu=='anal' || $menu=='delin_reg' || $menu=='proses_delin'  || $menu=='center_meeting'){
+                    ?>
+            <div class="container mt-5">
+                <div class="card border-warning">
+                    <div class="card-header bg-warning text-dark">
+                        <h4 class="card-title">Peringatan Hosting Akan Segera Berakhir</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            Dalam beberapa waktu ke depan, hosting untuk aplikasi ini akan habis.
+                            Jika Anda ingin tetap menggunakan aplikasi ini, Anda bisa bergabung dan berpartisipasi dalam
+                            pembayaran server agar aplikasi tetap berjalan.
+                        </p>
+                        <p class="card-text">
+                            <strong>Catatan:</strong> Server ini adalah server pribadi dan <strong>bukan</strong> server
+                            resmi dari Komida.
+                        </p>
+                        <div class="text-center">
+                            <a href="https://wa.me/6281214657370?text=Hallo%20pak%2C%20saya%20..%20dari%20cabang%20...%0A%0Aterimakasih%20ya"
+                                class="btn btn-success m-3">Send Greater to Creator :)</a>
+                        </div>
+                    </div>
+                </div>
+
+                <?php
+                }
+
+
+
                 if ($menu == "cek_par") {
                     include("./proses/cek_par.php");
                 } else if ($menu == 'anal') {
@@ -186,37 +215,37 @@ set_time_limit(3000);
                     include("./proses/center_proses.php");
                 } else {
             ?>
-                    <div class="container-fluid">
-                        <div class="row">
-                            <h1>Halaman Awal!</h1>
-                        </div>
+                <div class="container-fluid">
+                    <div class="row">
+                        <h1>Halaman Awal!</h1>
                     </div>
+                </div>
 
-            <?php
+                <?php
                 }
             }
             ?>
+            </div>
         </div>
-    </div>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
-    </script>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap4.min.js"></script>
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-    <script src="<?= $url ?>assets/js/script_index.js"></script>
-    <script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+        </script>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap4.min.js"></script>
+        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+        <script src="<?= $url ?>assets/js/script_index.js"></script>
+        <script>
         document.addEventListener("DOMContentLoaded", function() {
             var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
             // myModal.show();
         });
-    </script>
+        </script>
 
 
 
