@@ -4,7 +4,7 @@ require 'proses/global_fungsi.php';
 include_once "./config/setting.php";
 include_once "./config/koneksi.php";
 require("vendor/PHPExcel/Classes/PHPExcel.php");
-set_time_limit(300);
+set_time_limit(3000);
 
 // echo '<a href="https://wa.me/6281214657370?text=Hallo%20pak%2C%20saya%20..%20dari%20cabang%20...%0A%0Aterimakasih%20ya" class="btn btn-success m-3">Send Greater to Creator :)</a>';
 // echo "<h1>Terima kasih semua</h1>";
