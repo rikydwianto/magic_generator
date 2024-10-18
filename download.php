@@ -16,7 +16,7 @@ if (file_exists($filepath)) {
 
     // Membaca file dan mengirimkan isinya ke output
     readfile($filepath);
-    // unlink($filepath);
+    unlink($filepath);
 
     exit; // Keluar untuk mencegah konten lainnya ditambahkan
 } else {
