@@ -165,9 +165,7 @@ set_time_limit(3000);
                     include("./proses/tanya.php");
                 }
             } else {
-                if ($menu) {
-                    echo '<a href="https://wa.me/6281214657370?text=Assalamualaikum%20pak%2C%20saya%20...%20dari%20cabang%20...%0AMau%20ikut%20berpartisisi%0Aterimakasih" class="btn btn-success m-3">+62 812 1465 7370</a>';
-                }
+
                 if ($menu == 'cek_par' || $menu == 'anal' || $menu == 'delin_reg' || $menu == 'proses_delin'  || $menu == 'center_meeting') {
             ?>
                     <div class="container mt-5">
@@ -186,13 +184,15 @@ set_time_limit(3000);
                                     resmi dari Komida.
                                 </p>
                                 <div class="text-center">
-                                    <a href="https://wa.me/6281214657370?text=Hallo%20pak%2C%20saya%20..%20dari%20cabang%20...%0A%0Aterimakasih%20ya"
+                                    <a href="https://wa.me/6281214657370?text=Assalamualaikum%20pak%2C%20saya%20...%20dari%20cabang%20...%0AMau%20ikut%20berpartisisi%0Aterimakasih"
                                         class="btn btn-success m-3">Send Greater to Creator :)</a>
                                 </div>
                             </div>
                         </div>
 
                     <?php
+                } else {
+                    echo '<a href="https://wa.me/6281214657370?text=Assalamualaikum%20pak%2C%20saya%20...%20dari%20cabang%20...%0AMau%20ikut%20berpartisisi%0Aterimakasih" class="btn btn-success m-3">+62 812 1465 7370</a>';
                 }
 
 
