@@ -169,8 +169,8 @@ set_time_limit(3000);
                 if ($menu == 'cek_par' || $menu == 'anal' || $menu == 'delin_reg' || $menu == 'proses_delin'  || $menu == 'center_meeting') {
             ?>
             <div class="container mt-5">
-                <div class="card border-warning">
-                    <div class="card-header bg-warning text-dark">
+                <div class="card border-danger">
+                    <div class="card-header bg-danger text-dark">
                         <h4 class="card-title">Peringatan Hosting Akan Segera Berakhir</h4>
                     </div>
                     <div class="card-body">
