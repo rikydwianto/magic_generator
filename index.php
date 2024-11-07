@@ -170,19 +170,18 @@ set_time_limit(3000);
             ?>
             <div class="container mt-5">
                 <div class="card border-danger">
-                    <div class="card-header bg-danger text-dark">
+                    <div class="card-header bg-dark text-light">
                         <h4 class="card-title">Peringatan Hosting Akan Segera Berakhir</h4>
                     </div>
                     <div class="card-body">
                         <p class="card-text">
-                            Dalam beberapa waktu ke depan, hosting untuk aplikasi ini akan habis.
-                            Jika Anda ingin tetap menggunakan aplikasi ini, Anda bisa bergabung dan berpartisipasi dalam
-                            pembayaran server agar aplikasi tetap berjalan.
+                            Terima kasih, semua nya karna tulisan ini hanya jadi pajangan <br>
+                            Mohon maaf untuk aplikasi ini akan dibatasi,
                         </p>
-                        <p class="card-text">
+                        <!-- <p class="card-text">
                             <strong>Catatan:</strong> Server ini adalah server pribadi dan <strong>bukan</strong> server
                             resmi dari Komida.
-                        </p>
+                        </p> -->
                         <div class="text-center">
                             <a href="https://wa.me/6281214657370?text=Assalamualaikum%20pak%2C%20saya%20...%20dari%20cabang%20...%0AMau%20ikut%20berpartisisi%0Aterimakasih"
                                 class="btn btn-success m-3">+62 812 1465 7370</a>
