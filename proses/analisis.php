@@ -44,13 +44,13 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
                 $no = 1;
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 ?>
-                    <tr>
-                        <td><?= $no++ ?></td>
-                        <td><?= $row['cabang'] ?></td>
-                        <td><?= $row['mulai'] ?></td>
-                        <td><?= $row['keterangan'] ?></td>
-                        <td><?= $row['created_at'] ?></td>
-                    </tr>
+                <tr>
+                    <td><?= $no++ ?></td>
+                    <td><?= $row['cabang'] ?></td>
+                    <td><?= $row['mulai'] ?></td>
+                    <td><?= $row['keterangan'] ?></td>
+                    <td><?= $row['created_at'] ?></td>
+                </tr>
 
                 <?php
                 }
@@ -85,6 +85,15 @@ if (isset($_POST['preview'])) {
     // Ambil hasil pencocokan (nama cabang)
     $namaCabang = isset($matches[1]) ? $matches[1] : '';
     $namaCabang = preg_replace('/As$/', '', $namaCabang);
+
+    $ce_blok = $pdo->query("SELECT * from block where LOWER(cabang)=LOWER('$namaCabang')");
+    $ce_blok->execute();
+    if ($ce_blok->rowCount() > 0) {
+?>
+<h1>Mohon maaf Proses tidak dilanjutkan, Status : Limited Branch Name</h1>
+<?php
+        exit;
+    }
 
     if ($namaCabang != "") {
 

@@ -7,6 +7,15 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 $nama_cabang = $_GET['cabang'];
 $tgl_delin_awal = $_GET['tgl_delin'];
 $tgl_delin_akhir = $_GET['tgl_delin1'];
+$ce_blok = $pdo->query("SELECT * from block where LOWER(cabang)=LOWER('$nama_cabang')");
+$ce_blok->execute();
+if ($ce_blok->rowCount() > 0) {
+?>
+    <h1>Mohon maaf Proses tidak dilanjutkan, Status : Limited Branch Name</h1>
+<?php
+    exit;
+}
+
 $cek_center = $pdo->query("SELECT no_center, staff from deliquency where  tgl_input = '$tgl_delin_awal' AND cabang = '$nama_cabang' group by no_center ");
 $cek_center->execute();
 $cek_center = $cek_center->fetchAll(PDO::FETCH_ASSOC);
@@ -55,8 +64,21 @@ $sheet1->getStyle('A2:O2')->getFont()->setBold(true);
 
 
 $headerData = [
-    'NO', 'LOAN', 'CENTER', 'ID AGT', 'ANGGOTA',  'TANGGAL DISBURSE', 'DISBURSE',
-    'BALANCE', 'ARREAS', 'WEEK PAS', 'RILL', 'JANGKA WAKTU', 'JENIS TOPUP', 'HARI', 'STAFF'
+    'NO',
+    'LOAN',
+    'CENTER',
+    'ID AGT',
+    'ANGGOTA',
+    'TANGGAL DISBURSE',
+    'DISBURSE',
+    'BALANCE',
+    'ARREAS',
+    'WEEK PAS',
+    'RILL',
+    'JANGKA WAKTU',
+    'JENIS TOPUP',
+    'HARI',
+    'STAFF'
 ];
 
 // Menuliskan header ke dalam sheet
@@ -91,8 +113,20 @@ $judul = "PENGURANGAN OS PAR dari $tgl_delin_awal s/d $tgl_delin_akhir \nCABANG 
 $sheet3->setCellValue('A1', $judul);
 $sheet3->setAutoFilter('A2:N2');
 $headerData = [
-    'NO', 'LOAN', 'CENTER', 'ID AGT', 'ANGGOTA', 'TGL DISBURSE', 'DISBURSE',
-    'BALANCE SEBELUM', 'BALANCE SESUDAH', 'BERKURANG', 'WPD', 'JENIS TOPUP', 'HARI', 'STAFF'
+    'NO',
+    'LOAN',
+    'CENTER',
+    'ID AGT',
+    'ANGGOTA',
+    'TGL DISBURSE',
+    'DISBURSE',
+    'BALANCE SEBELUM',
+    'BALANCE SESUDAH',
+    'BERKURANG',
+    'WPD',
+    'JENIS TOPUP',
+    'HARI',
+    'STAFF'
 ];
 
 // Menuliskan header ke dalam sheet pada baris ke-2
@@ -162,10 +196,25 @@ $judul = "ANALISA ANGGOTA TIDAK BAYAR $tgl_delin_awal s/d $tgl_delin_akhir \nCAB
 $sheet5->setCellValue('A1', $judul);
 $sheet5->setAutoFilter('A2:S2');
 $headerData = array(
-    'NO', 'LOAN', 'CTR', 'CLIENT ID', 'NASABAH', 'PRODUK',
-    'JENIS TOPUP', 'DISBURSE', 'BALANCE BEFORE', 'BALANCE AFTER', 'WAJIB BEFORE',
-    'WAJIB AFTER', 'KET WAJIB', 'SUKARELA BEFORE', 'SUKARELA AFTER',
-    'SELISIH SUKARELA', 'KET SUKARELA', 'HARI', 'STAFF'
+    'NO',
+    'LOAN',
+    'CTR',
+    'CLIENT ID',
+    'NASABAH',
+    'PRODUK',
+    'JENIS TOPUP',
+    'DISBURSE',
+    'BALANCE BEFORE',
+    'BALANCE AFTER',
+    'WAJIB BEFORE',
+    'WAJIB AFTER',
+    'KET WAJIB',
+    'SUKARELA BEFORE',
+    'SUKARELA AFTER',
+    'SELISIH SUKARELA',
+    'KET SUKARELA',
+    'HARI',
+    'STAFF'
 );
 $column = 'A';
 foreach ($headerData as $header) {
@@ -184,8 +233,21 @@ if ($hitung_naik > 0) {
     foreach ($stmt->fetchAll() as $row) {
 
         $isiData = [
-            $no, $row['loan'], $row['no_center'], $row['id_detail_nasabah'], $row['nasabah'],  $row['tgl_disburse'], $row['amount'],
-            $row['sisa_saldo'], $row['tunggakan'], $row['minggu'], $row['minggu_rill'], $row['priode'], $row['jenis_topup'], $row['hari'], $row['staff']
+            $no,
+            $row['loan'],
+            $row['no_center'],
+            $row['id_detail_nasabah'],
+            $row['nasabah'],
+            $row['tgl_disburse'],
+            $row['amount'],
+            $row['sisa_saldo'],
+            $row['tunggakan'],
+            $row['minggu'],
+            $row['minggu_rill'],
+            $row['priode'],
+            $row['jenis_topup'],
+            $row['hari'],
+            $row['staff']
         ];
 
         $sql_update = "update deliquency set keterangan='naik' where id='$row[id]'";
@@ -225,8 +287,21 @@ $judul = "PENURUNAN PAR dari $tgl_delin_awal s/d $tgl_delin_akhir \nCABANG $nama
 $sheet1->setCellValue('A' . $baris_baru, $judul);
 
 $headerData = [
-    'NO', 'LOAN', 'CENTER', 'ID AGT', 'ANGGOTA',  'TANGGAL DISBURSE', 'DISBURSE',
-    'BALANCE', 'ARREAS', 'WEEK PAS', 'RILL', 'JANGKA WAKTU', 'JENIS TOPUP', 'HARI', 'STAFF'
+    'NO',
+    'LOAN',
+    'CENTER',
+    'ID AGT',
+    'ANGGOTA',
+    'TANGGAL DISBURSE',
+    'DISBURSE',
+    'BALANCE',
+    'ARREAS',
+    'WEEK PAS',
+    'RILL',
+    'JANGKA WAKTU',
+    'JENIS TOPUP',
+    'HARI',
+    'STAFF'
 ];
 
 // Menuliskan header ke dalam sheet
@@ -256,8 +331,21 @@ if ($hitung_turun > 0) {
     foreach ($stmt->fetchAll() as $row) {
 
         $isiData = [
-            $no, $row['loan'], $row['no_center'], $row['id_detail_nasabah'], $row['nasabah'],  $row['tgl_disburse'], $row['amount'],
-            $row['sisa_saldo'], $row['tunggakan'], $row['minggu'], $row['minggu_rill'], $row['priode'], $row['jenis_topup'], $row['hari'], $row['staff']
+            $no,
+            $row['loan'],
+            $row['no_center'],
+            $row['id_detail_nasabah'],
+            $row['nasabah'],
+            $row['tgl_disburse'],
+            $row['amount'],
+            $row['sisa_saldo'],
+            $row['tunggakan'],
+            $row['minggu'],
+            $row['minggu_rill'],
+            $row['priode'],
+            $row['jenis_topup'],
+            $row['hari'],
+            $row['staff']
         ];
 
         $by_staff['turun'][$row['staff']][] = $row['sisa_saldo'];
@@ -305,8 +393,20 @@ foreach ($stmt->fetchAll() as $row) {
 
     if ($saldo_berkurang > 0) {
         $isidata = [
-            $no, $row['loan'], $row['no_center'], $row['id_detail_nasabah'], $row['nasabah'], $row['tgl_disburse'], $row['amount'],
-            $saldo_banding, $saldo_sebelum,  $saldo_berkurang, $row['minggu'], $row['jenis_topup'], $row['hari'], $row['staff']
+            $no,
+            $row['loan'],
+            $row['no_center'],
+            $row['id_detail_nasabah'],
+            $row['nasabah'],
+            $row['tgl_disburse'],
+            $row['amount'],
+            $saldo_banding,
+            $saldo_sebelum,
+            $saldo_berkurang,
+            $row['minggu'],
+            $row['jenis_topup'],
+            $row['hari'],
+            $row['staff']
         ];
         $by_staff['turunos'][$row['staff']][] = $saldo_berkurang;
 
@@ -426,10 +526,25 @@ foreach ($stmt->fetchAll() as $row) {
         else $ket_wajib = "berubah";
 
         $headerData = array(
-            $no,  $row['loan'],  $row['no_center'],  $row['id_detail_nasabah'], $row['nasabah'], $row['kode_pemb'],
-            $row['jenis_topup'], $row['amount'], $saldo_before, $saldo_after, $wajib_before,
-            $wajib_after, $ket_wajib, $sukarela_before, $sukarela_after,
-            $banding_sukarela, $ket_sukarela, $row['hari'],  $banding['staff']
+            $no,
+            $row['loan'],
+            $row['no_center'],
+            $row['id_detail_nasabah'],
+            $row['nasabah'],
+            $row['kode_pemb'],
+            $row['jenis_topup'],
+            $row['amount'],
+            $saldo_before,
+            $saldo_after,
+            $wajib_before,
+            $wajib_after,
+            $ket_wajib,
+            $sukarela_before,
+            $sukarela_after,
+            $banding_sukarela,
+            $ket_sukarela,
+            $row['hari'],
+            $banding['staff']
         );
         $column = 'A';
         foreach ($headerData as $header) {
