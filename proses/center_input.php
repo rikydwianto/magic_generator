@@ -54,12 +54,12 @@ if (isset($_POST['xml-preview'])) {
                         $no_center =  $ctr_staf['CenterID'];
                         $center[] = $no_center;
                         $detail_center = $ctr_staf->Details_Collection->Details;
-                        $jam = $detail_center['MeetingTime'];
+                        $jam = rubahkata($detail_center['MeetingTime']);
                         $agt = $detail_center['Textbox128'];
                         $client = $detail_center['JumlahClient'];
-                        $desa = aman(ganti_karakter($detail_center['DusunName']));
-                        $kecamatan = aman(ganti_karakter($detail_center['KecamatanName']));
-                        $kab = aman(ganti_karakter($detail_center['KabupatenName']));
+                        $desa = aman(ganti_karakter(rubahkata($detail_center['DusunName'])));
+                        $kecamatan = aman(ganti_karakter(rubahkata($detail_center['KecamatanName'])));
+                        $kab = aman(ganti_karakter(rubahkata($detail_center['KabupatenName'])));
                         $qtxt = "INSERT INTO 
                         `center` (`id_center`, `no_center`, `doa_center`, `hari`, `status_center`, `member_center`, `anggota_center`, `center_bayar`, `id_cabang`, `id_karyawan`, `id_laporan`, `jam_center`, `latitude`, `longitude`, `doortodoor`, `blacklist`, `konfirmasi`, `staff`,desa,kecamatan,kabupaten,anggota_hadir,nama_cabang) 
                         VALUES (NULL, '$no_center', 'y', '$days', 'hijau', '$agt', '$client', '$client', '$sesi', '0', '0', '$jam', 'null', 'null', 't', 't', 't', '$nama_staff','$desa','$kecamatan','$kab','$agt','$namaCabang'); 
