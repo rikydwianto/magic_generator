@@ -143,8 +143,7 @@
                             ?>
 
                             <tr>
-                                <td><strong>Grand Total</strong></td>
-                                <td><strong>-</strong></td>
+                                <td colspan="2"><strong>Grand Total</strong></td>
                                 <td><strong><?php echo $grandTotalJumlah; ?></strong></td>
                                 <td><strong><?php echo formatNumber($grandTotalPinjaman); ?></strong></td>
                                 <td><strong><?= formatNumber($grandLimaPersen) ?></strong></td>
