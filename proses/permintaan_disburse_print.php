@@ -20,7 +20,6 @@
                         <th class="text-center p-1" colspan="5">
                             <h4>Permintaan Disburse Cabang <?= $namaCabang ?></h4>
                             <h4>Priode <?= haritanggal($tanggal) ?></h4>
-                            <hr>
                         </th>
                     </tr>
 
@@ -29,7 +28,7 @@
                     $query = "SELECT 
                                 CASE 
                                     WHEN jenis_top_up = '' THEN 'Bukan Topup'
-                                    ELSE 'Topup'
+                                    ELSE CONCAT('TOPUP ',jenis_top_up)
                                 END AS rincian_topup,
                                 COUNT(*) AS total_pencairan,
                                 SUM(loan_amount) AS sum_of_jumlah_pinjaman,
@@ -42,31 +41,31 @@
                     $stmt = $pdo->query($query);
                     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                    echo "<table border='1' style='width: 100%; margin-bottom: 20px;' class='table-bordered'>";
-                    echo "<tr>
-                            <th>Rincian Topup</th>
-                            <th>Total Pencairan</th>
-                            <th>Sum of Jumlah Pinjaman</th>
-                            <th>Sum of 5%</th>
-                            <th>Sum of AFTER 5%</th>
-                        </tr>";
-                    foreach ($results as $row) {
-                        echo "<tr>
-                                <td>{$row['rincian_topup']}</td>
-                                <td class='text-center'>{$row['total_pencairan']}</td>
-                                <td>" . formatNumber($row['sum_of_jumlah_pinjaman']) . "</td>
-                                <td>" . formatNumber($row['sum_of_5_percent']) . "</td>
-                                <td>" . formatNumber($row['sum_of_after_5_percent']) . "</td>
-                            </tr>";
-                    }
-                    echo "</table>";
+                    // echo "<table border='1' style='width: 100%; margin-bottom: 20px;' class='table-bordered'>";
+                    // echo "<tr>
+                    //         <th>Rincian Topup</th>
+                    //         <th>Total Pencairan</th>
+                    //         <th>Sum of Jumlah Pinjaman</th>
+                    //         <th>Sum of 5%</th>
+                    //         <th>Sum of AFTER 5%</th>
+                    //     </tr>";
+                    // foreach ($results as $row) {
+                    //     echo "<tr>
+                    //             <td>{$row['rincian_topup']}</td>
+                    //             <td class='text-center'>{$row['total_pencairan']}</td>
+                    //             <td>" . formatNumber($row['sum_of_jumlah_pinjaman']) . "</td>
+                    //             <td>" . formatNumber($row['sum_of_5_percent']) . "</td>
+                    //             <td>" . formatNumber($row['sum_of_after_5_percent']) . "</td>
+                    //         </tr>";
+                    // }
+                    // echo "</table>";
 
                     // Query untuk data staff dan anggota
                     $query = "SELECT 
                                 officer_name, 
                                 client_name AS member_name,
                                 COUNT(*) AS jumlah, 
-                                SUM(loan_amount) AS total_pinjaman
+                                SUM(loan_amount) AS total_pinjaman,sum(os_pokok_top_up) as os_pokok_top_up
                             FROM permintaan_disburse
                             WHERE nama_cabang = '$namaCabang' AND tanggal = '$tanggal'
                             GROUP BY officer_name";
@@ -74,15 +73,17 @@
                     $stmt = $pdo->query($query);
                     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     ?>
+                    <h1>Rincian</h1>
                     <table border="1" style="width: 100%; margin-bottom: 20px;" class='table-bordered'>
                         <thead>
                             <tr>
                                 <th>STAFF</th>
                                 <th>CENTER - ANGGOTA</th>
                                 <th>JUMLAH</th>
-                                <th>SISA OS</th>
-                                <th>- 5 %</th>
-                                <th>- AFTER 5 %</th>
+                                <th>PINJAMAN</th>
+                                <th>TOPUP</th>
+                                <th>NETT DISBURSE</th>
+                                <!-- <th>- AFTER 5 %</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -91,42 +92,51 @@
                             $grandTotalPinjaman = 0;
                             $grandLimaPersen = 0;
                             $grandAfter5 = 0;
+                            $grandNettDisburse = 0;
 
                             foreach ($results as $row) {
                                 $sisaOS = $row['total_pinjaman'];
                                 $minus5 = $sisaOS * 0.05;
                                 $after5 = $sisaOS - $minus5;
 
+                                $netDisburse = 0;
                                 $grandTotalJumlah += $row['jumlah'];
                                 $grandTotalPinjaman += $sisaOS;
                                 $grandLimaPersen += $minus5;
                                 $grandAfter5 += $after5;
+                                $osPokokTopUp = $row['os_pokok_top_up'];
+                                $netDisburse = $row['total_pinjaman'] - $osPokokTopUp;
+                                $grandNettDisburse += $netDisburse;
 
                                 $query = "SELECT 
-                                            SUM(loan_amount) AS total_pinjaman, center_id
+                                            (loan_amount) AS total_pinjaman, center_id,client_name,os_pokok_top_up,client_id,jenis_top_up,pinj_ke
                                         FROM permintaan_disburse
                                         WHERE nama_cabang = '$namaCabang' AND tanggal = '$tanggal' AND officer_name = '{$row['officer_name']}'";
                                 $sta = $pdo->query($query);
                                 $sta = $sta->fetchAll();
-                                $limaPersen = $sta[0]['total_pinjaman'] * 0.05;
-                                $sisaOS = $sta[0]['total_pinjaman'] - $limaPersen;
 
                                 echo "<tr style='background-color: #FADADAFF;'>
-                                        <th>{$row['officer_name']}</th>
-                                        <th></th>
+                                        <th colspan=2>{$row['officer_name']}</th>
                                         <th>{$row['jumlah']}</th>
                                         <th>" . formatNumber($sisaOS) . "</th>
-                                        <th>" . formatNumber($minus5) . "</th>
-                                        <th>" . formatNumber($after5) . "</th>
+                                        <th>" . formatNumber($osPokokTopUp) . "</th>
+                                        <th>" . formatNumber($netDisburse) . "</th>
                                     </tr>";
+                                $jenis_top_up = '';
                                 foreach ($sta as $st) {
+                                    $pinj_ke = $st['pinj_ke'];
+                                    $center_id = $st['center_id'];
+                                    $osPokokTopUpdet = $st['os_pokok_top_up'];
+                                    $netDisbursedet = $st['total_pinjaman'] - $osPokokTopUpdet;
+                                    $cleint_id = $st['client_id'];
+                                    $jenis_top_up = $st['jenis_top_up'];
                                     echo "<tr>
-                                            <td></td>
-                                            <td>{$st['center_id']} - {$row['member_name']}</td>
-                                            <td></td>
+                                            <td>$center_id</td>
+                                            <td>$cleint_id - {$st['client_name']}($pinj_ke)</td>
+                                            <td>$jenis_top_up</td>
                                             <td>" . formatNumber($st['total_pinjaman']) . "</td>
-                                            <td>" . formatNumber($limaPersen) . "</td>
-                                            <td>" . formatNumber($sisaOS) . "</td>
+                                            <td>" . formatNumber($osPokokTopUpdet) . "</td>
+                                            <td>" . formatNumber($netDisbursedet) . "</td>
                                         </tr>";
                                 }
                             }
@@ -138,7 +148,7 @@
                                 <td><strong><?php echo $grandTotalJumlah; ?></strong></td>
                                 <td><strong><?php echo formatNumber($grandTotalPinjaman); ?></strong></td>
                                 <td><strong><?= formatNumber($grandLimaPersen) ?></strong></td>
-                                <td><strong><?= formatNumber($grandAfter5) ?></strong></td>
+                                <td><strong><?= formatNumber($grandNettDisburse) ?></strong></td>
                             </tr>
                         </tbody>
                     </table>
