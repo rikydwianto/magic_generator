@@ -127,6 +127,9 @@ set_time_limit(3000);
                     <a class="nav-link" href="<?= $url ?>index.php?menu=center_meeting">CENTER</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="<?= $url ?>index.php?menu=permintaandisburse">DISBURSE</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="<?= $url ?>index.php?menu=delin_reg">REGIONAL</a>
                 </li>
                 <li class="nav-item">
@@ -213,6 +216,10 @@ set_time_limit(3000);
                     include("./proses/center_input.php");
                 } else if ($menu == 'center_proses') {
                     include("./proses/center_proses.php");
+                } else if ($menu == 'permintaandisburse') {
+                    include("./proses/permintaandisburse.php");
+                } else if ($menu == 'permintaan_disburse_print') {
+                    include("./proses/permintaan_disburse_print.php");
                 } else {
                     ?>
                         <div class="container-fluid">
