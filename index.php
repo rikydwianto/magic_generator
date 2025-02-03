@@ -206,7 +206,7 @@ set_time_limit(3000);
 
                         /* Gaya untuk card */
                         .card {
-                            max-width: 250px;
+                            max-width: 400px;
                             /* Lebar maksimal card */
                             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
                             /* Efek bayangan */
