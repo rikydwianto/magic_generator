@@ -98,55 +98,7 @@ set_time_limit(3000);
         let url = "<?= $url ?>";
         let url_api = url + "api/";
     </script>
-    <style>
-        /* Gaya untuk kotak mengambang */
-        .floating-box {
-            position: fixed;
-            /* Membuat kotak tetap di layar */
-            bottom: 20px;
-            /* Jarak dari bawah */
-            right: 20px;
-            /* Jarak dari kanan */
-            z-index: 1000;
-            /* Memastikan kotak berada di atas elemen lain */
-        }
 
-        /* Gaya untuk card */
-        .card {
-            max-width: 250px;
-            /* Lebar maksimal card */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            /* Efek bayangan */
-        }
-
-        /* Gaya untuk kotak gambar QRIS */
-        .qris-box {
-            display: inline-block;
-            border: 2px solid #dc3545;
-            /* Warna border sesuai dengan card border-danger */
-            padding: 10px;
-            border-radius: 10px;
-            /* Membuat sudut kotak melengkung */
-            background-color: #f8f9fa;
-            /* Warna latar belakang kotak */
-        }
-
-        /* Gaya untuk gambar QRIS */
-        .qris-box img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
-            /* Membuat sudut gambar melengkung */
-        }
-
-        /* Gaya untuk teks di dalam card */
-        .card-text {
-            font-size: 12px;
-            /* Ukuran font lebih kecil */
-            color: #6c757d;
-            /* Warna teks */
-        }
-    </style>
     <title>COMDEV TOOL</title>
 </head>
 
@@ -239,6 +191,55 @@ set_time_limit(3000);
                             </div>
                         </div>
                     </div>
+                    <style>
+                        /* Gaya untuk kotak mengambang */
+                        .floating-box {
+                            position: fixed;
+                            /* Membuat kotak tetap di layar */
+                            bottom: 20px;
+                            /* Jarak dari bawah */
+                            right: 20px;
+                            /* Jarak dari kanan */
+                            z-index: 1000;
+                            /* Memastikan kotak berada di atas elemen lain */
+                        }
+
+                        /* Gaya untuk card */
+                        .card {
+                            max-width: 250px;
+                            /* Lebar maksimal card */
+                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                            /* Efek bayangan */
+                        }
+
+                        /* Gaya untuk kotak gambar QRIS */
+                        .qris-box {
+                            display: inline-block;
+                            border: 2px solid #dc3545;
+                            /* Warna border sesuai dengan card border-danger */
+                            padding: 10px;
+                            border-radius: 10px;
+                            /* Membuat sudut kotak melengkung */
+                            background-color: #f8f9fa;
+                            /* Warna latar belakang kotak */
+                        }
+
+                        /* Gaya untuk gambar QRIS */
+                        .qris-box img {
+                            max-width: 100%;
+                            height: auto;
+                            border-radius: 5px;
+                            /* Membuat sudut gambar melengkung */
+                        }
+
+                        /* Gaya untuk teks di dalam card */
+                        .card-text {
+                            font-size: 12px;
+                            /* Ukuran font lebih kecil */
+                            color: #6c757d;
+                            /* Warna teks */
+                        }
+                    </style>
 
                 <?php
                 } else {
