@@ -178,10 +178,10 @@ set_time_limit(3000);
                             <div class="card-body text-center">
                                 <!-- Kotak untuk gambar QRIS -->
                                 <div class="qris-box">
-                                    <a href="assets/img/qris.png" target="_blank">
-                                        <img src="assets/img/qris.png" alt="QRIS" class="img-fluid">
+                                    <!-- <a href="assets/img/qris.png" target="_blank"> -->
+                                    <!-- <img src="assets/img/qris.png" alt="QRIS" class="img-fluid"> -->
 
-                                    </a>
+                                    <!-- </a> -->
                                 </div>
                                 <!-- Teks atau elemen tambahan di bawah gambar -->
                                 <!-- <p class="card-text mt-3">
