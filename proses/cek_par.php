@@ -47,13 +47,13 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
                 $no = 1;
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 ?>
-                <tr>
-                    <td><?= $no++ ?></td>
-                    <td><?= $row['cabang'] ?></td>
-                    <td><?= $row['mulai'] ?></td>
-                    <td><?= $row['keterangan'] ?></td>
-                    <td><?= $row['created_at'] ?></td>
-                </tr>
+                    <tr>
+                        <td><?= $no++ ?></td>
+                        <td><?= $row['cabang'] ?></td>
+                        <td><?= $row['mulai'] ?></td>
+                        <td><?= $row['keterangan'] ?></td>
+                        <td><?= $row['created_at'] ?></td>
+                    </tr>
 
                 <?php
                 }
@@ -67,6 +67,11 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 <?php
 if (isset($_POST['preview'])) {
+    $upload_dir = "uploads/";
+    if (!is_dir($upload_dir)) {
+        mkdir($upload_dir, 0777, true);
+    }
+
 
     error_reporting(0);
     $file = $_FILES['file']['tmp_name'];
