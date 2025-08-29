@@ -30,13 +30,25 @@ if (isset($_POST['xml-preview'])) {
             // Ambil nama cabang dan tanggal dari atribut Report
             $reportAttribs = $xml->attributes();
             $textbox101 = (string)$reportAttribs['Textbox101'];
+            $_Textbox102 = (string)$reportAttribs['Textbox102'];
+            preg_match_all('/\d{4}-\d{2}-\d{2}/', $_Textbox102, $matches);
+
+            if (!empty($matches[0])) {
+                $tanggal_awal  = $matches[0][0]; // 2025-08-22
+                $tanggal_akhir = $matches[0][1]; // 2025-08-29
+            }
+
+
+            // echo $_Textbox102;
+            // exit;
             $textboxParts = explode(" ", $textbox101);
 
             $namaCabang = $textboxParts[1]; // Cabang
-            $tanggal = date("Y-m-d", strtotime($textboxParts[3])); // Tanggal
+            // $tanggal = date("Y-m-d", strtotime($textboxParts[3])); // Tanggal
 
             // Hapus data lama untuk cabang dan tanggal yang sama
-            $pdo->query("DELETE FROM permintaan_disburse WHERE nama_cabang = '$namaCabang' AND tanggal = '$tanggal'");
+            $pdo->query("DELETE FROM permintaan_disburse WHERE nama_cabang = '$namaCabang' AND tanggal BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+
 
             // Ambil elemen Details_Collection
             $detailsCollection = $xml->Tablix1->Details_Collection->Details;
@@ -56,6 +68,7 @@ if (isset($_POST['xml-preview'])) {
                 $loanAmount = (float)$detail['LoanAmount'];
                 $osPokokTopUP = (float)$detail['OsPokokTopUP'];
                 $netDisburse = (float)$detail['NetDisburse'];
+                $DisbDate = $detail['DisbDate'];
 
                 // Simpan data ke database
                 $stmt = $pdo->prepare("INSERT INTO permintaan_disburse
@@ -63,7 +76,7 @@ if (isset($_POST['xml-preview'])) {
                     VALUES (:nama_cabang, :tanggal, :center_id, :client_id, :client_name, :officer_name, :product_name, :gp_pokok, :gp_nishbah, :period, :pinj_ke, :jenis_top_up, :loan_amount, :os_pokok_top_up, :net_disburse)");
 
                 $stmt->bindParam(':nama_cabang', $namaCabang);
-                $stmt->bindParam(':tanggal', $tanggal);
+                $stmt->bindParam(':tanggal', $DisbDate);
                 $stmt->bindParam(':center_id', $centerID);
                 $stmt->bindParam(':client_id', $clientID);
                 $stmt->bindParam(':client_name', $clientName);
@@ -83,8 +96,10 @@ if (isset($_POST['xml-preview'])) {
                 }
             }
 
+            // tambah 1 hari tanggal awal
+            $tanggal_awal = date("Y-m-d", strtotime($tanggal_awal . " +1 day"));
             echo "Data berhasil disimpan.";
-            pindah("index.php?menu=permintaan_disburse_print&nama_cabang=$namaCabang&tanggal=$tanggal");
+            pindah("index.php?menu=permintaan_disburse_print&nama_cabang=$namaCabang&tanggal=$tanggal_awal&tanggal_akhir=$tanggal_akhir");
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
