@@ -1,28 +1,135 @@
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <h1>
-                Cek Deliquency Regional
-            </h1>
-            <hr>
-
+<div class="container-fluid px-4 py-3">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="page-header">
+                <h1 class="page-title">
+                    <i class="fas fa-chart-area me-3"></i>Cek Deliquency Regional
+                </h1>
+                <p class="mb-0">Bandingkan dua file Excel PAR Regional untuk melihat perubahan tingkat regional</p>
+            </div>
         </div>
-        <div class="col-md-6">
-            <form method="post" enctype="multipart/form-data">
-                <label for="formFile" class="form-label">SILAHKAN PILIH FILE SEBELUM(MINGGU/HARI KEMARIN) - REGIONAL
-                    <br></label>
-                <input class="form-control" required type="file" name='file' accept=".xls,.xlsx" id="formFile">
-                <br />
-                <br />
-                <label for="formFile" class="form-label">SILAHKAN PILIH FILE PEMBANDING(MINGGU/HARI INI) - REGIONAL
-                    <br></label>
-                <input class="form-control" required type="file" name='file1' accept=".xls,.xlsx" id="formFile">
+    </div>
 
+    <div class="row">
+        <!-- Upload Form Card -->
+        <div class="col-12 col-lg-6 mb-4">
+            <div class="card modern-card">
+                <div class="card-header" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white;">
+                    <h5 class="mb-0">
+                        <i class="fas fa-file-upload me-2"></i>Upload File Excel Regional
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="upload-info-box mb-4">
+                        <i class="fas fa-info-circle text-info"></i>
+                        <div>
+                            <strong>Petunjuk Upload:</strong>
+                            <ul class="mb-0 mt-2">
+                                <li>Upload 2 file Excel format .xls atau .xlsx</li>
+                                <li>File pertama: Data minggu/hari sebelumnya (Regional)</li>
+                                <li>File kedua: Data minggu/hari ini pembanding (Regional)</li>
+                            </ul>
+                        </div>
+                    </div>
 
-                <br>
-                <input type="submit" onclick="return confirm('yakin sudah benar?')" value="KONFIRMASI"
-                    class='btn btn-danger' name='preview'>
-            </form>
+                    <form method="post" enctype="multipart/form-data" id="formDelinReg">
+                        <div class="mb-4">
+                            <label for="formFile1" class="form-label fw-bold">
+                                <i class="fas fa-file-excel text-success me-2"></i>File Sebelum (Minggu/Hari Kemarin) - Regional
+                            </label>
+                            <input class="form-control form-control-lg" type="file" name='file' accept=".xls,.xlsx" id="formFile1">
+                            <small class="text-muted">Format: .xls atau .xlsx</small>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="formFile2" class="form-label fw-bold">
+                                <i class="fas fa-file-excel text-primary me-2"></i>File Pembanding (Minggu/Hari Ini) - Regional
+                            </label>
+                            <input class="form-control form-control-lg" type="file" name='file1' accept=".xls,.xlsx" id="formFile2">
+                            <small class="text-muted">Format: .xls atau .xlsx</small>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" name='preview' class="btn btn-primary btn-lg" onclick="return confirmAction('Apakah data yang diupload sudah benar?', function() { showLoading('Sedang memproses file Excel Regional...'); })">
+                                <i class="fas fa-check-circle me-2"></i>Proses Sekarang
+                            </button>
+                        </div>
+                    </form>
+                    <script>
+                    (function() {
+                        var form = document.getElementById('formDelinReg');
+                        if (!form) return;
+                        form.addEventListener('submit', function(e) {
+                            var file1 = document.getElementById('formFile1');
+                            var file2 = document.getElementById('formFile2');
+                            if (!file1 || !file2) return;
+                            if (!file1.value || !file2.value) {
+                                e.preventDefault();
+                                if (typeof Swal !== 'undefined') {
+                                    Swal.fire({
+                                        icon: 'warning',
+                                        title: 'File harus terisi',
+                                        text: 'Silakan pilih kedua file Excel regional.'
+                                    });
+                                } else {
+                                    alert('File harus terisi');
+                                }
+                            }
+                        });
+                    })();
+                    </script>
+                </div>
+            </div>
+        </div>
+
+        <!-- Queue Card -->
+        <div class="col-12 col-lg-6 mb-4">
+            <div class="card modern-card">
+                <div class="card-header" style="background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%); color: #2d3436;">
+                    <h5 class="mb-0">
+                        <i class="fas fa-clock me-2"></i>Antrian Proses Regional
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class='table table-hover'>
+                            <thead class="table-light">
+                                <tr>
+                                    <th width="5%">No</th>
+                                    <th width="25%">Regional</th>
+                                    <th width="25%">Waktu Mulai</th>
+                                    <th width="20%">Status</th>
+                                    <th width="25%">Dibuat</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $sql = "SELECT * FROM log_cek_par WHERE keterangan='proses' ORDER BY created_at DESC";
+                                $stmt = $pdo->query($sql);
+
+                                $no = 1;
+                                if ($stmt->rowCount() > 0) {
+                                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                ?>
+                                    <tr>
+                                        <td><?= $no++ ?></td>
+                                        <td><strong><?= $row['cabang'] ?></strong></td>
+                                        <td><?= $row['mulai'] ?></td>
+                                        <td><span class="badge bg-warning"><i class="fas fa-spinner fa-spin me-1"></i><?= ucfirst($row['keterangan']) ?></span></td>
+                                        <td><?= date('d M Y H:i', strtotime($row['created_at'])) ?></td>
+                                    </tr>
+                                <?php
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='5' class='text-center text-muted'>Tidak ada antrian</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -38,6 +145,17 @@ ini_set('post_max_size', '150M');
 ini_set('max_execution_time', 500);
 
 if (isset($_POST['preview'])) {
+    if (
+        empty($_FILES['file']['name']) || $_FILES['file']['error'] === UPLOAD_ERR_NO_FILE ||
+        empty($_FILES['file1']['name']) || $_FILES['file1']['error'] === UPLOAD_ERR_NO_FILE
+    ) {
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
+        alert("File harus terisi");
+        pindah("index.php?menu=delin_reg");
+        return;
+    }
 
     error_reporting(0);
     $file = $_FILES['file']['tmp_name'];

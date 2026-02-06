@@ -1,5 +1,23 @@
-<h1>Laporan Regional</h1>
-<hr>
+<div class="container-fluid px-4 py-3">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="page-header-regional">
+                <h1 class="page-title">
+                    <i class="fas fa-building me-3"></i>LAPORAN REGIONAL
+                </h1>
+                <p class="mb-0">Rekap Laporan Per Cabang Regional <?= $regional ?></p>
+            </div>
+        </div>
+    </div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card modern-card mb-4">
+            <div class="card-header" style="background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%); color: white;">
+                <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Filter Data</h5>
+            </div>
+            <div class="card-body">
 <form action="" method="get">
     <input type="hidden" name="menu" value="laporan_regional/regional">
 
@@ -43,8 +61,16 @@
             </select>
         </div>
     </div>
-    <button type="submit" class="btn btn-success mt-2"><i class="fa fa-search"></i> Cari</button>
+    <div class="row">
+        <div class="col-12">
+            <button type="submit" class="btn btn-success mt-2"><i class="fa fa-search me-2"></i> Cari Data</button>
+        </div>
+    </div>
 </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <?php
 if (isset($_GET['minggu']) && isset($_GET['bulan'])) {
@@ -177,6 +203,52 @@ if (isset($_GET['minggu']) && isset($_GET['bulan'])) {
     </tfoot>
 
 </table>
+        </div>
+    </div>
+</div>
+</div>
+
+<style>
+.page-header-regional {
+    background: linear-gradient(135deg, #dfe6e9 0%, #b2bec3 100%);
+    padding: 30px 40px;
+    border-radius: 15px;
+    color: #2d3436;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+}
+
+.page-header-regional .page-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #2d3436;
+}
+
+.page-header-regional p {
+    color: #636e72;
+    margin-bottom: 0;
+}
+
+.modern-card {
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.card-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 18px 25px;
+}
+
+.card-body {
+    padding: 25px;
+}
+</style>
+
 <?php
         } else {
             echo 'Tidak ada hasil yang ditemukan.';

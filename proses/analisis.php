@@ -9,57 +9,130 @@ use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 ?>
 
-<div class="col-md-4">
-
-</div>
-
-<div class="container-fluid">
-    <h1>ANALISA DELIQUENCY</h1>
-    <div class="row">
-
-        <div class="col-6">
-
-            <h3>Analisa Pinjaman PAR </h3>
-            <form method="post" enctype="multipart/form-data">
-                <label for="formFile" class="form-label">SILAHKAN PILIH FILE <br></label>
-                <input class="form-control" required type="file" name='file' accept=".xls,.xlsx" id="formFile">
-                <br>
-                <input type="submit" onclick="return confirm('yakin sudah benar?')" value="KONFIRMASI"
-                    class='btn btn-danger' name='preview'>
-            </form>
+<div class="container-fluid px-4 py-3">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="page-header-analisa">
+                <h1 class="page-title">
+                    <i class="fas fa-chart-bar me-3"></i>ANALISA PAR
+                </h1>
+                <p class="mb-0">Analisis mendalam deliquency dan breakdown detail per loan & center</p>
+            </div>
         </div>
-        <div class="col-6">
-            <h3>ANTRIAN</h3>
-            <table border='1' class='table table-bordered table-hovered'>
-                <tr>
-                    <th>NO</th>
-                    <th>Cabang</th>
-                    <th>Mulai</th>
-                    <th>Keterangan</th>
-                    <th>Dibuat Pada</th>
-                </tr>
+    </div>
 
-                <?php
-                $sql = "SELECT * FROM log_cek_par where keterangan='proses-analisa'";
-                $stmt = $pdo->query($sql);
+    <div class="row">
+        <!-- Upload Form Card -->
+        <div class="col-md-6 mb-4">
+            <div class="card modern-card">
+                <div class="card-header" style="background: linear-gradient(135deg, #81ecec 0%, #74b9ff 100%); color: #2d3436;">
+                    <h5 class="mb-0">
+                        <i class="fas fa-microscope me-2"></i>Upload File untuk Analisa
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="upload-info-box-success mb-4">
+                        <i class="fas fa-info-circle text-success"></i>
+                        <div>
+                            <strong>Fitur Analisa:</strong>
+                            <ul class="mb-0 mt-2">
+                                <li>Breakdown detail per loan dan center</li>
+                                <li>Visualisasi data dengan grafik interaktif</li>
+                                <li>Export hasil analisa ke Excel</li>
+                                <li>Analisis trend dan pola PAR</li>
+                            </ul>
+                        </div>
+                    </div>
 
-                $no = 1;
-                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                ?>
-                <tr>
-                    <td><?= $no++ ?></td>
-                    <td><?= $row['cabang'] ?></td>
-                    <td><?= $row['mulai'] ?></td>
-                    <td><?= $row['keterangan'] ?></td>
-                    <td><?= $row['created_at'] ?></td>
-                </tr>
+                    <form method="post" enctype="multipart/form-data" id="formAnalisa">
+                        <div class="mb-4">
+                            <label for="formFileAnalisa" class="form-label fw-bold">
+                                <i class="fas fa-file-excel text-success me-2"></i>Pilih File Excel PAR
+                            </label>
+                            <input class="form-control form-control-lg" type="file" name='file' accept=".xls,.xlsx" id="formFileAnalisa">
+                            <small class="text-muted">Upload 1 file Excel format .xls atau .xlsx untuk dianalisa</small>
+                        </div>
 
-                <?php
-                }
+                        <div class="d-grid">
+                            <button type="submit" name='preview' class="btn btn-success btn-lg" onclick="return confirmAction('Mulai proses analisa file ini?', function() { showLoading('Sedang menganalisa data...'); })">
+                                <i class="fas fa-play-circle me-2"></i>Mulai Analisa
+                            </button>
+                        </div>
+                    </form>
+                    <script>
+                    (function() {
+                        var form = document.getElementById('formAnalisa');
+                        if (!form) return;
+                        form.addEventListener('submit', function(e) {
+                            var file = document.getElementById('formFileAnalisa');
+                            if (!file) return;
+                            if (!file.value) {
+                                e.preventDefault();
+                                if (typeof Swal !== 'undefined') {
+                                    Swal.fire({
+                                        icon: 'warning',
+                                        title: 'File harus terisi',
+                                        text: 'Silakan pilih file Excel yang akan dianalisa.'
+                                    });
+                                } else {
+                                    alert('File harus terisi');
+                                }
+                            }
+                        });
+                    })();
+                    </script>
+                </div>
+            </div>
+        </div>
 
+        <!-- Queue Card -->
+        <div class="col-12 col-lg-6 mb-4">
+            <div class="card modern-card">
+                <div class="card-header" style="background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%); color: white;">
+                    <h5 class="mb-0">
+                        <i class="fas fa-list-check me-2"></i>Antrian Analisa
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class='table table-hover'>
+                            <thead class="table-light">
+                                <tr>
+                                    <th width="5%">No</th>
+                                    <th width="25%">Cabang</th>
+                                    <th width="25%">Waktu Mulai</th>
+                                    <th width="20%">Status</th>
+                                    <th width="25%">Dibuat</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $sql = "SELECT * FROM log_cek_par WHERE keterangan='proses-analisa' ORDER BY created_at DESC";
+                                $stmt = $pdo->query($sql);
 
-                ?>
-            </table>
+                                $no = 1;
+                                if ($stmt->rowCount() > 0) {
+                                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                ?>
+                                    <tr>
+                                        <td><?= $no++ ?></td>
+                                        <td><strong><?= $row['cabang'] ?></strong></td>
+                                        <td><?= $row['mulai'] ?></td>
+                                        <td><span class="badge bg-info"><i class="fas fa-spinner fa-spin me-1"></i>Analisa</span></td>
+                                        <td><?= date('d M Y H:i', strtotime($row['created_at'])) ?></td>
+                                    </tr>
+                                <?php
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='5' class='text-center text-muted'>Tidak ada antrian analisa</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -67,6 +140,11 @@ use PhpOffice\PhpSpreadsheet\Shared\Date;
 <?php
 
 if (isset($_POST['preview'])) {
+    if (empty($_FILES['file']['name']) || $_FILES['file']['error'] === UPLOAD_ERR_NO_FILE) {
+        alert("File harus terisi");
+        pindah("index.php?menu=anal");
+        return;
+    }
 
     $file = $_FILES['file']['tmp_name'];
     $path = $file;
@@ -689,7 +767,7 @@ if (isset($_POST['preview'])) {
         $sisa_saldo = $row['sisa_saldo'];
         $satu_persen = $sisa_saldo * 0;
         // $tpk = ceil($sisa_saldo / 50000) * 50000;
-        $tpk = $sisa_saldo ;
+        $tpk = $sisa_saldo + 10_000 ;
         // $tpk = $tpk * 10000;
         // echo angka($sisa_saldo) . ' - ' . $row['nasabah'] . ' - ' . angka($tpk) . '<br/>';
         $setengah  = ($row['minggu_rill'] / $row['priode']) * 100;
@@ -746,9 +824,6 @@ if (isset($_POST['preview'])) {
     $sheet5->getStyle('A2:S' . $batas_sh5)->applyFromArray($styleArray); //INI UNTUK BORDER
 
 
-    $sql_delete = "DELETE FROM deliquency WHERE tgl_input='$tgl_delin' and cabang='$namaCabang'";
-    $stmt = $pdo->query($sql_delete);
-
     try {
         $sql = "UPDATE log_cek_par 
         SET selesai = :selesai, keterangan = :keterangan, edited_at = NOW() 
@@ -778,7 +853,21 @@ if (isset($_POST['preview'])) {
     $filename = "ANALISA PAR $namaCabang $tgl_delin.xlsx";
     $writer->save($folder . $filename);
 
-    pindah($url . "download.php?filename=" . $filename);
+    // Auto-download dan kembali ke halaman analisis
+    ?>
+    <script>
+        // Trigger download via iframe
+        var iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = '<?= $url ?>download.php?filename=<?= urlencode($filename) ?>&cleanup=delin_tgl_cabang&tgl_input=<?= urlencode($tgl_delin) ?>&cabang=<?= urlencode($namaCabang) ?>';
+        document.body.appendChild(iframe);
+        
+        // Redirect setelah 2 detik
+        setTimeout(function() {
+            window.location.href = '<?= $url ?>index.php?menu=anal';
+        }, 2000);
+    </script>
+    <?php
 }
 
 

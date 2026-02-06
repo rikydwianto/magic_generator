@@ -41,7 +41,7 @@ if ($kuis_jawab) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HALAMAN QUIZ | COMDEV | <?= $row['nama_kuis'] ?></title>
+    <title>HALAMAN QUIZ | | <?= $row['nama_kuis'] ?></title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- SweetAlert CSS -->
