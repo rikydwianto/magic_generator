@@ -301,11 +301,25 @@ set_time_limit(3000);
                             <i class="fas fa-chart-line me-1"></i> CEK PAR
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?= (isset($_GET['menu']) && $_GET['menu'] == 'anal') ? 'active' : '' ?>" 
-                           href="<?= $url ?>index.php?menu=anal">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle <?= (isset($_GET['menu']) && ($_GET['menu'] == 'anal' || $_GET['menu'] == 'anal_bayar')) ? 'active' : '' ?>" 
+                           href="#" id="navbarDropdownAnalisa" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-chart-bar me-1"></i> ANALISA PAR
                         </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownAnalisa">
+                            <li>
+                                <a class="dropdown-item <?= (isset($_GET['menu']) && $_GET['menu'] == 'anal') ? 'active' : '' ?>" 
+                                   href="<?= $url ?>index.php?menu=anal">
+                                    <i class="fas fa-chart-line me-1"></i> Analisa PAR
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item <?= (isset($_GET['menu']) && $_GET['menu'] == 'anal_bayar') ? 'active' : '' ?>" 
+                                   href="<?= $url ?>index.php?menu=anal_bayar">
+                                    <i class="fas fa-money-bill-wave me-1"></i> Analisa PAR Bayar
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?= (isset($_GET['menu']) && $_GET['menu'] == 'center_meeting') ? 'active' : '' ?>" 
@@ -354,6 +368,7 @@ set_time_limit(3000);
 
             <?php
 
+// var_dump($_SESSION);
             @$menu = $_GET['menu'];
             // session_destroy();
             // if ($sesi == '' || $sesi == null) {
@@ -447,6 +462,8 @@ set_time_limit(3000);
                     include("./proses/cek_par.php");
                 } else if ($menu == 'anal') {
                     include("./proses/analisis.php");
+                } else if ($menu == 'anal_bayar') {
+                    include("./proses/anal_bayar.php");
                 } else if ($menu == 'delin_reg') {
                     include("./proses/delin_reg.php");
                 } else if ($menu == 'proses_delin') {
