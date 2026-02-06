@@ -2,12 +2,18 @@
 $namaCabang = $_GET['nama_cabang'];
 $id_cabang = $sesi;
 ?>
-<style>
-table {
-    border-collapse: collapse;
-}
-</style>
-<div class="container-fluid">
+<div class="container-fluid px-4 py-3">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="page-header-center">
+                <h1 class="page-title">
+                    <i class="fas fa-calendar-alt me-3"></i>JADWAL CENTER MEETING
+                </h1>
+                <p class="mb-0">Cabang: <strong><?= strtoupper($namaCabang) ?></strong></p>
+            </div>
+        </div>
+    </div>
 
     <?php
     $cek  = "select count(*) as hitung from center where nama_cabang='$namaCabang'";
@@ -18,190 +24,171 @@ table {
     }
     ?>
     <div class="row">
-        jika ingin diprint, klik kanan -> print
-        <!-- <a href="javacript:printCtr()" onclick="printCtr('printArea')" class="btn"><i class="fa fa-print"></i></a> -->
-        <hr>
         <div class="col-12">
-            <table border="1" id='printArea' class='table table-bordered'>
-                <tr>
-                    <th class="text-center p-1">
-                        <small style="font-weight: lighter;text-align: left;">&nbsp;</small> <br>
-                        <img src="./assets/img/logo.png" style="width:40px;" alt="Logo Comdev" class=""> <br>
-                        Community <br> Development
-                    </th>
-                    <th style="text-align: center;" colspan="30"> <br />
-                        JADWAL CENTER MEETING <br /> CABANG <?= strtoupper($namaCabang) ?> <br /><br />
-                    </th>
-                </tr>
-                <?php
-                $qhari = "SELECT distinct hari from center where id_cabang='$id_cabang' and nama_cabang='$namaCabang' order by FIELD(hari,'senin','selasa','rabu','kamis','jumat') asc";
-                $hari  = $pdo->query($qhari);
-                foreach ($hari->fetchAll() as $hari) {
-                ?>
-                <tr>
-                    <td rowspan="2" style="padding: 0px;font-weight: bold;vertical-align: middle;text-align:center;">
-                        <?= strtoupper($hari['hari']) ?></td>
-                    <?php
-                        $qkar = "SELECT distinct c.staff from center c  where c.id_cabang='$id_cabang' order by c.staff asc ";
-                        $kar =  $pdo->query($qkar);
-                        foreach ($kar->fetchAll() as $kar) {
-                            $pecah_nama = explode(" ", strtoupper($kar['staff']));
-                            $nama_staff = $pecah_nama[0];
-                            if (strlen($nama_staff) < 3) {
-                                $nama_staff = $pecah_nama[0] . " " . $pecah_nama[1];
-                            } else {
-                                if (!empty($pecah_nama[1])) {
-
-                                    $nama_staff = $nama_staff . " " . $pecah_nama[1][0];
-                                }
-                            }
-                        ?>
-                    <th colspan="1" style="font-size: 12px;min-width: 60px;"> &nbsp;&nbsp;<?= $nama_staff ?>&nbsp;&nbsp;
-                    </th>
-                    <?php
-
-                            $center_hari =  "SELECT count(hari) as hitung_hari from center where id_cabang='$id_cabang' and hari='$hari[hari]'";
-                            $center_hari = $pdo->query($center_hari);
-                        }
-                        ?>
-                    <td rowspan="2">
-
-
-                    </td>
-                </tr>
-                <tr>
-
-                    <?php
-                        $qkar = "SELECT distinct c.staff,c.id_karyawan from center c where c.id_cabang='$id_cabang' order by c.staff asc ";
-                        $qkar  = $pdo->query($qkar);
-                        foreach ($qkar->fetchAll() as $kar) {
-                            $qcenter = $pdo->query("SELECT no_center,status_center,member_center from center where id_cabang='$id_cabang' and hari='$hari[hari]' and staff='$kar[staff]' order by jam_center asc");
-                        ?>
-                    <td style="vertical-align: top;text-align:center">
-                        <?php
-                                foreach ($qcenter->fetchAll() as $center) {
-                                    $status = $center['status_center'];
-                                    $warna = 'black';
-                                    echo "<b style='color:$warna;float:left'>" . sprintf("%03d", $center['no_center']) . "</b> | <b style='float:right'>$center[member_center]</b>" . "<br/>";
-                                }
-                                ?>
-                    </td>
-                    <?php
-                        }
-                        ?>
-
-                </tr>
-                <tr>
-                    <th>TOTAL CENTER</th>
-                    <?php $qkar = $pdo->query("SELECT distinct c.staff,c.id_karyawan from center c  where c.id_cabang='$id_cabang' order by c.staff asc ");
-                        foreach ($qkar->fetchAll() as $kar) {
-                            $qcenter = $pdo->query("SELECT count(no_center) as hitung_center from center where id_cabang='$id_cabang' and hari='$hari[hari]' and staff='$kar[staff]' order by jam_center asc");
-                            $hitung = $qcenter->fetch();
-                        ?>
-                    <td style="vertical-align: top;text-align:center;font-weight: bold;background-color: #dcdedc;">
-                        <?= $hitung['hitung_center'] ?>
-                    </td>
-                    <?php
-                        }
-                        ?>
-                    <th><?= $center_hari->fetch()['hitung_hari'] ?></th>
-                </tr>
-
-                <?php
-                }
-                $hitung_semua = 0;
-                ?>
-                <tr>
-                    <th colspan="1">TOTAL SEMUA STAFF
-                        <hr>MEMBER
-                    </th>
-                    <?php
-                    $qkar = $pdo->query("SELECT distinct c.staff,c.id_karyawan from center c  where c.id_cabang='$id_cabang' order by c.staff asc ");
-                    foreach ($qkar->fetchAll() as $kar) {
-                        $qcenter = $pdo->query("SELECT count(no_center) as hitung_center,sum(member_center) as member from center where id_cabang='$id_cabang'  and staff='$kar[staff]' order by jam_center asc");
-
-                        $semua = $qcenter->fetch();
-                    ?>
-                    <th style="vertical-align: middle;text-align:center;font-weight: bold;background-color: dcdedc;">
-                        <?= $total = $semua['hitung_center'] ?>
-                        <hr />
-                        <?= $total_member = $semua['member'] ?><br />
-                        <?php $hitung_semua += $total ?>
-                    </th>
-                    <?php
-
-                        $total_member += $total_member;
-                    }
-                    ?>
-                    <td rowspan="0" style="padding: 10px;font-weight: bold;">
-                        <?= $hitung_semua ?>
-                        <hr>
-                        <?php
-                        $total_member = $pdo->query("SELECT sum(member_center) as member from center where id_cabang='$id_cabang' group by id_cabang  ");
-                        $total_member = $total_member->fetch();
-                        echo $total_member['member'];
-                        ?>
-                    </td>
-                </tr>
-
-            </table>
+            <div class="card modern-card mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <i class="fas fa-info-circle text-info me-2"></i>
+                            <span class="text-muted">Export jadwal ke PDF atau cetak langsung</span>
+                        </div>
+                        <div>
+                            <button onclick="exportToPDF()" class="btn btn-sm btn-danger me-2">
+                                <i class="fas fa-file-pdf me-2"></i>Export PDF
+                            </button>
+                            <button onclick="window.print()" class="btn btn-sm btn-primary">
+                                <i class="fas fa-print me-2"></i>Print Jadwal
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
-<?php
-$query = "delete from center where nama_cabang='$namaCabang'";
-$pdo->query($query);
-?>
-<style>
-@media print {
 
-    /* Sembunyikan semua elemen kecuali elemen dengan id printArea */
-    body * {
-        visibility: hidden;
-    }
+        <div class="col-12">
+            <div class="card modern-card">
+                <div class="card-body p-0">
+                    <div class="table-responsive" id='printArea'>
+                        <table border="1" class='table table-bordered mb-0' style="border-collapse: collapse;">
+                            <thead>
+                                <tr>
+                                    <th colspan="20" style="text-align: center; padding: 15px; font-size: 16px;">
+                                        <strong>JADWAL CENTER MEETING</strong><br>
+                                        <strong>CABANG <?= strtoupper($namaCabang) ?></strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                // Get all staff
+                                $qkar_all = "SELECT distinct c.staff from center c where c.nama_cabang='$namaCabang' order by c.staff asc";
+                                $staff_list = $pdo->query($qkar_all)->fetchAll();
 
+                                // Get all days
+                                $qhari = "SELECT distinct hari from center where nama_cabang='$namaCabang' order by FIELD(hari,'senin','selasa','rabu','kamis','jumat') asc";
+                                $hari_list = $pdo->query($qhari)->fetchAll();
 
-    #printArea,
-    #printArea * {
-        visibility: visible;
-    }
+                                foreach ($hari_list as $hari) {
+                                    // Header row with day name and staff names
+                                    echo "<tr>";
+                                    echo "<td rowspan='2' style='padding: 10px; font-weight: bold; vertical-align: middle; text-align: center; background-color: #f8f9fa;'>" . strtoupper($hari['hari']) . "</td>";
 
-    #printArea {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-    }
+                                    foreach ($staff_list as $staff) {
+                                        $pecah_nama = explode(" ", strtoupper($staff['staff']));
+                                        $nama_staff = $pecah_nama[0];
+                                        if (strlen($nama_staff) < 3) {
+                                            $nama_staff = $pecah_nama[0] . " " . ($pecah_nama[1] ?? '');
+                                        } else {
+                                            if (!empty($pecah_nama[1])) {
+                                                $nama_staff = $nama_staff . " " . $pecah_nama[1][0];
+                                            }
+                                        }
+                                        echo "<th style='padding: 8px; text-align: center; font-size: 12px; min-width: 80px;'>" . $nama_staff . "</th>";
+                                    }
+                                    echo "<th rowspan='2' style='padding: 10px; font-weight: bold; vertical-align: middle; text-align: center; background-color: #f8f9fa;'>TOTAL</th>";
+                                    echo "</tr>";
 
-    img {
-        max-width: 100%;
-        height: auto;
-    }
+                                    // Get max rows needed for this day
+                                    $max_rows = 0;
+                                    $staff_centers = [];
+                                    foreach ($staff_list as $staff) {
+                                        $qcenter = $pdo->query("SELECT no_center, member_center from center where nama_cabang='$namaCabang' and hari='" . $hari['hari'] . "' and staff='" . $staff['staff'] . "' order by jam_center asc");
+                                        $centers = $qcenter->fetchAll();
+                                        $staff_centers[$staff['staff']] = $centers;
+                                        if (count($centers) > $max_rows) {
+                                            $max_rows = count($centers);
+                                        }
+                                    }
 
-    table,
-    tr,
-    th,
-    td {
-        border: 1px solid #6b6c6e;
-    }
+                                    // Data row - centers
+                                    echo "<tr>";
+                                    foreach ($staff_list as $staff) {
+                                        echo "<td style='vertical-align: top; text-align: left; padding: 8px;'>";
+                                        $centers = $staff_centers[$staff['staff']];
+                                        foreach ($centers as $center) {
+                                            echo sprintf("%03d", $center['no_center']) . "|" . $center['member_center'] . "<br>";
+                                        }
+                                        echo "</td>";
+                                    }
+                                    echo "</tr>";
 
-}
-</style>
-<script>
-function printCtr(elementId) {
-    // Menyimpan elemen yang akan dicetak
-    var printElement = document.getElementById(elementId);
-    var originalContents = document.body.innerHTML;
+                                    // Total row per day
+                                    echo "<tr>";
+                                    echo "<th style='padding: 8px; background-color: #f8f9fa;'>TOTAL CENTER</th>";
+                                    $total_hari = 0;
+                                    foreach ($staff_list as $staff) {
+                                        $count = count($staff_centers[$staff['staff']]);
+                                        $total_hari += $count;
+                                        echo "<td style='text-align: center; font-weight: bold; padding: 8px; background-color: #dcdedc;'>" . $count . "</td>";
+                                    }
+                                    echo "<th style='text-align: center; padding: 8px; background-color: #f8f9fa;'>" . $total_hari . "</th>";
+                                    echo "</tr>";
+                                }
 
-    // Menyembunyikan semua elemen lain kecuali elemen yang akan dicetak
-    document.body.innerHTML = printElement.outerHTML;
+                                // Grand total rows
+                                echo "<tr>";
+                                echo "<th style='padding: 10px; background-color: #e9ecef;'>TOTAL SEMUA STAFF<br>CENTER</th>";
+                                $grand_total = 0;
+                                foreach ($staff_list as $staff) {
+                                    $qcenter = $pdo->query("SELECT count(no_center) as hitung_center from center where nama_cabang='$namaCabang' and staff='" . $staff['staff'] . "'");
+                                    $result = $qcenter->fetch();
+                                    $grand_total += $result['hitung_center'];
+                                    echo "<th style='text-align: center; padding: 8px; background-color: #dcdedc;'>" . $result['hitung_center'] . "</th>";
+                                }
+                                echo "<th style='text-align: center; padding: 8px; background-color: #e9ecef;'>" . $grand_total . "</th>";
+                                echo "</tr>";
 
-    // Memanggil metode print
-    window.print();
+                                echo "<tr>";
+                                echo "<th style='padding: 10px; background-color: #e9ecef;'>MEMBER</th>";
+                                $grand_total_member = 0;
+                                foreach ($staff_list as $staff) {
+                                    $qcenter = $pdo->query("SELECT sum(member_center) as member from center where nama_cabang='$namaCabang' and staff='" . $staff['staff'] . "'");
+                                    $result = $qcenter->fetch();
+                                    $member = $result['member'] ?? 0;
+                                    $grand_total_member += $member;
+                                    echo "<th style='text-align: center; padding: 8px; background-color: #dcdedc;'>" . $member . "</th>";
+                                }
+                                echo "<th style='text-align: center; padding: 8px; background-color: #e9ecef;'>" . $grand_total_member . "</th>";
+                                echo "</tr>";
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <?php
+            $query = "delete from center where nama_cabang='$namaCabang'";
+            $pdo->query($query);
+            ?>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+            <script>
+                function exportToPDF() {
+                    const element = document.getElementById('printArea');
+                    const opt = {
+                        margin: 10,
+                        filename: 'Jadwal_Center_<?= strtoupper($namaCabang) ?>_<?= date("Y-m-d") ?>.pdf',
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2, useCORS: true },
+                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+                    };
+                    
+                    html2pdf().set(opt).from(element).save();
+                }
 
-    // Mengembalikan konten asli halaman setelah mencetak
-    document.body.innerHTML = originalContents;
-    location.reload(); // Reload halaman untuk mengembalikan e
+                function printCtr(elementId) {
+                    // Menyimpan elemen yang akan dicetak
+                    var printElement = document.getElementById(elementId);
+                    var originalContents = document.body.innerHTML;
 
-}
-</script>
+                    // Menyembunyikan semua elemen lain kecuali elemen yang akan dicetak
+                    document.body.innerHTML = printElement.outerHTML;
+
+                    // Memanggil metode print
+                    window.print();
+
+                    // Mengembalikan konten asli halaman setelah mencetak
+                    document.body.innerHTML = originalContents;
+                    location.reload(); // Reload halaman untuk mengembalikan e
+
+                }
+            </script>

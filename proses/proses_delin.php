@@ -612,7 +612,23 @@ $writer = new Xlsx($spreadsheet);
 $folder = "FILE/";
 $filename = "CEK PAR $nama_cabang $tgl_delin_awal - $tgl_delin_akhir.xlsx";
 $writer->save($folder . $filename);
-$delete = "delete from deliquency where session='$sesi'";
-$pdo->query($delete);
-pindah("download.php?filename=" . $filename);
+
+//hapus delin
+$hapus_delin = $pdo->query("DELETE FROM deliquency WHERE cabang='$nama_cabang' AND (tgl_input='$tgl_delin_awal' OR tgl_input='$tgl_delin_akhir') ");
+$hapus_delin->execute();
+
+// Auto-download dan kembali ke halaman cek_par
 ?>
+<script>
+    // Trigger download via iframe
+    var iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = 'download.php?filename=<?= urlencode($filename) ?>&cleanup=delin_session&session=<?= urlencode((string)($sesi ?? '')) ?>';
+    document.body.appendChild(iframe);
+    
+    // Redirect setelah 2 detik
+    setTimeout(function() {
+        window.location.href = 'index.php?menu=cek_par';
+    }, 2000);
+</script>
+<?php

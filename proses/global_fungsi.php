@@ -136,6 +136,9 @@ function haritanggal($tanggal)
 
 function aman($teks)
 {
+    if ($teks === null || $teks === '') {
+        return '';
+    }
     return preg_replace("/'/", "-", $teks);
 }
 
@@ -323,6 +326,9 @@ function badge($teks, $warna = 'success')
 }
 function removeNonNumeric($input)
 {
+    if ($input === null || $input === '') {
+        return '';
+    }
     // Hapus karakter selain angka
     $numericOnly = preg_replace("/[^0-9]/", "", $input);
 

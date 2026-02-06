@@ -5,20 +5,21 @@
         <?php
         @$sesi = $_SESSION['idLogin'];
         @$superuser = $_SESSION['jenisAkun'];
-        if (!$sesi == '' || !$sesi == null) {
+        $is_logged_in = !($sesi == '' || $sesi == null);
+        if ($is_logged_in) {
 
             include_once("./proses/layout/navbar.php");
         }
         ?>
 
         <!-- Konten -->
-        <main role="main" class="col-md-10 ml-sm-auto col-lg-10 ">
+        <main role="main" class="<?= $is_logged_in ? 'col-md-10 ml-sm-auto col-lg-10' : 'col-12 px-0' ?>">
             <div id="content">
 
                 <?php
 
 
-                if ($sesi == '' || $sesi == null || $_SESSION['jabatan'] != "Regional") {
+                if (!$is_logged_in) {
 
                     include("./proses/view/login.php");
                 } else {
