@@ -3,6 +3,8 @@ error_reporting(0);
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 
 ?>
@@ -68,8 +70,7 @@ if (isset($_POST['preview'])) {
 
     $file = $_FILES['file']['tmp_name'];
     $path = $file;
-    $tgl = $_POST['tgl'];
-    $reader = PHPExcel_IOFactory::createReaderForFile($path);
+    $reader = IOFactory::createReaderForFile($path);
     $objek = $reader->load($path);
     $ws = $objek->getActiveSheet();
     $last_row = $ws->getHighestDataRow();
@@ -392,7 +393,7 @@ if (isset($_POST['preview'])) {
     $stmt = $pdo->query($sql_delete);
 
     for ($row = 3; $row <= $last_row; $row++) {
-        $no_center =  ganti_karakter($ws->getCell("C" . $row)->getValue()) + 0;
+        $no_center =  floatval(ganti_karakter($ws->getCell("C" . $row)->getValue()));
         if ($no_center > 0) {
 
 
@@ -400,27 +401,33 @@ if (isset($_POST['preview'])) {
             $client_id = ganti_karakter1($ws->getCell("D" . $row)->getValue());
             $nama_nasabah = ganti_karakter($ws->getCell("E" . $row)->getValue());
             $jenis_produk = ganti_karakter($ws->getCell("G" . $row)->getValue());
-            $disburse = ganti_karakter($ws->getCell("H" . $row)->getValue());
+            $disburse = floatval(ganti_karakter($ws->getCell("H" . $row)->getValue()));
             $jk = ganti_karakter($ws->getCell("I" . $row)->getValue());
-            $balance = ganti_karakter($ws->getCell("M" . $row)->getValue());
-            $arreas = ganti_karakter($ws->getCell("N" . $row)->getValue());
-            $wpd = ganti_karakter($ws->getCell("O" . $row)->getValue());
-            $tgl_dis = ganti_karakter1($ws->getCell("J" . $row)->getValue());
-            $tgl_dis = date("Y-m-d", PHPExcel_Shared_Date::ExcelToPHP($tgl_dis));
+            $balance = floatval(ganti_karakter($ws->getCell("M" . $row)->getValue()));
+            $arreas = floatval(ganti_karakter($ws->getCell("N" . $row)->getValue()));
+            $wpd = floatval(ganti_karakter($ws->getCell("O" . $row)->getValue()));
+            $tgl_dis_raw = $ws->getCell("J" . $row)->getValue();
+            // Cek apakah nilai adalah tanggal Excel (numeric)
+            if (is_numeric($tgl_dis_raw)) {
+                $tgl_dis = date("Y-m-d", Date::excelToDateTimeObject($tgl_dis_raw)->getTimestamp());
+            } else {
+                // Jika sudah string tanggal, parse langsung
+                $tgl_dis = date("Y-m-d", strtotime($tgl_dis_raw));
+            }
             $tanggal = date_create($tgl_dis)->format('m/d/Y');
 
             // SIMPANAN
-            $s_wajib =  ganti_karakter($ws->getCell("U" . $row)->getValue());
-            $s_sukarela =  ganti_karakter($ws->getCell("V" . $row)->getValue());
-            $s_pensiun =  ganti_karakter($ws->getCell("W" . $row)->getValue());
-            $s_hariraya =  ganti_karakter($ws->getCell("X" . $row)->getValue());
-            $s_khusus =  ganti_karakter($ws->getCell("Y" . $row)->getValue());
-            $s_qurban =  ganti_karakter($ws->getCell("Z" . $row)->getValue());
-            $s_sipadan =  ganti_karakter($ws->getCell("AA" . $row)->getValue());
+            $s_wajib =  floatval(ganti_karakter($ws->getCell("U" . $row)->getValue()));
+            $s_sukarela =  floatval(ganti_karakter($ws->getCell("V" . $row)->getValue()));
+            $s_pensiun =  floatval(ganti_karakter($ws->getCell("W" . $row)->getValue()));
+            $s_hariraya =  floatval(ganti_karakter($ws->getCell("X" . $row)->getValue()));
+            $s_khusus =  floatval(ganti_karakter($ws->getCell("Y" . $row)->getValue()));
+            $s_qurban =  floatval(ganti_karakter($ws->getCell("Z" . $row)->getValue()));
+            $s_sipadan =  floatval(ganti_karakter($ws->getCell("AA" . $row)->getValue()));
 
-            $angsuran =  ganti_karakter($ws->getCell("AB" . $row)->getValue());
-            $rill =  ganti_karakter($ws->getCell("AD" . $row)->getValue());
-            $ke =  ganti_karakter($ws->getCell("AC" . $row)->getValue());
+            $angsuran =  floatval(ganti_karakter($ws->getCell("AB" . $row)->getValue()));
+            $rill =  floatval(ganti_karakter($ws->getCell("AD" . $row)->getValue()));
+            $ke =  floatval(ganti_karakter($ws->getCell("AC" . $row)->getValue()));
             $tujuan =  ganti_karakter($ws->getCell("AE" . $row)->getValue());
             $hari =  ganti_karakter($ws->getCell("AF" . $row)->getValue());
             $staff =  ganti_karakter1($ws->getCell("AG" . $row)->getValue());
@@ -681,7 +688,8 @@ if (isset($_POST['preview'])) {
 
         $sisa_saldo = $row['sisa_saldo'];
         $satu_persen = $sisa_saldo * 0;
-        $tpk = ceil($sisa_saldo / 50000) * 50000;
+        // $tpk = ceil($sisa_saldo / 50000) * 50000;
+        $tpk = $sisa_saldo ;
         // $tpk = $tpk * 10000;
         // echo angka($sisa_saldo) . ' - ' . $row['nasabah'] . ' - ' . angka($tpk) . '<br/>';
         $setengah  = ($row['minggu_rill'] / $row['priode']) * 100;

@@ -141,7 +141,10 @@ function aman($teks)
 
 function ganti_karakter($text)
 {
-    return   preg_replace('/[^a-zA-Z0-9()_ .,"\'\\-;]/', '', $text);
+    if ($text === null || $text === '') {
+        return '';
+    }
+    return preg_replace('/[^a-zA-Z0-9()_ .,"\'\\-;]/', '', $text);
 }
 function no_center($no)
 {
@@ -149,7 +152,10 @@ function no_center($no)
 }
 function ganti_karakter1($text)
 {
-    return   preg_replace('/[^a-zA-Z0-9()_ .,"\'-;]/', '', $text);
+    if ($text === null || $text === '') {
+        return '';
+    }
+    return preg_replace('/[^a-zA-Z0-9()_ .,"\'-;]/', '', $text);
 }
 
 

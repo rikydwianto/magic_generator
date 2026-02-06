@@ -25,5 +25,5 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     // echo "Koneksi berhasil!";
 } catch (PDOException $e) {
-    die("Koneksi gagal: Terjadi masalah pada server, bukan di aplikasi jangan tanya kenapa, udah saya kasih tau di server");
+    die("Koneksi gagal: Terjadi masalah pada server database.");
 }
