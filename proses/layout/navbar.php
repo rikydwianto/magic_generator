@@ -41,6 +41,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link <?= ($menu === 'cabang_blockir') ? 'active' : '' ?>" href="<?= $url . 'index.php?menu=index&act=cabang_blockir' ?>">
+                        <i class="fas fa-2x fa-ban"></i> Cabang Blockir
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link <?= ($menu === 'generator') ? 'active' : '' ?>" href="<?= $url . 'index.php?menu=index&act=generator' ?>">
                         <i class="fas fa-2x fa-database"></i> Database
                     </a>

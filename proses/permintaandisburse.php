@@ -118,8 +118,8 @@ if (isset($_POST['xml-preview'])) {
             preg_match_all('/\d{4}-\d{2}-\d{2}/', $_Textbox102, $matches);
 
             if (!empty($matches[0])) {
-                $tanggal_awal  = $matches[0][0]; // 2025-08-22
-                $tanggal_akhir = $matches[0][1]; // 2025-08-29
+                $tanggal_awal  = $matches[0][0] ?? date('Y-m-d'); // 2025-08-22
+                $tanggal_akhir = isset($matches[0][1]) ? $matches[0][1] : $tanggal_awal; // 2025-08-29
             }
 
 
@@ -127,8 +127,12 @@ if (isset($_POST['xml-preview'])) {
             // exit;
             $textboxParts = explode(" ", $textbox101);
 
-            $namaCabang = $textboxParts[1]; // Cabang
+            $namaCabang = $textboxParts[1] ?? 'Unknown'; // Cabang
             // $tanggal = date("Y-m-d", strtotime($textboxParts[3])); // Tanggal
+
+            if (cekCabangBlocked($pdo, $namaCabang, 'index.php?menu=permintaandisburse')) {
+                return;
+            }
 
             try {
                 $log_stmt = $pdo->prepare("INSERT INTO log_permintaan_disburse (nama_cabang, file_name, tanggal_awal, tanggal_akhir, total_row, keterangan, mulai, pesan)
@@ -151,8 +155,9 @@ if (isset($_POST['xml-preview'])) {
 
 
             // Ambil elemen Details_Collection
-            $detailsCollection = $xml->Tablix1->Details_Collection->Details;
+            $detailsCollection = $xml->Tablix1->Details_Collection->Details ?? null;
 
+            if ($detailsCollection) {
             foreach ($detailsCollection as $detail) {
                 // Ambil data dari atribut <Details>
                 $centerID = (string)$detail['CenterID'];
@@ -210,6 +215,7 @@ if (isset($_POST['xml-preview'])) {
                     // ignore logging error
                 }
             }
+            } // End of if ($detailsCollection)
 
             // tambah 1 hari tanggal awal
             $tanggal_awal = date("Y-m-d", strtotime($tanggal_awal . " +1 day"));

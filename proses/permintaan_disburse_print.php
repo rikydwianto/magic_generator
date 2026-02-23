@@ -1,3 +1,88 @@
+<style>
+    /* General Styles untuk Screen dan PDF Export */
+    .modern-card {
+        border: 2px solid #dee2e6;
+        margin-bottom: 1rem;
+    }
+    
+    .card-header {
+        border-bottom: 2px solid #000;
+    }
+    
+    table {
+        border: 2px solid #000;
+        border-collapse: collapse;
+        width: 100%;
+    }
+    
+    table th, table td {
+        border: 1px solid #000;
+        padding: 8px;
+    }
+    
+    table thead tr {
+        background-color: #f8f9fa;
+    }
+    
+    /* Print Styles */
+    @media print {
+        .modern-card {
+            page-break-inside: avoid;
+            border: 2px solid #000 !important;
+            box-shadow: none !important;
+        }
+        
+        .card-header {
+            border-bottom: 2px solid #000 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        table {
+            border: 2px solid #000 !important;
+            border-collapse: collapse !important;
+        }
+        
+        table th, table td {
+            border: 1px solid #000 !important;
+            padding: 8px !important;
+        }
+        
+        table thead tr {
+            background-color: #f8f9fa !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        tr[style*="background-color"] {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        
+        .btn, .page-header-disburse, .info-card {
+            display: none !important;
+        }
+        
+        .page-break {
+            page-break-after: always !important;
+            break-after: always !important;
+        }
+        
+        .badge {
+            border: 1px solid #000 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+    }
+    
+    /* Screen-only responsive wrapper */
+    @media screen {
+        .table-responsive {
+            overflow-x: auto;
+        }
+    }
+</style>
+
 <div class="container-fluid px-4 py-3">
     <?php
     $namaCabang = aman($_GET['nama_cabang']);
@@ -28,7 +113,7 @@
 
     <div class="row">
         <div class="col-12">
-            <div class="card modern-card mb-3">
+            <div class="card modern-card info-card mb-3">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
@@ -60,11 +145,16 @@
                 ORDER BY tanggal ASC
             ");
 
-            while ($tgl = $qtgl->fetch()) {
+            $allDates = $qtgl->fetchAll();
+            $totalDates = count($allDates);
+            $currentIndex = 0;
+
+            foreach ($allDates as $tgl) {
+                $currentIndex++;
                 $tanggal_loop = $tgl['tanggal'];
             ?>
-                <div class="card modern-card mb-4">
-                    <div class="card-header" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
+                <div class="card modern-card mb-4" style="border: 2px solid #dee2e6;">
+                    <div class="card-header" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border-bottom: 2px solid #000;">
                         <h5 class="mb-0 text-center">
                             <strong>PERMINTAAN DISBURSE CABANG <?= strtoupper($namaCabang) ?></strong><br>
                             <span style="font-size: 0.9rem;">Periode: <?= haritanggal($tanggal_loop) ?></span>
@@ -72,15 +162,15 @@
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
-                            <table class="table table-bordered mb-0" style="border-collapse: collapse;">
+                            <table class="table table-bordered mb-0">
                                 <thead class="table-light">
                                     <tr>
-                                        <th style="width: 10%;">STAFF</th>
-                                        <th style="width: 35%;">CENTER - ANGGOTA</th>
-                                        <th style="width: 8%;">JUMLAH</th>
-                                        <th style="width: 15%;">PINJAMAN</th>
-                                        <th style="width: 15%;">TOPUP</th>
-                                        <th style="width: 17%;">NETT DISBURSE</th>
+                                        <th style="width: 10%; border: 1px solid #000; background-color: #f8f9fa;">STAFF</th>
+                                        <th style="width: 35%; border: 1px solid #000; background-color: #f8f9fa;">CENTER - ANGGOTA</th>
+                                        <th style="width: 8%; border: 1px solid #000; background-color: #f8f9fa;">JUMLAH</th>
+                                        <th style="width: 15%; border: 1px solid #000; background-color: #f8f9fa;">PINJAMAN</th>
+                                        <th style="width: 15%; border: 1px solid #000; background-color: #f8f9fa;">TOPUP</th>
+                                        <th style="width: 17%; border: 1px solid #000; background-color: #f8f9fa;">NETT DISBURSE</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -130,32 +220,32 @@
                                         $sta = $pdo->query($query_detail)->fetchAll();
 
                                         echo "<tr style='background-color: #ffe5e5; font-weight: bold;'>
-                                                <td colspan='2' style='padding: 10px;'>{$row['officer_name']}</td>
-                                                <td style='text-align: center; padding: 10px;'>{$row['jumlah']}</td>
-                                                <td style='text-align: right; padding: 10px;'>" . formatNumber($sisaOS) . "</td>
-                                                <td style='text-align: right; padding: 10px;'>" . formatNumber($osPokokTopUp) . "</td>
-                                                <td style='text-align: right; padding: 10px;'>" . formatNumber($netDisburse) . "</td>
+                                                <td colspan='2' style='padding: 10px; border: 1px solid #000;'>{$row['officer_name']}</td>
+                                                <td style='text-align: center; padding: 10px; border: 1px solid #000;'>{$row['jumlah']}</td>
+                                                <td style='text-align: right; padding: 10px; border: 1px solid #000;'>" . formatNumber($sisaOS) . "</td>
+                                                <td style='text-align: right; padding: 10px; border: 1px solid #000;'>" . formatNumber($osPokokTopUp) . "</td>
+                                                <td style='text-align: right; padding: 10px; border: 1px solid #000;'>" . formatNumber($netDisburse) . "</td>
                                               </tr>";
 
                                         foreach ($sta as $st) {
                                             $netDisbursedet = $st['loan_amount'] - $st['os_pokok_top_up'];
                                             echo "<tr>
-                                                    <td style='padding: 8px; text-align: center;'>{$st['center_id']}</td>
-                                                    <td style='padding: 8px;'>{$st['client_id']} - {$st['client_name']} <small>({$st['product_name']} - Ke-{$st['pinj_ke']})</small></td>
-                                                    <td style='padding: 8px; text-align: center;'><span class='badge bg-info'>{$st['jenis_top_up']}</span></td>
-                                                    <td style='padding: 8px; text-align: right;'>" . formatNumber($st['loan_amount']) . "</td>
-                                                    <td style='padding: 8px; text-align: right;'>" . formatNumber($st['os_pokok_top_up']) . "</td>
-                                                    <td style='padding: 8px; text-align: right; font-weight: bold;'>" . formatNumber($netDisbursedet) . "</td>
+                                                    <td style='padding: 8px; text-align: center; border: 1px solid #000;'>{$st['center_id']}</td>
+                                                    <td style='padding: 8px; border: 1px solid #000;'>{$st['client_id']} - {$st['client_name']} <small>({$st['product_name']} - Ke-{$st['pinj_ke']})</small></td>
+                                                    <td style='padding: 8px; text-align: center; border: 1px solid #000;'><span class='badge bg-info'>{$st['jenis_top_up']}</span></td>
+                                                    <td style='padding: 8px; text-align: right; border: 1px solid #000;'>" . formatNumber($st['loan_amount']) . "</td>
+                                                    <td style='padding: 8px; text-align: right; border: 1px solid #000;'>" . formatNumber($st['os_pokok_top_up']) . "</td>
+                                                    <td style='padding: 8px; text-align: right; font-weight: bold; border: 1px solid #000;'>" . formatNumber($netDisbursedet) . "</td>
                                                   </tr>";
                                         }
                                     }
                                     ?>
                                     <tr style="background-color: #e9ecef; font-weight: bold; font-size: 1.05rem;">
-                                        <td colspan="2" style="padding: 12px; text-align: center;">GRAND TOTAL</td>
-                                        <td style="padding: 12px; text-align: center;"><?= $grandTotalJumlah ?></td>
-                                        <td style="padding: 12px; text-align: right;"><?= formatNumber($grandTotalPinjaman) ?></td>
-                                        <td style="padding: 12px; text-align: right;"><?= formatNumber($grandTotalTopup) ?></td>
-                                        <td style="padding: 12px; text-align: right;"><?= formatNumber($grandNettDisburse) ?></td>
+                                        <td colspan="2" style="padding: 12px; text-align: center; border: 1px solid #000;">GRAND TOTAL</td>
+                                        <td style="padding: 12px; text-align: center; border: 1px solid #000;"><?= $grandTotalJumlah ?></td>
+                                        <td style="padding: 12px; text-align: right; border: 1px solid #000;"><?= formatNumber($grandTotalPinjaman) ?></td>
+                                        <td style="padding: 12px; text-align: right; border: 1px solid #000;"><?= formatNumber($grandTotalTopup) ?></td>
+                                        <td style="padding: 12px; text-align: right; border: 1px solid #000;"><?= formatNumber($grandNettDisburse) ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -163,8 +253,10 @@
                     </div>
                 </div>
 
-                <!-- page break untuk print per tanggal -->
-                <div style="page-break-after: always;"></div>
+                <!-- page break untuk print per hari per lembar, kecuali halaman terakhir -->
+                <?php if ($currentIndex < $totalDates) { ?>
+                <div class="page-break"></div>
+                <?php } ?>
 
             <?php
             }
@@ -179,11 +271,27 @@
     function exportToPDF() {
         const element = document.getElementById('printArea');
         const opt = {
-            margin: 10,
+            margin: [10, 10, 10, 10],
             filename: 'Permintaan_Disburse_<?= strtoupper($namaCabang) ?>_<?= date("Y-m-d") ?>.pdf',
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            html2canvas: { 
+                scale: 2, 
+                useCORS: true,
+                logging: false,
+                letterRendering: true,
+                allowTaint: true
+            },
+            jsPDF: { 
+                unit: 'mm', 
+                format: 'a4', 
+                orientation: 'landscape',
+                compress: true
+            },
+            pagebreak: { 
+                mode: ['avoid-all', 'css', 'legacy'],
+                before: '.page-break',
+                after: '.page-break'
+            }
         };
         
         html2pdf().set(opt).from(element).save();

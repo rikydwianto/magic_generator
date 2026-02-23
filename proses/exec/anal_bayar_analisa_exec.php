@@ -385,11 +385,13 @@ if ($session === '' || !$row) {
             $final_message = "Analisa selesai dengan error (" . count($errors) . ")";
         }
         try {
-            $stmt = $pdo->prepare("UPDATE exec_analisa_par_multi SET status = :status, message = :message, output_file = :output_file, finish_time = NOW() WHERE session = :session");
+            $waktu_sekarang = date("Y-m-d H:i:s");
+            $stmt = $pdo->prepare("UPDATE exec_analisa_par_multi SET status = :status, message = :message, output_file = :output_file, finish_time = :finish_time WHERE session = :session");
             $stmt->execute([
                 ':status' => $final_status,
                 ':message' => $final_message,
                 ':output_file' => $output_file !== '' ? $output_file : null,
+                ':finish_time' => $waktu_sekarang,
                 ':session' => $session,
             ]);
         } catch (PDOException $e) {

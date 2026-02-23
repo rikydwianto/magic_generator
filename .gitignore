@@ -1,3 +1,14 @@
 .env
 api/temp/
 php_error.log
+*.log
+
+# Uploaded & generated files
+FILE/CEK_PAR_REGIONAL/
+FILE/ANALISA_REG/
+FILE/1770*/
+FILE/*.xlsx
+FILE/*.xls
+
+# Uploaded files (tmp/uploads)
+uploads/

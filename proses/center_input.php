@@ -119,6 +119,10 @@ if (isset($_POST['xml-preview'])) {
             $pecah = explode(",", $executionTime);
             $namaCabang = $pecah[0];
 
+            if (cekCabangBlocked($pdo, $namaCabang, 'index.php?menu=center_meeting')) {
+                return;
+            }
+
             $log_id = null;
             try {
                 $log_stmt = $pdo->prepare("INSERT INTO log_center_meeting (nama_cabang, id_cabang, file_name, total_center, total_hari, keterangan, mulai, pesan)

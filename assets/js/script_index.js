@@ -115,3 +115,22 @@ function klikGambar(id, ket) {
 
   $("#gambarModal").modal("show");
 }
+
+/**
+ * Menampilkan alert untuk cabang yang diblokir
+ * @param {string} namaCabang - Nama cabang yang diblokir
+ * @param {string} redirectUrl - URL untuk redirect setelah OK (optional)
+ */
+function alertCabangDiblokir(namaCabang, redirectUrl) {
+  Swal.fire({
+    icon: 'error',
+    title: 'Cabang Diblokir',
+    html: '<strong>Proses tidak dapat dilanjutkan</strong><br>Cabang <b>' + namaCabang + '</b> masuk dalam daftar blokir.<br><br>Status: <span class="badge bg-danger">Limited Branch Name</span>',
+    confirmButtonText: 'OK',
+    allowOutsideClick: false
+  }).then((result) => {
+    if (result.isConfirmed && redirectUrl) {
+      window.location.href = redirectUrl;
+    }
+  });
+}

@@ -145,7 +145,25 @@ use PhpOffice\PhpSpreadsheet\Shared\Date;
 </div>
 
 <?php
+/**
+ * ReadFilter: hanya muat kolom B-AH (kolom yang dipakai) untuk hemat memory.
+ */
+class CekParReadFilter implements \PhpOffice\PhpSpreadsheet\Reader\IReadFilter
+{
+    public function readCell($columnAddress, $row, $worksheetName = '')
+    {
+        $cols = ['B','C','D','E','F','G','H','I','J','K',
+                 'L','M','N','O','P','Q','R','S','T','U',
+                 'V','W','X','Y','Z',
+                 'AA','AB','AC','AD','AE','AF','AG','AH'];
+        return in_array($columnAddress, $cols);
+    }
+}
+
 if (isset($_POST['preview'])) {
+    ini_set('memory_limit', '-1');
+    ini_set('max_execution_time', 0);
+
     if (
         empty($_FILES['file']['name']) || $_FILES['file']['error'] === UPLOAD_ERR_NO_FILE ||
         empty($_FILES['file1']['name']) || $_FILES['file1']['error'] === UPLOAD_ERR_NO_FILE
@@ -165,6 +183,9 @@ if (isset($_POST['preview'])) {
     $file = $_FILES['file']['tmp_name'];
     $path = $file;
     $reader = IOFactory::createReaderForFile($path);
+    $reader->setReadDataOnly(true);
+    $reader->setReadEmptyCells(false);
+    $reader->setReadFilter(new CekParReadFilter());
     $objek = $reader->load($path);
     $ws = $objek->getActiveSheet();
     $last_row = $ws->getHighestDataRow();
@@ -184,22 +205,28 @@ if (isset($_POST['preview'])) {
     $namaCabang = preg_replace('/As$/', '', $namaCabang);
 
     if ($namaCabang != "") {
+        if (cekCabangBlocked($pdo, $namaCabang, $url . 'index.php?menu=cek_par')) {
+            return;
+        }
 
         try {
             $sql = "INSERT INTO log_cek_par (cabang, mulai, selesai, keterangan, created_at, edited_at)
-                VALUES (:cabang, :mulai, :selesai, :keterangan, NOW(), NOW())";
+                VALUES (:cabang, :mulai, :selesai, :keterangan, :created_at, :edited_at)";
 
             // Menyiapkan statement PDO
             $stmt = $pdo->prepare($sql);
             $mulai = date("H:i:s");
             $selesai = "";
             $keterangan = "proses";
+            $waktu_sekarang = date("Y-m-d H:i:s");
 
             // Binding parameter ke statement PDO
             $stmt->bindParam(':cabang', $namaCabang);
             $stmt->bindParam(':mulai', $mulai);
             $stmt->bindParam(':selesai', $selesai);
             $stmt->bindParam(':keterangan', $keterangan);
+            $stmt->bindParam(':created_at', $waktu_sekarang);
+            $stmt->bindParam(':edited_at', $waktu_sekarang);
 
             // Mengeksekusi statement PDO
             $stmt->execute();
@@ -317,9 +344,19 @@ if (isset($_POST['preview'])) {
 
     //FILE KE DUA
 
+    // Bebaskan memory file pertama
+    if (isset($objek)) {
+        $objek->disconnectWorksheets();
+        unset($objek, $ws, $reader);
+        gc_collect_cycles();
+    }
+
     $file = $_FILES['file1']['tmp_name'];
     $path = $file;
     $reader = IOFactory::createReaderForFile($path);
+    $reader->setReadDataOnly(true);
+    $reader->setReadEmptyCells(false);
+    $reader->setReadFilter(new CekParReadFilter());
     $objek = $reader->load($path);
     $ws = $objek->getActiveSheet();
     $last_row = $ws->getHighestDataRow();
@@ -478,7 +515,7 @@ if (isset($_POST['preview'])) {
 
 
         $sql = "UPDATE log_cek_par 
-        SET priode_dari=:tgl_satu,priode_sampai=:tgl_dua, selesai = :selesai, keterangan = :keterangan, edited_at = NOW() 
+        SET priode_dari=:tgl_satu,priode_sampai=:tgl_dua, selesai = :selesai, keterangan = :keterangan, edited_at = :edited_at 
         WHERE id = :id";
 
         // Menyiapkan statement PDO
@@ -487,10 +524,12 @@ if (isset($_POST['preview'])) {
         // Mengatur nilai parameter
         $selesai = date("H:i:s"); // Mengambil waktu saat ini
         $keterangan = "selesai"; // Mengubah keterangan menjadi "selesai"
+        $edited_at = date("Y-m-d H:i:s");
 
         // Binding parameter ke statement PDO
         $stmt->bindParam(':selesai', $selesai);
         $stmt->bindParam(':keterangan', $keterangan);
+        $stmt->bindParam(':edited_at', $edited_at);
         $stmt->bindParam(':tgl_satu', $tgl_delin);
         $stmt->bindParam(':tgl_dua', $tgl_delin1);
         $stmt->bindParam(':id', $id_log);

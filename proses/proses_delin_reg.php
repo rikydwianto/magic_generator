@@ -161,6 +161,34 @@ foreach ($headerData as $header) {
 //AKHIR SHEET5
 
 
+// SHEET 6 REKAP PER CABANG
+$sheet6 = $spreadsheet->createSheet();
+$sheet6->setTitle('REKAP PER CABANG');
+$sheet6->mergeCells('A1:L1');
+$mergedCell = $sheet6->getCell('A1');
+$mergedCell->getStyle()->getFont()->setBold(true)->setSize(15);
+$mergedCell->getStyle()->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+$mergedCell->getStyle()->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+$sheet6->getRowDimension(1)->setRowHeight(40);
+$mergedCell->getStyle()->getAlignment()->setWrapText(true);
+$sheet6->getStyle('A2:L2')->getFont()->setBold(true);
+$judul = "REKAP PER CABANG dari $tgl_delin_awal s/d $tgl_delin_akhir \n$nama_cabang";
+$sheet6->setCellValue('A1', $judul);
+$sheet6->setAutoFilter('A2:L2');
+
+$headerData = [
+    'NO', 'CABANG', 'CTR PAR', 'AGT PAR', 'REK PAR',
+    'PAR NAIK', 'PAR TURUN', 'PENGURANGAN OS PAR',
+    'TOTAL PENURUNAN', 'PERUBAHAN', 'BALANCE PAR', 'BALANCE SEBELUM',
+];
+$column = 'A';
+foreach ($headerData as $header) {
+    $sheet6->setCellValue($column . '2', $header);
+    $column++;
+}
+// AKHIR HEADER SHEET 6
+
+
 $no = 1;
 $baris_1 = 3;
 $sql_naik = "SELECT * FROM deliquency_regional WHERE `loan` NOT IN (SELECT loan FROM deliquency_regional WHERE tgl_input='$tgl_delin_awal') AND tgl_input='$tgl_delin_akhir' AND regional='$nama_cabang'  order by cabang,staff asc,hari desc";
@@ -431,6 +459,61 @@ foreach ($stmt->fetchAll() as $row) {
 //SHEET 5 ANGGOTA TIDAK BAYAR
 
 
+// DATA SHEET 6 REKAP PER CABANG
+$no = 1;
+$sql_rekap_cab = "SELECT cabang,
+    COUNT(DISTINCT no_center) AS ctr_par,
+    SUM(sisa_saldo) AS saldo,
+    COUNT(DISTINCT id_detail_nasabah) AS agt_par,
+    COUNT(id_detail_nasabah) AS rek_par
+    FROM deliquency_regional
+    WHERE tgl_input='$tgl_delin_akhir' AND regional='$nama_cabang'
+    GROUP BY cabang ORDER BY cabang ASC";
+$stmt_cab = $pdo->query($sql_rekap_cab);
+$baris_6 = 3;
+foreach ($stmt_cab->fetchAll() as $row) {
+    $cab = $row['cabang'];
+
+    $r_naik    = $pdo->query("SELECT SUM(sisa_saldo) AS total FROM deliquency_regional WHERE keterangan='naik' AND regional='$nama_cabang' AND cabang='$cab' AND tgl_input='$tgl_delin_akhir'");
+    $r_turun   = $pdo->query("SELECT SUM(sisa_saldo) AS total FROM deliquency_regional WHERE keterangan='turun' AND regional='$nama_cabang' AND cabang='$cab' AND tgl_input='$tgl_delin_awal'");
+    $r_turunos = $pdo->query("SELECT SUM(perubahan) AS total FROM deliquency_regional WHERE keterangan='turunos' AND regional='$nama_cabang' AND cabang='$cab' AND tgl_input='$tgl_delin_akhir'");
+    $r_saldo_sebelum = $pdo->query("SELECT SUM(sisa_saldo) AS total FROM deliquency_regional WHERE regional='$nama_cabang' AND cabang='$cab' AND tgl_input='$tgl_delin_awal'");
+
+    $cab_naik            = (float)($r_naik->fetch()['total'] ?? 0);
+    $cab_turun           = (float)($r_turun->fetch()['total'] ?? 0);
+    $cab_turunos         = (float)($r_turunos->fetch()['total'] ?? 0);
+    $cab_saldo_sebelum   = (float)($r_saldo_sebelum->fetch()['total'] ?? 0);
+    $cab_total_penurunan = $cab_turun + $cab_turunos;
+    $cab_perubahan       = $cab_naik - $cab_total_penurunan;
+
+    $isiData = [
+        $no, $cab,
+        $row['ctr_par'], $row['agt_par'], $row['rek_par'],
+        $cab_naik, $cab_turun, $cab_turunos,
+        $cab_total_penurunan, $cab_perubahan, $row['saldo'], $cab_saldo_sebelum,
+    ];
+    $column = 'A';
+    foreach ($isiData as $isi) {
+        $sheet6->setCellValue($column . $baris_6, $isi);
+        $column++;
+    }
+
+    $colorRGB = $cab_perubahan > 0 ? 'FFB7B7' : ($cab_perubahan < 0 ? '8DFB90' : 'DFE1E5');
+    $sheet6->getStyle('A' . $baris_6 . ':L' . $baris_6)
+        ->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB($colorRGB);
+
+    $no++;
+    $baris_6++;
+}
+$sheet6->mergeCells('A' . $baris_6 . ':B' . $baris_6);
+$sheet6->setCellValue('A' . $baris_6, 'TOTAL');
+$kurang_1 = $baris_6 - 1;
+foreach (range('C', 'L') as $col) {
+    $sheet6->setCellValue($col . $baris_6, '=SUM(' . $col . '3:' . $col . $kurang_1 . ')');
+}
+// AKHIR DATA SHEET 6
+
+
 //SETING SHEET 1/KENAIKAN
 $batas_sh1 = $hitung_naik + 3;
 $sheet1->getStyle('G3:L' . $batas_sh1)->getNumberFormat()->setFormatCode('#,##0');
@@ -477,11 +560,29 @@ $sheet5->getStyle("A2:AA" . $batas_sh5)->getFont()->setSize(8);
 $sheet5->getStyle('A2:T' . $batas_sh5)->applyFromArray($styleArray); //INI UNTUK BORDER
 
 
+//SHEET6
+foreach (range('A', 'L') as $col) {
+    $sheet6->getColumnDimension($col)->setAutoSize(true);
+}
+$sheet6->getStyle('C3:L' . $baris_6)->getNumberFormat()->setFormatCode('#,##0');
+$sheet6->getStyle('A2:Z' . $baris_6)->getFont()->setSize(8);
+$sheet6->getStyle('A2:L' . $baris_6)->applyFromArray($styleArray);
 
 
 $writer = new Xlsx($spreadsheet);
 $folder = "FILE/";
 $filename = "CEK PAR $nama_cabang $tgl_delin_awal - $tgl_delin_akhir.xlsx";
 $writer->save($folder . $filename);
-pindah("download.php?filename=" . urlencode($filename) . "&cleanup=delin_reg_session&session=" . urlencode((string)($sesi ?? '')));
+$menuFrom = htmlspecialchars($_GET['from'] ?? 'delin_reg');
+?>
+<script>
+    var iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = 'download.php?filename=<?= urlencode($filename) ?>&cleanup=delin_reg_session&session=<?= urlencode((string)($sesi ?? '')) ?>';
+    document.body.appendChild(iframe);
+    setTimeout(function() {
+        window.location.href = 'index.php?menu=<?= $menuFrom ?>';
+    }, 2000);
+</script>
+<?php
 ?>

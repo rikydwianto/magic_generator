@@ -560,6 +560,64 @@ foreach ($stmt->fetchAll() as $row) {
 //SHEET 5 ANGGOTA TIDAK BAYAR
 
 
+// SHEET 6 REKAP PER CABANG
+$sheet6 = $spreadsheet->createSheet();
+$sheet6->setTitle('REKAP PER CABANG');
+$sheet6->mergeCells('A1:K1');
+$mergedCell = $sheet6->getCell('A1');
+$mergedCell->getStyle()->getFont()->setBold(true)->setSize(15);
+$mergedCell->getStyle()->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+$mergedCell->getStyle()->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+$sheet6->getRowDimension(1)->setRowHeight(40);
+$mergedCell->getStyle()->getAlignment()->setWrapText(true);
+$sheet6->getStyle('A2:K2')->getFont()->setBold(true);
+$judul = "REKAP PER CABANG dari $tgl_delin_awal s/d $tgl_delin_akhir \nCABANG $nama_cabang";
+$sheet6->setCellValue('A1', $judul);
+$sheet6->setAutoFilter('A2:K2');
+
+$headerData = [
+    'NO', 'CABANG', 'CTR PAR', 'AGT PAR', 'REK PAR',
+    'PAR NAIK', 'PAR TURUN', 'PENGURANGAN OS PAR',
+    'TOTAL PENURUNAN', 'PERUBAHAN', 'BALANCE PAR',
+];
+$column = 'A';
+foreach ($headerData as $header) {
+    $sheet6->setCellValue($column . '2', $header);
+    $column++;
+}
+
+$sql_rekap_cab = "SELECT COUNT(DISTINCT no_center) AS ctr_par, SUM(sisa_saldo) AS saldo,
+    COUNT(DISTINCT id_detail_nasabah) AS agt_par, COUNT(id_detail_nasabah) AS rek_par
+    FROM deliquency WHERE tgl_input='$tgl_delin_akhir' AND cabang='$nama_cabang'";
+$rc = $pdo->query($sql_rekap_cab)->fetch();
+
+$sql_naik_cab    = "SELECT SUM(sisa_saldo) AS total FROM deliquency WHERE keterangan='naik' AND cabang='$nama_cabang' AND tgl_input='$tgl_delin_akhir'";
+$sql_turun_cab   = "SELECT SUM(sisa_saldo) AS total FROM deliquency WHERE keterangan='turun' AND cabang='$nama_cabang' AND tgl_input='$tgl_delin_awal'";
+$sql_turunos_cab = "SELECT SUM(perubahan) AS total FROM deliquency WHERE keterangan='turunos' AND cabang='$nama_cabang' AND tgl_input='$tgl_delin_akhir'";
+
+$cab_naik            = (float)($pdo->query($sql_naik_cab)->fetch()['total'] ?? 0);
+$cab_turun           = (float)($pdo->query($sql_turun_cab)->fetch()['total'] ?? 0);
+$cab_turunos         = (float)($pdo->query($sql_turunos_cab)->fetch()['total'] ?? 0);
+$cab_total_penurunan = $cab_turun + $cab_turunos;
+$cab_perubahan       = $cab_naik - $cab_total_penurunan;
+
+$isiData = [
+    1, $nama_cabang,
+    $rc['ctr_par'], $rc['agt_par'], $rc['rek_par'],
+    $cab_naik, $cab_turun, $cab_turunos,
+    $cab_total_penurunan, $cab_perubahan, $rc['saldo'],
+];
+$column = 'A';
+foreach ($isiData as $isi) {
+    $sheet6->setCellValue($column . '3', $isi);
+    $column++;
+}
+
+$colorRGB = $cab_perubahan > 0 ? 'FFB7B7' : ($cab_perubahan < 0 ? '8DFB90' : 'DFE1E5');
+$sheet6->getStyle('A3:K3')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB($colorRGB);
+// AKHIR SHEET 6 REKAP PER CABANG
+
+
 //SETING SHEET 1/KENAIKAN
 $batas_sh1 = $hitung_naik + 3;
 $sheet1->getStyle('G3:L' . $batas_sh1)->getNumberFormat()->setFormatCode('#,##0');
@@ -606,6 +664,13 @@ $sheet5->getStyle("A2:Z" . $batas_sh5)->getFont()->setSize(8);
 $sheet5->getStyle('A2:S' . $batas_sh5)->applyFromArray($styleArray); //INI UNTUK BORDER
 
 
+//SHEET6
+foreach (range('A', 'K') as $col) {
+    $sheet6->getColumnDimension($col)->setAutoSize(true);
+}
+$sheet6->getStyle('C3:K3')->getNumberFormat()->setFormatCode('#,##0');
+$sheet6->getStyle('A2:Z3')->getFont()->setSize(8);
+$sheet6->getStyle('A2:K3')->applyFromArray($styleArray); //INI UNTUK BORDER
 
 
 $writer = new Xlsx($spreadsheet);

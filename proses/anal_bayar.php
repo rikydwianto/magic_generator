@@ -38,8 +38,8 @@ use PhpOffice\PhpSpreadsheet\Shared\Date;
                             <strong>Fitur Analisa:</strong>
                             <ul class="mb-0 mt-2">
                                 <li>Upload banyak file Excel (.xls/.xlsx)</li>
-                                <li>Setiap file akan diproses seperti Analisa PAR biasa</li>
-                                <li>Hasil akan digabung dalam satu file ZIP</li>
+                                <li>Akan membandingkan setiap file nya lalu akan di cek apakah bayar atau tidak</li>
+                                <li>Mengecek apakah ada pemasukan sukarela apa tidak</li>
                             </ul>
                         </div>
                     </div>
@@ -50,7 +50,7 @@ use PhpOffice\PhpSpreadsheet\Shared\Date;
                                 <i class="fas fa-file-excel text-success me-2"></i>Pilih Banyak File Excel PAR
                             </label>
                             <input class="form-control form-control-lg" type="file" name='files[]' accept=".xls,.xlsx" id="formFileAnalisaMulti" multiple>
-                            <small class="text-muted">Format: .xls atau .xlsx (bisa pilih banyak file)</small>
+                            <small class="text-muted">Format: .xls atau .xlsx (minimal 2 file untuk perbandingan)</small>
                         </div>
 
                         <div class="d-grid">
@@ -66,17 +66,36 @@ use PhpOffice\PhpSpreadsheet\Shared\Date;
                         form.addEventListener('submit', function(e) {
                             var file = document.getElementById('formFileAnalisaMulti');
                             if (!file) return;
+                            
+                            // Validasi file kosong
                             if (!file.files || file.files.length === 0) {
                                 e.preventDefault();
                                 if (typeof Swal !== 'undefined') {
                                     Swal.fire({
                                         icon: 'warning',
-                                        title: 'File harus terisi',
-                                        text: 'Silakan pilih minimal 1 file Excel.'
+                                        title: 'File Harus Terisi',
+                                        text: 'Silakan pilih minimal 2 file Excel untuk perbandingan.'
                                     });
                                 } else {
                                     alert('File harus terisi');
                                 }
+                                return false;
+                            }
+                            
+                            // Validasi minimal 2 file untuk perbandingan
+                            if (file.files.length < 2) {
+                                e.preventDefault();
+                                if (typeof Swal !== 'undefined') {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'File Tidak Mencukupi',
+                                        text: 'Minimal 2 file diperlukan untuk melakukan perbandingan. Anda hanya memilih ' + file.files.length + ' file.',
+                                        confirmButtonText: 'OK'
+                                    });
+                                } else {
+                                    alert('Minimal 2 file diperlukan untuk perbandingan!');
+                                }
+                                return false;
                             }
                         });
                     })();
@@ -113,8 +132,10 @@ use PhpOffice\PhpSpreadsheet\Shared\Date;
                             </thead>
                             <tbody id="queueBody">
                                 <?php
+                              
                                 $sql = "SELECT session, cabang, total_files, status, message, created_at, updated_at, output_file
                                         FROM exec_analisa_par_multi
+                                        WHERE session ='$sesi'
                                         ORDER BY updated_at DESC";
                                 $stmt = $pdo->query($sql);
 
@@ -419,6 +440,10 @@ if (isset($_POST['preview_multi'])) {
         return;
     }
 
+    if ($cabang_set !== '' && cekCabangBlocked($pdo, $cabang_set, $url . 'index.php?menu=anal_bayar')) {
+        return;
+    }
+
     try {
         $stmt_exist = $pdo->prepare("SELECT cabang FROM exec_analisa_par_multi WHERE session = :session LIMIT 1");
         $stmt_exist->execute([':session' => $sesi_upload]);
@@ -444,15 +469,18 @@ if (isset($_POST['preview_multi'])) {
     }
 
     $file_list = json_encode($saved_files);
+    $waktu_sekarang = date("Y-m-d H:i:s");
     try {
         $stmt = $pdo->prepare("INSERT INTO exec_analisa_par_multi (session, cabang, file_list, total_files, status, message, uploaded_at)
-            VALUES (:session, :cabang, :file_list, :total_files, 'uploaded', 'Upload selesai', NOW())
-            ON DUPLICATE KEY UPDATE cabang = VALUES(cabang), file_list = VALUES(file_list), total_files = VALUES(total_files), status = 'uploaded', message = 'Upload diperbarui', uploaded_at = NOW()");
+            VALUES (:session, :cabang, :file_list, :total_files, 'uploaded', 'Upload selesai', :uploaded_at)
+            ON DUPLICATE KEY UPDATE cabang = VALUES(cabang), file_list = VALUES(file_list), total_files = VALUES(total_files), status = 'uploaded', message = 'Upload diperbarui', uploaded_at = :uploaded_at_update");
         $stmt->execute([
             ':session' => $sesi_upload,
             ':cabang' => $cabang_set,
             ':file_list' => $file_list,
             ':total_files' => count($saved_files),
+            ':uploaded_at' => $waktu_sekarang,
+            ':uploaded_at_update' => $waktu_sekarang,
         ]);
     } catch (PDOException $e) {
         // ignore logging error

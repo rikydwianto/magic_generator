@@ -546,3 +546,81 @@ function sendMessageFCM($title, $body, $token, $customData = '')
 
     return $response;
 }
+
+/**
+ * Mengecek apakah cabang ada dalam daftar block
+ * @param PDO $pdo - Database connection
+ * @param string $namaCabang - Nama cabang yang akan dicek
+ * @return bool - true jika cabang diblokir, false jika tidak
+ */
+function isCabangBlocked($pdo, $namaCabang)
+{
+    $isBlocked = false;
+    try {
+        $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM block WHERE LOWER(cabang) = LOWER(?)");
+        $stmt->execute([$namaCabang]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $isBlocked = ($result['total'] ?? 0) > 0;
+    } catch (PDOException $e) {
+        error_log("Error checking blocked branch: " . $e->getMessage());
+        return false;
+    }
+
+    // Simpan log pengecekan ke database (jika tabel tersedia)
+    try {
+        $stmtLog = $pdo->prepare("INSERT INTO block_log (cabang, is_blocked, checked_at, user_id, ip_address)
+            VALUES (:cabang, :is_blocked, :checked_at, :user_id, :ip_address)");
+        $stmtLog->execute([
+            ':cabang' => $namaCabang,
+            ':is_blocked' => $isBlocked ? 1 : 0,
+            ':checked_at' => date("Y-m-d H:i:s"),
+            ':user_id' => $_SESSION['idLogin'] ?? null,
+            ':ip_address' => $_SERVER['REMOTE_ADDR'] ?? null,
+        ]);
+    } catch (PDOException $e) {
+        error_log("Error logging blocked branch check: " . $e->getMessage());
+    }
+
+    return $isBlocked;
+}
+
+/**
+ * Mengecek cabang dan menampilkan alert jika diblokir, lalu redirect
+ * @param PDO $pdo - Database connection
+ * @param string $namaCabang - Nama cabang yang akan dicek
+ * @param string $redirectUrl - URL untuk redirect jika cabang diblokir
+ * @return bool - true jika cabang diblokir, false jika tidak
+ */
+function cekCabangBlocked($pdo, $namaCabang, $redirectUrl = '')
+{
+    if (isCabangBlocked($pdo, $namaCabang)) {
+        $url = !empty($redirectUrl) ? $redirectUrl : 'index.php?menu=anal';
+        ?>
+        <script>
+            (function() {
+                var namaCabang = <?= json_encode($namaCabang) ?>;
+                var redirectUrl = <?= json_encode($url) ?>;
+
+                function showBlockedAlert() {
+                    if (typeof window.alertCabangDiblokir === 'function') {
+                        window.alertCabangDiblokir(namaCabang, redirectUrl);
+                        return;
+                    }
+                    alert('Cabang ' + namaCabang + ' diblokir.');
+                    if (redirectUrl) {
+                        window.location.href = redirectUrl;
+                    }
+                }
+
+                if (document.readyState === 'complete') {
+                    showBlockedAlert();
+                } else {
+                    window.addEventListener('load', showBlockedAlert);
+                }
+            })();
+        </script>
+        <?php
+        return true; // Return true jika diblokir
+    }
+    return false; // Return false jika tidak diblokir
+}

@@ -333,11 +333,25 @@ set_time_limit(3000);
                             <i class="fas fa-money-bill-wave me-1"></i> DISBURSE
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?= (isset($_GET['menu']) && $_GET['menu'] == 'delin_reg') ? 'active' : '' ?>" 
-                           href="<?= $url ?>index.php?menu=delin_reg">
+                    <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle <?= (isset($_GET['menu']) && ($_GET['menu'] == 'delin_reg' || $_GET['menu'] == 'analisa_delin_reg' || $_GET['menu'] == 'proses_delin_reg' || $_GET['menu'] == 'proses_analisa_delin_reg')) ? 'active' : '' ?>" 
+                           href="#" id="navbarDropdownRegional" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-building me-1"></i> REGIONAL
                         </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownRegional">
+                            <li>
+                                <a class="dropdown-item <?= (isset($_GET['menu']) && $_GET['menu'] == 'delin_reg') ? 'active' : '' ?>" 
+                                   href="<?= $url ?>index.php?menu=delin_reg">
+                                    <i class="fas fa-chart-line me-1"></i> CEK PAR Regional
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item <?= (isset($_GET['menu']) && $_GET['menu'] == 'analisa_delin_reg') ? 'active' : '' ?>" 
+                                   href="<?= $url ?>index.php?menu=analisa_delin_reg">
+                                    <i class="fas fa-chart-bar me-1"></i> Analisa PAR Regional
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?= (isset($_GET['menu']) && $_GET['menu'] == 'index') ? 'active' : '' ?>" 
@@ -381,7 +395,7 @@ set_time_limit(3000);
             } else {
 
                 // $menu = 'mati';
-                if ($menu == 'cek_par' || $menu == 'anal' || $menu == 'delin_reg' || $menu == 'proses_delin'  || $menu == 'center_meeting') {
+                if ($menu == 'cek_par' || $menu == 'anal' || $menu == 'delin_reg' || $menu == 'analisa_delin_reg' || $menu == 'proses_delin'  || $menu == 'center_meeting') {
             ?>
                     <div class="floating-box">
                         <div class="card border-danger">
@@ -460,15 +474,25 @@ set_time_limit(3000);
                 @$menu = $_GET['menu'];
                 if ($menu == "cek_par") {
                     include("./proses/cek_par.php");
-                } else if ($menu == 'anal') {
+                }
+                 else if ($menu == 'anal') {
                     include("./proses/analisis.php");
-                } else if ($menu == 'anal_bayar') {
+                } 
+                 else if ($menu == 'analisa_delin_reg') {
+                    include("./proses/analisa_delin_reg.php");
+                } 
+                 else if ($menu == 'proses_analisa_delin_reg') {
+                    include("./proses/proses_analisa_delin_reg.php");
+                } 
+                else if ($menu == 'anal_bayar') {
                     include("./proses/anal_bayar.php");
                 } else if ($menu == 'delin_reg') {
                     include("./proses/delin_reg.php");
                 } else if ($menu == 'proses_delin') {
                     include("./proses/proses_delin.php");
-                } else if ($menu == 'proses_delin_reg') {
+                } else if ($menu == 'proses_analisa_delin_reg') {
+                    include("./proses/proses_analisa_delin_reg.php");
+                } else if ( $menu == 'proses_delin_reg') {
                     include("./proses/proses_delin_reg.php");
                 } else if ($menu == 'index') {
                     include("./proses/index.php");
@@ -848,6 +872,25 @@ set_time_limit(3000);
                 text: message,
                 icon: 'info',
                 confirmButtonColor: '#4e73df'
+            });
+        }
+
+        /**
+         * Alert untuk cabang yang diblokir
+         * @param {string} namaCabang - Nama cabang yang diblokir
+         * @param {string} redirectUrl - URL untuk redirect setelah OK
+         */
+        window.alertCabangDiblokir = function(namaCabang, redirectUrl) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Cabang Diblokir',
+                html: '<strong>Proses tidak dapat dilanjutkan</strong><br>Cabang <b>' + namaCabang + '</b> masuk dalam daftar blokir.<br><br>Status: <span class="badge bg-danger">Cabang Diblokir, Silahkan Hubungi</span><br>+62 812 1465 7370 (WA)',
+                confirmButtonText: 'OK',
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.isConfirmed && redirectUrl) {
+                    window.location.href = redirectUrl;
+                }
             });
         }
     </script>
